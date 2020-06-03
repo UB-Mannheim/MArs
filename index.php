@@ -260,7 +260,6 @@ $email = get_parameter('email');
 $uid = get_parameter('uid');
 $lastuid = get_parameter('lastuid');
 $password = get_parameter('password');
-$md5 = get_parameter('md5');
 
 // Is there a username with valid password?
 $authorized = false;
@@ -285,7 +284,6 @@ Here you can book seats in the library branches.</p>
 <label for="uid">Benutzerkennung </label><input id="uid" name="uid" placeholder="user id" required="required" value="<?=$uid?>"/>
 <label for="password">Passwort </label><input id="password" name="password" placeholder="********" required="required" type="password" value="<?=$password?>"/>
 <input id="lastuid" name="lastuid" type="hidden" value="<?=$uid?>"/>
-<input id="md5" name="md5" type="hidden" value="<?=$md5?>"/>
 </fieldset>
 
 <?php
