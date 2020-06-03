@@ -76,8 +76,11 @@ function mail_database($uid) {
             // Don't show old bookings.
             continue;
         }
+        // Convert date representation.
+        $date = date('d.m.Y', strtotime($date));
         // Translate short into long location name.
-        $text = $TEXTS[$reservation['text']];
+//~         trace($date . ': ' . $reservation['text']);
+        $text = TEXTS[$reservation['text']];
         $mailtext .= "$date $text\n";
     }
     $result->free();
@@ -118,30 +121,38 @@ function preset_database() {
 function update_database($uid, $date, $oldvalue, $value) {
     $db = get_database();
     $comment = "";
-    $no_reservation = TEXTS['no'];
+    $no_reservation = 'no';
+    $success_text = '<span class="success">Aktion erfolgreich</span>';
+    $failure_text = '<span class="failure">Aktion nicht erfolgreich</span>';
     if ($value == $no_reservation) {
         // Delete booking.
         $result = $db->query("DELETE FROM reservierungen WHERE name='$uid' AND date='$date'");
-        $success = $result ? 'bestätigt' : 'abgelehnt';
-        $comment = DEBUG ? "gelöscht: $oldvalue, $success" : "Änderung $success";
+        $success = $result ? $success_text : $failure_text;
+        $comment = DEBUG ? "gelöscht: $oldvalue, $success" : $success;
     } else {
         // Limit bookings.
         $result = $db->query("SELECT COUNT(*) FROM reservierungen WHERE date='$date' AND text='$value'");
         $count = $result ? $result->fetch_row()[0] : 0;
         $limit = LIMIT[$value];
+        $today = date('Y-m-d', time());
+        $result = $db->query("SELECT COUNT(*) FROM reservierungen WHERE date>='$today' AND name='$uid'");
+        $personal_bookings = $result ? $result->fetch_row()[0] : 999;
+//~         trace("bookings for $uid from $today = $personal_bookings");
         if ($count > $limit) {
-            $comment = "bereits voll: $value, maximal $limit, abgelehnt";
+            $comment = '<span class="failure">Bibliotheksbereich ausgebucht</span>';
+        } elseif ($personal_bookings > 5) {
+            $comment = '<span class="failure">Persönliches Buchungslimit erreicht</span>';
         } elseif ($oldvalue == $no_reservation) {
             // New bookings.
             $result = $db->query("INSERT INTO reservierungen (name, text, date) VALUES ('$uid','$value','$date')");
-            $success = $result ? 'bestätigt' : 'abgelehnt';
-            $comment = DEBUG ? "reserviert: $value, $success" : "Änderung $success";
+            $success = $result ? $success_text : $failure_text;
+            $comment = DEBUG ? "reserviert: $value, $success" : $success;
         } else {
             // Modified booking.
             $result = $db->query("DELETE FROM reservierungen WHERE name='$uid' AND date='$date'");
             $result = $db->query("INSERT INTO reservierungen (name, text, date) VALUES ('$uid','$value','$date')");
-            $success = $result ? 'bestätigt' : 'abgelehnt';
-            $comment = DEBUG ? "aktualisiert: $oldvalue -> $value, $success" : "Änderung $success";
+            $success = $result ? $success_text : $failure_text;
+            $comment = DEBUG ? "aktualisiert: $oldvalue -> $value, $success" : $success;
         }
     }
     $db->close();
@@ -253,7 +264,7 @@ function show_database($uid, $lastuid) {
                 "<label class=\"$value\" for=\"$id\">$longname</label>";
         }
         if ($comment != '') {
-            $comment = " ($comment)";
+            $comment = " $comment";
         }
         print("<div class=\"open\">$label$line$comment</div>\n");
     }

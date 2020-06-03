@@ -66,3 +66,12 @@ legend {
 li {
   padding-bottom: 6px;
 }
+
+span.failure {
+  background-color: red;
+  font-weight: bold;
+}
+span.success {
+  background-color: greenyellow;
+  font-weight: bold;
+}
