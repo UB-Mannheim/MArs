@@ -2,3 +2,26 @@ body {
   font-family: sans-serif;
   font-size: 14px;
 }
+
+
+#reservation fieldset {
+  border: 1px solid #b0b0b0;
+  margin: 3px;
+  padding: 3px;
+}
+
+#reservation fieldset + fieldset {
+  border: 1px solid #b0b0b0;
+  margin-top: 12px;
+}
+
+
+#reservation legend {
+	width: auto;
+	border-bottom: none;
+	margin-bottom: 10px;
+
+}
+#reservation label {
+	padding-right: 5px;
+}
