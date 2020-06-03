@@ -13,6 +13,8 @@
 
 // Read configuration for database access.
 require_once('config.php');
+require_once('authorize.php');
+require_once('mail.php');
 
 function alert($text) {
     print("<script>alert('$text');</script>");
