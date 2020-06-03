@@ -18,6 +18,13 @@ function alert($text) {
     print("<script>alert('$text');</script>");
 }
 
+function trace($text) {
+    global $uid;
+    if (defined($uid) && $uid == 'stweil') {
+        alert($text);
+    }
+}
+
 // Get parameter from web (GET, POST) or command line (environment).
 function get_parameter($name, $default='') {
     $parameter = $default;
@@ -61,7 +68,7 @@ function mail_database($uid) {
     }
     $db = get_database();
     $result = $db->query("SELECT date,text FROM reservierungen where name='$uid' ORDER BY date");
-    $mailtext = "Date       Location\n";
+    $mailtext = "Datum      Bibliotheksbereich\n";
     $today = date('Y-m-d', time());
     while ($reservation = $result->fetch_assoc()) {
         $date = $reservation['date'];
@@ -272,17 +279,25 @@ $authorized = false;
 <link rel="stylesheet" type="text/css" href="mars.css" media="all">
 </head>
 <body>
-<h2>♂ MA<small>RS</small> = MAnnheimer <small>Reservierungs-System TESTVERSION</small></h2>
+<h2>Sitzplatzbuchung</h2>
+<h3>MA<small>RS♂</small> = MAnnheimer <small>Reservierungs-System TESTVERSION</small></h3>
 
 <p>Hier können Sie Arbeitsplätze in den Bibliotheksbereichen TESTWEISE buchen. /<br/>
 Here you can book seats in the library branches.</p>
 
+<p>Ihre Angaben in den Pflichtfeldern sind für den Zugang zu Ihren Buchungsdaten erforderlich.
+Pflichtfelder sind mit einem Stern (*) gekennzeichnet.
+Bitte lesen Sie die Informationen zum <a href="/datenschutzerklaerung/">Datenschutz</a>. /
+Your entries in the mandatory fields are necessary in order to access your booking information.
+Mandatory fields are marked by an asterisk (*).
+Please read the <a href="">privacy information</a>.</p>
+
 <form id="reservation" method="post">
 
-<fieldset>
+<fieldset class="personaldata">
 <legend>Benutzerdaten / personal data</legend>
-<label for="uid">Benutzerkennung </label><input id="uid" name="uid" placeholder="user id" required="required" value="<?=$uid?>"/>
-<label for="password">Passwort </label><input id="password" name="password" placeholder="********" required="required" type="password" value="<?=$password?>"/>
+<label for="uid">Benutzerkennung:*</label><input id="uid" name="uid" placeholder="user id" required="required" value="<?=$uid?>"/>
+<label for="password">Passwort:*</label><input id="password" name="password" placeholder="********" required="required" type="password" value="<?=$password?>"/>
 <input id="lastuid" name="lastuid" type="hidden" value="<?=$uid?>"/>
 </fieldset>
 
@@ -292,7 +307,7 @@ if ($uid != '') {
     $authorized = get_authorization($uid, $password);
 }
 
-// TODO: check role. Only staff may do this.
+// Should admin commands be allowed?
 $master = ($authorized && $authorized == 'master');
 
 if ($master && $task == 'dump') {
@@ -312,6 +327,10 @@ if ($master && $task == 'dump') {
     dump_database();
     print('</pre>');
 } elseif ($authorized) {
+    // Show some information for the current uid.
+    $usertext = get_usertext();
+    print("<p>$usertext</p>");
+    // Show all bookings.
     show_database($uid, $lastuid);
     if ($email != '') {
         // Send user bookings per e-mail.
@@ -331,24 +350,35 @@ if ($master && $task == 'dump') {
     }
 } else {
     ?>
-    <p>Mit Klick auf „Eingaben absenden“ prüfen wir Ihre Anmeldedaten und zeigen Ihnen Ihre Buchung.
+    <p>Mit Klick auf „Anmelden“ prüfen wir Ihre Anmeldedaten und zeigen Ihnen Ihre Buchungen.
     Sie können dann bestehende Buchungen ändern und neue vormerken.</p>
     <?php
 }
 //<button type="reset">Eingaben zurücksetzen</button>
-?>
 
+if ($authorized) {
+
+?>
 <p>
 <input type="checkbox" name="dsgvo" id="dsgvo" required="required" value="checked"/>
 <label for="dsgvo">
-Ich habe diesen Hinweis und die <a href="/datenschutzerklaerung/">Datenschutzerklärung</a> zur Kenntnis genommen /
-I have read the above hint and the <a href="/en/privacy-policy/">privacy policy</a>
+Ich habe diesen Hinweis zur Kenntnis genommen.
+Die Informationen zum <a href="/datenschutzerklaerung/">Datenschutz</a> wurden mir zur Verfügung gestellt.
+I have read the above hint.
+The <a href="/en/privacy-policy/">privacy information</a> was provided to me.
 </label>
 </p>
 
 <button type="submit">Eingaben absenden</button>
 <input type="checkbox" name="email" id="email" value="checked" <?=$email?>/>
 <label for="email">E-Mail senden / send e-mail</label>
+<?php
+} else {
+?>
+<button type="submit">Anmelden</button>
+<?php
+}
+?>
 
 <?php
 if ($master) {
@@ -363,5 +393,8 @@ Admin-Funktionen:
 ?>
 
 </form>
+
+<?=HINTS?>
+
 </body>
 </html>

@@ -3,6 +3,10 @@ body {
   font-size: 14px;
 }
 
+fieldset.personaldata {
+  margin-right: 5px;
+}
+
 label.day {
   margin-right: 5px;
 }
