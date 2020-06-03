@@ -14,6 +14,10 @@
 // Read configuration for database access.
 require_once('config.php');
 
+function alert($text) {
+    print("<script>alert('$text');</script>");
+}
+
 // Get parameter from web (GET, POST) or command line (environment).
 function get_parameter($name, $default='') {
     $parameter = $default;
@@ -164,14 +168,11 @@ function show_database($uid, $lastuid) {
     print('<legend>Buchungen / bookings</legend>');
 
     // Get the first reserved day from the booking list.
-    $i = 0;
     $resday = '';
-    if ($i < count($reservations)) {
+    for ($i = 0; $i < count($reservations); $i++) {
         $resday = $reservations[$i]['date'];
-        $time = strtotime($resday);
-        if ($time < $first) {
-            $first = $time;
-            $day = date('Y-m-d', $time);
+        if ($resday >= $today) {
+            break;
         }
     }
 
@@ -200,9 +201,6 @@ function show_database($uid, $lastuid) {
             continue;
         }
 
-        if ($uid == 'stweil') {
-//~             print("day=$day\n<br/>");
-        }
         // Skip days which cannot be booked.
         $weekday = date('D', $time);
         $closed = false;
