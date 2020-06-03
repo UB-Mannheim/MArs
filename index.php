@@ -4,9 +4,9 @@
  * 2020-05-30 Prototyp begonnen /sw
  *
  * Datenbankschema:
- * email - e-mail address
- * text  - reservation information
- * date  - date for reservation
+ * uid  - user id
+ * text - booking information
+ * date - date for booking
  *
  * Note: TODO comments mark missing and incomplete code.
  */
@@ -51,7 +51,7 @@ function dump_database() {
     $db->close();
 }
 
-function mail_database($uid, $email) {
+function mail_database($uid) {
     if (!function_exists('sendmail')) {
         return;
     }
@@ -77,7 +77,7 @@ function mail_database($uid, $email) {
     }
     $result->free();
     $db->close();
-    sendmail($uid, $email, $mailtext);
+    sendmail($uid, $mailtext);
 }
 
 // Drop existing table with all bookings and create a new empty one.
@@ -87,7 +87,6 @@ function init_database() {
     $result = $db->query("CREATE TABLE `reservierungen` (
         `id` INT NOT NULL AUTO_INCREMENT,
         `name` VARCHAR(16) NOT NULL,
-        `email` VARCHAR(64) NOT NULL,
         `text` VARCHAR(8) NOT NULL,
         `date` DATE NOT NULL,
         CONSTRAINT unique_reservation UNIQUE (date, name),
@@ -283,7 +282,6 @@ Here you can book seats in the library branches.</p>
 
 <fieldset>
 <legend>Benutzerdaten / personal data</legend>
-<label for="email">E-Mail </label><input id="email" name="email" placeholder="name@mail.uni-mannheim.de" type="email" size="30" value="<?=$email?>"/>
 <label for="userid">Benutzerkennung </label><input id="userid" name="userid" placeholder="userid" required="required" value="<?=$userid?>"/>
 <label for="password">Passwort </label><input id="password" name="password" placeholder="********" required="required" type="password" value="<?=$password?>"/>
 <input id="lastuid" name="lastuid" type="hidden" value="<?=$userid?>"/>
@@ -319,7 +317,7 @@ if ($master && $task == 'dump') {
     show_database($userid, $lastuid);
     if ($email != '') {
         // Send user bookings per e-mail.
-        mail_database($userid, $email);
+        mail_database($userid);
     }
     ?>
     <p>Mit Klick auf „Eingaben absenden“ bestätigen Sie Ihren Buchungswunsch.
@@ -343,7 +341,7 @@ if ($master && $task == 'dump') {
 ?>
 
 <p>
-<input type="checkbox" name="dsgvo" id="dsgvo" required="required" value="dsgvo"/>
+<input type="checkbox" name="dsgvo" id="dsgvo" required="required" value="checked"/>
 <label for="dsgvo">
 Ich habe diesen Hinweis und die <a href="/datenschutzerklaerung/">Datenschutzerklärung</a> zur Kenntnis genommen /
 I have read the above hint and the <a href="/en/privacy-policy/">privacy policy</a>
@@ -351,8 +349,8 @@ I have read the above hint and the <a href="/en/privacy-policy/">privacy policy<
 </p>
 
 <button type="submit">Eingaben absenden</button>
-<input type="checkbox" name="mail" id="mail" value="sendmail"/>
-<label for="mail">E-Mail senden / send e-mail</label>
+<input type="checkbox" name="email" id="email" value="checked" <?=$email?>/>
+<label for="email">E-Mail senden / send e-mail</label>
 
 <?php
 if ($master) {
