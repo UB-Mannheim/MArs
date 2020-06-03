@@ -264,14 +264,9 @@ $password = get_parameter('password');
 // Is there a username with valid password?
 $authorized = false;
 
+// HTML-Code and Header / Title in Template
+require( "tmpl/mars-head.tmpl" );
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<title>Mannheimer Reservierungssystem</title>
-<link rel="stylesheet" type="text/css" href="mars.css" media="all">
-</head>
-<body>
 <h2>♂ MA<small>RS</small> = MAnnheimer <small>Reservierungs-System TESTVERSION</small></h2>
 
 <p>Hier können Sie Arbeitsplätze in den Bibliotheksbereichen TESTWEISE buchen. /<br/>
@@ -363,5 +358,9 @@ Admin-Funktionen:
 ?>
 
 </form>
+<?php
+    // HTML-Code for footer in Template
+    require( "tmpl/mars-footer.tmpl" );
+?>
 </body>
 </html>
