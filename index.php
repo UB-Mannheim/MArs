@@ -4,7 +4,7 @@
  * 2020-05-30 Prototyp begonnen /sw
  *
  * Datenbankschema:
- * uid  - user id
+ * name - user id
  * text - booking information
  * date - date for booking
  *
@@ -257,7 +257,7 @@ function show_database($uid, $lastuid) {
 // Get form values from input (normally POST) if available.
 $task = get_parameter('task');
 $email = get_parameter('email');
-$userid = get_parameter('userid');
+$uid = get_parameter('uid');
 $lastuid = get_parameter('lastuid');
 $password = get_parameter('password');
 $md5 = get_parameter('md5');
@@ -282,16 +282,16 @@ Here you can book seats in the library branches.</p>
 
 <fieldset>
 <legend>Benutzerdaten / personal data</legend>
-<label for="userid">Benutzerkennung </label><input id="userid" name="userid" placeholder="userid" required="required" value="<?=$userid?>"/>
+<label for="uid">Benutzerkennung </label><input id="uid" name="uid" placeholder="user id" required="required" value="<?=$uid?>"/>
 <label for="password">Passwort </label><input id="password" name="password" placeholder="********" required="required" type="password" value="<?=$password?>"/>
-<input id="lastuid" name="lastuid" type="hidden" value="<?=$userid?>"/>
+<input id="lastuid" name="lastuid" type="hidden" value="<?=$uid?>"/>
 <input id="md5" name="md5" type="hidden" value="<?=$md5?>"/>
 </fieldset>
 
 <?php
 
-if ($userid != '') {
-    $authorized = get_authorization($userid, $password);
+if ($uid != '') {
+    $authorized = get_authorization($uid, $password);
 }
 
 // TODO: check role. Only staff may do this.
@@ -314,10 +314,10 @@ if ($master && $task == 'dump') {
     dump_database();
     print('</pre>');
 } elseif ($authorized) {
-    show_database($userid, $lastuid);
+    show_database($uid, $lastuid);
     if ($email != '') {
         // Send user bookings per e-mail.
-        mail_database($userid);
+        mail_database($uid);
     }
     ?>
     <p>Mit Klick auf „Eingaben absenden“ bestätigen Sie Ihren Buchungswunsch.
@@ -325,7 +325,7 @@ if ($master && $task == 'dump') {
     Wir speichern Ihre Angaben zur Buchung und löschen sie <?=MAX_AGE?> Tage nach dem jeweiligen Buchungsdatum.</p>
     <p>Achtung TESTVERSION! Hier buchen Sie nur zu Testzwecken!</p>
     <?php
-} elseif ($userid != '') {
+} elseif ($uid != '') {
     if ($password == '') {
         print('<p>Bitte ergänzen Sie Ihre Anmeldedaten um Ihr Passwort.</p>');
     } else {
