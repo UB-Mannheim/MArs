@@ -212,16 +212,17 @@ function show_database($uid, $lastuid) {
 
         // Skip days which cannot be booked.
         $weekday = date('D', $time);
+        $label = "<label style=\"width:64px\">$weekday $label</label>";
         $closed = false;
         foreach (CLOSED as $condition) {
             $closed = ($weekday == $condition);
             if ($closed) {
-                print("$label Wochenende, geschlossen / week end, closed<br/>");
+                print("$label geschlossen / closed<br/>");
                 break;
             }
             $closed = ($day == $condition);
             if ($closed) {
-                print("$label Feiertag, geschlossen / public holiday, closed<br/>");
+                print("$label geschlossen / closed<br/>");
                 break;
             }
         }
@@ -261,6 +262,23 @@ function show_database($uid, $lastuid) {
     print('</fieldset>');
 }
 
+// Daily report for a location.
+function day_report($location) {
+    $now = time();
+    $today = date('Y-m-d', $now);
+
+    $db = get_database();
+    $result = $db->query("SELECT date, text, name FROM reservierungen WHERE date = '$today' AND text = '$location' ORDER BY date");
+    $reservations = $result->fetch_all(MYSQLI_ASSOC);
+    $result->free();
+    $db->close();
+    print('Datum Bibliotheksbereich Benutzerkennung Name<br/>');
+    foreach ($reservations as $booking) {
+        print_r($booking);
+        print('<br/>');
+    }
+}
+
 // Get form values from input (normally POST) if available.
 $task = get_parameter('task');
 $email = get_parameter('email');
@@ -279,18 +297,14 @@ $authorized = false;
 <link rel="stylesheet" type="text/css" href="mars.css" media="all">
 </head>
 <body>
-<h2>Sitzplatzbuchung</h2>
-<h3>MA<small>RS♂</small> = MAnnheimer <small>Reservierungs-System TESTVERSION</small></h3>
-
-<p>Hier können Sie Arbeitsplätze in den Bibliotheksbereichen TESTWEISE buchen. /<br/>
-Here you can book seats in the library branches.</p>
-
-<p>Ihre Angaben in den Pflichtfeldern sind für den Zugang zu Ihren Buchungsdaten erforderlich.
-Pflichtfelder sind mit einem Stern (*) gekennzeichnet.
-Bitte lesen Sie die Informationen zum <a href="/datenschutzerklaerung/">Datenschutz</a>. /
-Your entries in the mandatory fields are necessary in order to access your booking information.
-Mandatory fields are marked by an asterisk (*).
-Please read the <a href="">privacy information</a>.</p>
+<?php
+if ($uid == '' || $task == '') {
+?>
+<h2>Sitzplatzbuchung / Seat booking</h2>
+<p>Buchen Sie einen Sitzplatz in den Bibliotheksbereichen und verwalten Sie
+Ihre Sitzplatzbuchungen über das Mannheimer Reservierungssystem MA<small>RS</small>.<br/>
+Book a seat in the library locations and manage your seat bookings
+via the Mannheim reservation system MA<small>RS</small>.</p>
 
 <form id="reservation" method="post">
 
@@ -302,6 +316,7 @@ Please read the <a href="">privacy information</a>.</p>
 </fieldset>
 
 <?php
+}
 
 if ($uid != '') {
     $authorized = get_authorization($uid, $password);
@@ -314,6 +329,10 @@ if ($master && $task == 'dump') {
     print("<pre>\n");
     dump_database();
     print("<pre>\n");
+} elseif ($master && $task == 'a3-report') {
+    day_report('a3');
+} elseif ($master && $task == 'eh-report') {
+    day_report('eh');
 } elseif ($master && $task == 'init') {
     init_database();
     print('<pre>');
@@ -330,18 +349,13 @@ if ($master && $task == 'dump') {
     // Show some information for the current uid.
     $usertext = get_usertext();
     print("<p>$usertext</p>");
+    print("<p>Meine Sitzplatzbuchungen / My seat bookings</p>");
     // Show all bookings.
     show_database($uid, $lastuid);
     if ($email != '') {
         // Send user bookings per e-mail.
         mail_database($uid);
     }
-    ?>
-    <p>Mit Klick auf „Eingaben absenden“ bestätigen Sie Ihren Buchungswunsch.
-    Wenn gewünscht, senden wir Ihnen auch eine E-Mail mit Ihren vorgemerkten Buchungen.
-    Wir speichern Ihre Angaben zur Buchung und löschen sie <?=MAX_AGE?> Tage nach dem jeweiligen Buchungsdatum.</p>
-    <p>Achtung TESTVERSION! Hier buchen Sie nur zu Testzwecken!</p>
-    <?php
 } elseif ($uid != '') {
     if ($password == '') {
         print('<p>Bitte ergänzen Sie Ihre Anmeldedaten um Ihr Passwort.</p>');
@@ -350,43 +364,38 @@ if ($master && $task == 'dump') {
     }
 } else {
     ?>
-    <p>Mit Klick auf „Anmelden“ prüfen wir Ihre Anmeldedaten und zeigen Ihnen Ihre Buchungen.
-    Sie können dann bestehende Buchungen ändern und neue vormerken.</p>
+    <p>Die <a href="/datenschutzerklaerung/">Informationen zum Datenschutz</a> wurden mir zur Verfügung gestellt.<br/>
+    The <a href="/en/privacy-policy/">privacy information</a> was provided to me.</p>
     <?php
 }
 //<button type="reset">Eingaben zurücksetzen</button>
 
-if ($authorized) {
-
+if ($uid == '' || $task == '') {
+    if ($authorized) {
 ?>
-<p>
-<input type="checkbox" name="dsgvo" id="dsgvo" required="required" value="checked"/>
-<label for="dsgvo">
-Ich habe diesen Hinweis zur Kenntnis genommen.
-Die Informationen zum <a href="/datenschutzerklaerung/">Datenschutz</a> wurden mir zur Verfügung gestellt.
-I have read the above hint.
-The <a href="/en/privacy-policy/">privacy information</a> was provided to me.
-</label>
-</p>
-
 <button type="submit">Eingaben absenden</button>
+<br/>
 <input type="checkbox" name="email" id="email" value="checked" <?=$email?>/>
-<label for="email">E-Mail senden / send e-mail</label>
+<label for="email">Informieren Sie mich bitte per E-Mail über meine aktuellen Sitzplatzbuchungen.
+Please inform me by e-mail about my current bookings.</label>
 <?php
-} else {
+    } else {
 ?>
 <button type="submit">Anmelden</button>
 <?php
-}
+    }
 ?>
 
 <?php
-if ($master) {
+    if ($master) {
 ?>
 <p>
 Admin-Funktionen:
-<button>dump</button>
-<button>test</button>
+<ul>
+<li><a href="./?task=dump" target="_blank">Alle Buchungen ausgeben</a>
+<li><a href="./?task=a3-report" target="_blank">Tagesplanung A3</a>
+<li><a href="./?task=eh-report" target="_blank">Tagesplanung Schloss Ehrenhof</a>
+</ul>
 </p>
 <?php
 }
@@ -395,6 +404,9 @@ Admin-Funktionen:
 </form>
 
 <?=HINTS?>
+<?php
+}
+?>
 
 </body>
 </html>
