@@ -274,7 +274,7 @@ $authorized = false;
 <link rel="stylesheet" type="text/css" href="mars.css" media="all">
 </head>
 <body>
-<h2>MA<small>RS</small> = MAnnheimer <small>Reservierungs-System TESTVERSION</small></h2>
+<h2>♂ MA<small>RS</small> = MAnnheimer <small>Reservierungs-System TESTVERSION</small></h2>
 
 <p>Hier können Sie Arbeitsplätze in den Bibliotheksbereichen TESTWEISE buchen. /<br/>
 Here you can book seats in the library branches.</p>
