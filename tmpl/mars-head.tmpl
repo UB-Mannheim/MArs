@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<!-- ToDo: Sprache flexibel machen -->
+<html lang="en">
+<head>
+<title>Mannheimer Reservierungssystem</title>
+
+<link rel="stylesheet" type="text/css" href="/typo3temp/Assets/6185c801b2.css?1483736960" media="all">
+<link rel="stylesheet" type="text/css" href="/fileadmin/relaunch_2016/Resources/Css/bootstrap.min.css?1483633272" media="all">
+<link rel="stylesheet" type="text/css" href="/fileadmin/relaunch_2016/Resources/Extensions/indexed_search/Css/indexed_search.css?1473079085" media="all">
+<link rel="stylesheet" type="text/css" href="/fileadmin/relaunch_2016/Resources/Css/musterprojekt_style.css?1472634077" media="all">
+<link rel="stylesheet" type="text/css" href="/fileadmin/relaunch_2016/Resources/Css/Font-Awesome/css/font-awesome.min.css?1478871486" media="all">
+<link rel="stylesheet" type="text/css" href="/fileadmin/relaunch_2016/Resources/Css/yamm3/yamm/yamm.css?1478871668" media="all">
+<link rel="stylesheet" type="text/css" href="/fileadmin/relaunch_2016/Resources/Css/ub_ma_icon.min.css?1479112930" media="all">
+<link rel="stylesheet" type="text/css" href="/fileadmin/relaunch_2016/Resources/Css/dbis/ezb.css?1479817971" media="all">
+<link rel="stylesheet" type="text/css" href="/fileadmin/relaunch_2016/Resources/Css/ub_ma.css?1483633271" media="all">
+
+<link rel="stylesheet" type="text/css" href="mars.css" media="all">
+
+<!--[if lte IE 8]><script src="/fileadmin/relaunch_2016/Resources/Javascript/jquery-1.12.2.min.js"></script><![endif]--><!--[if gt IE 8]><!--><script src="/fileadmin/relaunch_2016/Resources/Javascript/jquery.min.js?1463765083" type="text/javascript"></script><!--<![endif]-->
+<!--[if lt IE 9]> <script src="/fileadmin/relaunch_2016/Resources/Javascript/respond.min.js?1447247463" type="text/javascript"></script> <![endif]-->
+<script src="/fileadmin/relaunch_2016/Resources/Javascript/bootstrap.min.js?1483442691" type="text/javascript"></script>
+<script src="/typo3temp/Assets/dd82474708.js?1483736960" type="text/javascript"></script>
+
+</head>
+
+<div id="wrap">
+    <header class="topheader">
+<?php
+    require( "tmpl/head-de.tmpl" );
+?>
+    </header>
+<?php
+    require( "tmpl/navigation-001-de.tmpl");
+    require( "tmpl/navigation-002-de.tmpl");
+    require( "tmpl/navigation-003-de.tmpl");
+?>
+    <!-- Begin page content -->
+
+    <div class="inhaltsbereich container-fluid">
+        <div id="col1">
+            <div id="searchbox">
+<?php
+    require( "tmpl/search-de.tmpl" );
+?>
+            </div>
+            <div id="leftNaviBox">
+<?php
+    require( "tmpl/navigation-left-de.tmpl" );
+?>
+
+            </div>
+        </div>
+        <div id="col2">
+
+            <div class="breadcrumbrow hidden-print">
+                <ul class="breadcrumb">
+                    <li id="home"><a href="/"><i class="fa fa-home" aria-hidden="true"></i></a></li>
+                    <li><a href="/medien-finden-nutzen/">Medien finden &amp; nutzen</a></li>
+                    <li><a href="/fernleihe/">Fernleihe</a></li>
+                    <li>Fernleihformular</li>
+                </ul>
+            </div>
+
+            <!--TYPO3SEARCH_begin-->
+            <div class="HauptInhalt">

@@ -249,14 +249,9 @@ $md5 = get_parameter('md5');
 // Is there a username with valid password?
 $authorized = false;
 
+// HTML-Code and Header / Title in Template
+require( "tmpl/mars-head.tmpl" );
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<title>Mannheimer Reservierungssystem</title>
-<link rel="stylesheet" type="text/css" href="mars.css" media="all">
-</head>
-<body>
 <?php
 if (DEBUG) {
 ?>
@@ -336,5 +331,9 @@ if ($authorized && $task == 'dump') {
 <button type="submit">Eingaben absenden</button>
 
 </form>
+<?php
+    // HTML-Code for footer in Template
+    require( "tmpl/mars-footer.tmpl" );
+?>
 </body>
 </html>
