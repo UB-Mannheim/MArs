@@ -58,7 +58,6 @@ Die Anzeige lässt sich optional per CSS angepassen.
 
 * Projektnamen auswählen
 * Benutzerdaten aus ALMA
-* falls ecUM: Prüfung auf immer 10 Ziffern?
 * Mehrsprachigkeit lässt sich z. B. mit Hilfe von `gettext` nachrüsten.
 * Anbindung von E-Mail-Benachrichtigung fehlt noch (php-swiftmailer, php-mail)
 * php-ssh2 installieren und statt `exec` verwenden

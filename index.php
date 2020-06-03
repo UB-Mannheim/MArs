@@ -5,7 +5,6 @@
  *
  * Datenbankschema:
  * email - e-mail address
- * ecum  - ecUM number
  * text  - reservation information
  * date  - date for reservation
  *
@@ -37,7 +36,7 @@ function get_database() {
     return $db;
 }
 
-// Dump all reservations.
+// Dump all bookings.
 function dump_database() {
     $db = get_database();
     $result = $db->query("SELECT date,text,name FROM reservierungen ORDER BY date,name");
@@ -56,22 +55,32 @@ function mail_database($uid, $email) {
     if (!function_exists('sendmail')) {
         return;
     }
-    // TODO: Add nice intro using name and sex.
     $db = get_database();
     $result = $db->query("SELECT date,text FROM reservierungen where name='$uid' ORDER BY date");
-    $mailtext = "date       location\n";
+    $mailtext = "Date       Location\n";
+    $today = date('Y-m-d', time());
     while ($reservation = $result->fetch_assoc()) {
         $date = $reservation['date'];
+        if ($date < $today) {
+            // Don't show old bookings.
+            continue;
+        }
         $text = $reservation['text'];
+        // Translate short into long location name.
+        foreach (TEXTS as $location) {
+            if ($text == $location[0]) {
+                $text = $location[1];
+                break;
+            }
+        }
         $mailtext .= "$date $text\n";
     }
     $result->free();
     $db->close();
-    // TODO: Optionally pass also pretty name.
     sendmail($uid, $email, $mailtext);
 }
 
-// Drop existing table with all reservations and create a new empty one.
+// Drop existing table with all bookings and create a new empty one.
 function init_database() {
     $db = get_database();
     $result = $db->query("DROP TABLE reservierungen");
@@ -79,7 +88,6 @@ function init_database() {
         `id` INT NOT NULL AUTO_INCREMENT,
         `name` VARCHAR(16) NOT NULL,
         `email` VARCHAR(64) NOT NULL,
-        `ecum` VARCHAR(16) NOT NULL,
         `text` VARCHAR(8) NOT NULL,
         `date` DATE NOT NULL,
         CONSTRAINT unique_reservation UNIQUE (date, name),
@@ -88,7 +96,7 @@ function init_database() {
     $db->close();
 }
 
-// Add up to 10 random reservations for testing.
+// Add up to 10 random bookings for testing.
 function preset_database() {
     $db = get_database();
     $now = time();
@@ -101,30 +109,30 @@ function preset_database() {
     $db->close();
 }
 
-// Add, modify or delete reservations in the database.
+// Add, modify or delete bookings in the database.
 function update_database($uid, $date, $oldvalue, $value) {
     $db = get_database();
     $comment = "";
     $no_reservation = TEXTS[count(TEXTS) - 1][0];
     if ($value == $no_reservation) {
-        // Delete reservation.
+        // Delete booking.
         $result = $db->query("DELETE FROM reservierungen WHERE name='$uid' AND date='$date'");
         $success = $result ? 'bestätigt' : 'abgelehnt';
         $comment = DEBUG ? "gelöscht: $oldvalue, $success" : "Änderung $success";
     } else {
-        // Limit reservations.
+        // Limit bookings.
         $result = $db->query("SELECT COUNT(*) FROM reservierungen WHERE date='$date' AND text='$value'");
         $count = $result ? $result->fetch_row()[0] : 0;
         $limit = LIMIT[$value];
         if ($count > $limit) {
             $comment = "bereits voll: $value, maximal $limit, abgelehnt";
         } elseif ($oldvalue == $no_reservation) {
-            // New reservation.
+            // New bookings.
             $result = $db->query("INSERT INTO reservierungen (name, text, date) VALUES ('$uid','$value','$date')");
             $success = $result ? 'bestätigt' : 'abgelehnt';
             $comment = DEBUG ? "reserviert: $value, $success" : "Änderung $success";
         } else {
-            // Modified reservation.
+            // Modified booking.
             $result = $db->query("DELETE FROM reservierungen WHERE name='$uid' AND date='$date'");
             $result = $db->query("INSERT INTO reservierungen (name, text, date) VALUES ('$uid','$value','$date')");
             $success = $result ? 'bestätigt' : 'abgelehnt';
@@ -135,7 +143,7 @@ function update_database($uid, $date, $oldvalue, $value) {
     return $comment;
 }
 
-// Show stored reservations in a web form which allows modifications.
+// Show stored bookings in a web form which allows modifications.
 function show_database($uid, $lastuid) {
     $db = get_database();
     $result = $db->query("SELECT date, text FROM reservierungen WHERE name = '$uid' ORDER BY date");
@@ -145,16 +153,18 @@ function show_database($uid, $lastuid) {
     $db->close();
 
     $now = time();
-    // First day which can be reserved.
-    // Accept reservations for same day until 10:00.
+    // First day which can be booked.
+    // Accept bookings for same day until 10:00.
     $start = $now + (24 - 10) * 60 * 60;
     $first = $start;
     $last = $now + 24 * 60 * 60 * MAX_DAYS;
 
-    print('<fieldset>');
-    print('<legend>Reservierungen</legend>');
+    $today = date('Y-m-d', $now);
 
-    // Get the first reserved day from the reservation list.
+    print('<fieldset>');
+    print('<legend>Buchungen / bookings</legend>');
+
+    // Get the first reserved day from the booking list.
     $i = 0;
     $resday = '';
     if ($i < count($reservations)) {
@@ -171,7 +181,7 @@ function show_database($uid, $lastuid) {
         $day = date('Y-m-d', $time);
         $text = 'no';
         if ($time < $start) {
-            if ($day != $resday) {
+            if ($day < $today && $day != $resday) {
                 continue;
             }
             $disabled = ' disabled';
@@ -186,18 +196,26 @@ function show_database($uid, $lastuid) {
             }
         }
 
-        // Skip days which cannot be reserved.
+        if ($day < $today) {
+            // Skip old bookings.
+            continue;
+        }
+
+        if ($uid == 'stweil') {
+//~             print("day=$day\n<br/>");
+        }
+        // Skip days which cannot be booked.
         $weekday = date('D', $time);
         $closed = false;
         foreach (CLOSED as $condition) {
             $closed = ($weekday == $condition);
             if ($closed) {
-                print("<label>$label</label>: $weekday, geschlossen<br/>");
+                print("<label>$label</label>: Wochenende, geschlossen / week end, closed<br/>");
                 break;
             }
             $closed = ($day == $condition);
             if ($closed) {
-                print("<label>$label</label>: Feiertag, geschlossen<br/>");
+                print("<label>$label</label>: Feiertag, geschlossen / public holiday, closed<br/>");
                 break;
             }
         }
@@ -228,7 +246,7 @@ function show_database($uid, $lastuid) {
             $checked = ($text == $value) ? ' checked' : '';
             print("<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"$value\"$checked$disabled/>" .
                 "<label for=\"$id\">$label</label>");
-	}
+        }
         if ($comment != '') {
             $comment = " ($comment)";
         }
@@ -240,7 +258,6 @@ function show_database($uid, $lastuid) {
 // Get form values from input (normally POST) if available.
 $task = get_parameter('task');
 $email = get_parameter('email');
-$ecum = get_parameter('ecum');
 $userid = get_parameter('userid');
 $lastuid = get_parameter('lastuid');
 $password = get_parameter('password');
@@ -257,27 +274,18 @@ $authorized = false;
 <link rel="stylesheet" type="text/css" href="mars.css" media="all">
 </head>
 <body>
-<?php
-if (DEBUG) {
-?>
-<h2>Sitzplatzreservierung</h2>
-<h2>miriam = Mannheim Individual Reservations / Information Assisting Mananger</h2>
-<h2><strong>MA</strong><em>RS</em> = MAnnheimer <em>Reservierungs-System</em></h2>
-<?php
-}
-?>
-<h2>MA<small>RS</small> = MAnnheimer <small>Reservierungs-System</small></h2>
+<h2>MA<small>RS</small> = MAnnheimer <small>Reservierungs-System TESTVERSION</small></h2>
 
-<p>Hier können Sie Arbeitsplätze in den Bibliotheksbereichen reservieren.</p>
+<p>Hier können Sie Arbeitsplätze in den Bibliotheksbereichen TESTWEISE buchen. /<br/>
+Here you can book seats in the library branches.</p>
 
 <form id="reservation" method="post">
 
 <fieldset>
-<legend>Benutzerdaten</legend>
-<label for="email">E-Mail </label><input id="email" name="email" placeholder="name@uni-mannheim.de" type="email" size="30" value="<?=$email?>"/>
-<label for="ecum">ecUM </label><input id="ecum" name="ecum" placeholder="1234567890" type="number" value="<?=$ecum?>"/><br/>
+<legend>Benutzerdaten / personal data</legend>
+<label for="email">E-Mail </label><input id="email" name="email" placeholder="name@mail.uni-mannheim.de" type="email" size="30" value="<?=$email?>"/>
 <label for="userid">Benutzerkennung </label><input id="userid" name="userid" placeholder="userid" required="required" value="<?=$userid?>"/>
-<label for="password">Passwort </label><input id="password" name="password" placeholder="********" type="password" value="<?=$password?>"/>
+<label for="password">Passwort </label><input id="password" name="password" placeholder="********" required="required" type="password" value="<?=$password?>"/>
 <input id="lastuid" name="lastuid" type="hidden" value="<?=$userid?>"/>
 <input id="md5" name="md5" type="hidden" value="<?=$md5?>"/>
 </fieldset>
@@ -288,21 +296,21 @@ if ($userid != '') {
     $authorized = get_authorization($userid, $password);
 }
 
-if ($authorized && $task == 'dump') {
-    // TODO: check role. Only staff may do this.
+// TODO: check role. Only staff may do this.
+$master = ($authorized && $authorized == 'master');
+
+if ($master && $task == 'dump') {
     print("<pre>\n");
     dump_database();
     print("<pre>\n");
-} elseif ($authorized && $task == 'init') {
-    // TODO: check role. Only staff may do this.
+} elseif ($master && $task == 'init') {
     init_database();
     print('<pre>');
     dump_database();
     print('</pre>');
-} elseif ($authorized && $task == 'phpinfo') {
+} elseif ($master && $task == 'phpinfo') {
     phpinfo();
-} elseif ($authorized && $task == 'preset') {
-    // TODO: check role. Only staff may do this.
+} elseif ($master && $task == 'preset') {
     preset_database();
     print('<pre>');
     dump_database();
@@ -310,13 +318,14 @@ if ($authorized && $task == 'dump') {
 } elseif ($authorized) {
     show_database($userid, $lastuid);
     if ($email != '') {
-        // Send user reservations per e-mail.
+        // Send user bookings per e-mail.
         mail_database($userid, $email);
     }
     ?>
-    <p>Mit Klick auf „Eingaben absenden“ bestätigen Sie Ihren Reservierungswunsch.
-    Wenn Sie eine E-Mail-Adresse angegeben haben, schicken wir Ihnen eine Bestätigung per E-Mail.
-    Wir speichern Ihre Angaben zur Reservierung und löschen sie <?=MAX_AGE?> Tage nach dem jeweiligen Reservierungsdatum.</p>
+    <p>Mit Klick auf „Eingaben absenden“ bestätigen Sie Ihren Buchungswunsch.
+    Wenn gewünscht, senden wir Ihnen auch eine E-Mail mit Ihren vorgemerkten Buchungen.
+    Wir speichern Ihre Angaben zur Buchung und löschen sie <?=MAX_AGE?> Tage nach dem jeweiligen Buchungsdatum.</p>
+    <p>Achtung TESTVERSION! Hier buchen Sie nur zu Testzwecken!</p>
     <?php
 } elseif ($userid != '') {
     if ($password == '') {
@@ -326,14 +335,36 @@ if ($authorized && $task == 'dump') {
     }
 } else {
     ?>
-    <p>Mit Klick auf „Eingaben absenden“ prüfen wir Ihre Anmeldedaten und zeigen Ihnen Ihre Reservierung.
-    Sie können dann bestehende Reservierungen ändern und neue vormerken.</p>
+    <p>Mit Klick auf „Eingaben absenden“ prüfen wir Ihre Anmeldedaten und zeigen Ihnen Ihre Buchung.
+    Sie können dann bestehende Buchungen ändern und neue vormerken.</p>
     <?php
 }
 //<button type="reset">Eingaben zurücksetzen</button>
 ?>
 
+<p>
+<input type="checkbox" name="dsgvo" id="dsgvo" required="required" value="dsgvo"/>
+<label for="dsgvo">
+Ich habe diesen Hinweis und die <a href="/datenschutzerklaerung/">Datenschutzerklärung</a> zur Kenntnis genommen /
+I have read the above hint and the <a href="/en/privacy-policy/">privacy policy</a>
+</label>
+</p>
+
 <button type="submit">Eingaben absenden</button>
+<input type="checkbox" name="mail" id="mail" value="sendmail"/>
+<label for="mail">E-Mail senden / send e-mail</label>
+
+<?php
+if ($master) {
+?>
+<p>
+Admin-Funktionen:
+<button>dump</button>
+<button>test</button>
+</p>
+<?php
+}
+?>
 
 </form>
 </body>
