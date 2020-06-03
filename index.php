@@ -20,7 +20,7 @@ function alert($text) {
 
 function trace($text) {
     global $uid;
-    if (defined($uid) && $uid == 'stweil') {
+    if ($uid == 'stweil') {
         alert($text);
     }
 }
@@ -76,14 +76,8 @@ function mail_database($uid) {
             // Don't show old bookings.
             continue;
         }
-        $text = $reservation['text'];
         // Translate short into long location name.
-        foreach (TEXTS as $location) {
-            if ($text == $location[0]) {
-                $text = $location[1];
-                break;
-            }
-        }
+        $text = $TEXTS[$reservation['text']];
         $mailtext .= "$date $text\n";
     }
     $result->free();
@@ -112,6 +106,7 @@ function preset_database() {
     $now = time();
     for ($i = 0; $i < 10; $i++) {
         $uid = TEST_USERS[rand(0, count(TEST_USERS) - 1)];
+        // TODO: Fixme.
         $text = TEXTS[rand(0, count(TEXTS) - 2)][0];
         $date = date('Y-m-d', $now + 24 * 60 * 60 * rand(0 - MAX_AGE, 7));
         $result = $db->query("INSERT INTO reservierungen (name, text, date) VALUES ('$uid','$text','$date')");
@@ -123,7 +118,7 @@ function preset_database() {
 function update_database($uid, $date, $oldvalue, $value) {
     $db = get_database();
     $comment = "";
-    $no_reservation = TEXTS[count(TEXTS) - 1][0];
+    $no_reservation = TEXTS['no'];
     if ($value == $no_reservation) {
         // Delete booking.
         $result = $db->query("DELETE FROM reservierungen WHERE name='$uid' AND date='$date'");
@@ -162,52 +157,57 @@ function show_database($uid, $lastuid) {
     //echo 'row=' . htmlentities($row);
     $db->close();
 
+    // Get current time.
     $now = time();
-    // First day which can be booked.
+
+    // First day which can be booked (time rounded to start of day).
     // Accept bookings for same day until 10:00.
     $start = $now + (24 - 10) * 60 * 60;
-    $first = $start;
+    $start = strtotime(date('Y-m-d', $start));
+
+    // Round current time to start of day.
+    $now = strtotime(date('Y-m-d', $now));
+
+//~     trace("now=$now, start=$start");
+//~     $date_now = date('Y-m-d H:i:s', $now);
+//~     $date_start = date('Y-m-d H:i:s', $start);
+//~     trace("now=$date_now, nxt=$date_start");
+
+    // Last day which may be booked (time rounded to start of day).
     $last = $now + 24 * 60 * 60 * MAX_DAYS;
 
-    $today = date('Y-m-d', $now);
+    // First day which will be shown.
+    $first = $now;
 
     print('<fieldset>');
     print('<legend>Buchungen / bookings</legend>');
 
     // Get the first reserved day from the booking list.
-    $resday = '';
-    for ($i = 0; $i < count($reservations); $i++) {
-        $resday = $reservations[$i]['date'];
-        if ($resday >= $today) {
-            break;
-        }
-    }
+    $i = 0;
 
     for ($time = $first; $time < $last; $time += 24 * 60 * 60) {
         $disabled = '';
         $day = date('Y-m-d', $time);
         $text = 'no';
         if ($time < $start) {
-            if ($day < $today && $day != $resday) {
-                continue;
-            }
             $disabled = ' disabled';
+//~             trace("$day is disabled");
         }
 
         $label = date('d.m.', $time);
         $label = "<label class=\"day\">$label</label>";
 
-        if ($i < count($reservations) && $day == $resday) {
-            $text = $reservations[$i]['text'];
+        $resday = '';
+        while ($i < count($reservations) && ($resday = $reservations[$i]['date']) < $day) {
             $i++;
-            if ($i < count($reservations)) {
-                $resday = $reservations[$i]['date'];
-            }
         }
 
-        if ($day < $today) {
-            // Skip old bookings.
-            continue;
+        if ($i < count($reservations)) {
+            $text = $reservations[$i]['text'];
+        }
+//~         trace("$day, $resday=$text");
+        if ($resday != $day) {
+            $text = 'no';
         }
 
         // Skip days which cannot be booked.
@@ -230,8 +230,6 @@ function show_database($uid, $lastuid) {
             continue;
         }
 
-//~         print('<span>');
-
         $name = "choice-$day";
         $requested = get_parameter($name, 'no');
         $comment = '';
@@ -248,9 +246,7 @@ function show_database($uid, $lastuid) {
         }
 
         $line = '';
-        foreach (TEXTS as $entry) {
-            $value = $entry[0];
-            $longname = $entry[1];
+        foreach (TEXTS as $value => $longname) {
             $id = "$value-$day";
             $checked = ($text == $value) ? ' checked' : '';
             $line .= "<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"$value\"$checked$disabled/>" .
@@ -283,6 +279,7 @@ function day_report($location) {
 
 // Get form values from input (normally POST) if available.
 $task = get_parameter('task');
+// TODO: $email eventuell entfernen.
 $email = get_parameter('email');
 $uid = get_parameter('uid');
 $lastuid = get_parameter('lastuid');
@@ -295,7 +292,7 @@ $authorized = false;
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<title>Mannheimer Reservierungssystem</title>
+<title>UB Sitzplatzbuchung</title>
 <link rel="stylesheet" type="text/css" href="mars.css" media="all">
 </head>
 <body>
@@ -315,6 +312,7 @@ via the Mannheim reservation system MA<small>RS</small>.</p>
 <label class="uid" for="uid">Benutzerkennung:*</label><input id="uid" name="uid" placeholder="user id" required="required" value="<?=$uid?>"/>
 <label class="password" for="password">Passwort:*</label><input id="password" name="password" placeholder="********" required="required" type="password" value="<?=$password?>"/>
 <input id="lastuid" name="lastuid" type="hidden" value="<?=$uid?>"/>
+<button class="logout" type="button"><a class="logout" href=".">Abmelden / Logout</a></button>
 </fieldset>
 
 <?php

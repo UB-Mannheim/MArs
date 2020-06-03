@@ -3,6 +3,15 @@ body {
   font-size: 14px;
 }
 
+a.logout {
+  font-size: 18px;
+  text-decoration: none;
+}
+
+button.logout {
+  padding-left: 10px;
+}
+
 button.submit {
   font-size: 20px;
   margin-top: 8px;
