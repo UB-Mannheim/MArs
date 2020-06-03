@@ -2,3 +2,15 @@ body {
   font-family: sans-serif;
   font-size: 14px;
 }
+
+label.day {
+  margin-right: 5px;
+}
+
+label.a3 {
+  margin-right: 5px;
+}
+
+label.eh {
+  margin-right: 5px;
+}

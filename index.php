@@ -186,7 +186,9 @@ function show_database($uid, $lastuid) {
             }
             $disabled = ' disabled';
         }
-        $label = date('d.m', $time);
+
+        $label = date('d.m.', $time);
+        $label = "<label class=\"day\">$label</label>";
 
         if ($i < count($reservations) && $day == $resday) {
             $text = $reservations[$i]['text'];
@@ -207,12 +209,12 @@ function show_database($uid, $lastuid) {
         foreach (CLOSED as $condition) {
             $closed = ($weekday == $condition);
             if ($closed) {
-                print("<label>$label</label>: Wochenende, geschlossen / week end, closed<br/>");
+                print("$label Wochenende, geschlossen / week end, closed<br/>");
                 break;
             }
             $closed = ($day == $condition);
             if ($closed) {
-                print("<label>$label</label>: Feiertag, geschlossen / public holiday, closed<br/>");
+                print("$label Feiertag, geschlossen / public holiday, closed<br/>");
                 break;
             }
         }
@@ -235,14 +237,14 @@ function show_database($uid, $lastuid) {
             $text = $requested;
         }
 
-        print("<label>$label</label>: ");
+        print("$label");
         foreach (TEXTS as $entry) {
             $value = $entry[0];
             $label = $entry[1];
             $id = "$value-$day";
             $checked = ($text == $value) ? ' checked' : '';
             print("<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"$value\"$checked$disabled/>" .
-                "<label for=\"$id\">$label</label>");
+                "<label class=\"$value\" for=\"$id\">$label</label>");
         }
         if ($comment != '') {
             $comment = " ($comment)";
