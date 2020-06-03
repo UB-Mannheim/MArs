@@ -3,8 +3,39 @@ body {
   font-size: 14px;
 }
 
+button.submit {
+  font-size: 20px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+div.closed {
+  color: grey;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+div.open {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.weekday {
+  min-width: 32px;
+  display: inline-block;
+}
+
 fieldset.personaldata {
   margin-right: 5px;
+}
+
+label.uid {
+  padding-right: 6px;
+}
+
+label.password {
+  padding-left: 10px;
+  padding-right: 6px;
 }
 
 label.day {
@@ -17,4 +48,12 @@ label.a3 {
 
 label.eh {
   margin-right: 5px;
+}
+
+legend {
+  font-size: 16px;
+}
+
+li {
+  padding-bottom: 6px;
 }

@@ -212,23 +212,25 @@ function show_database($uid, $lastuid) {
 
         // Skip days which cannot be booked.
         $weekday = date('D', $time);
-        $label = "<label style=\"width:64px\">$weekday $label</label>";
+        $label = "<label><span class=\"weekday\">$weekday</span> $label</label>";
         $closed = false;
         foreach (CLOSED as $condition) {
             $closed = ($weekday == $condition);
             if ($closed) {
-                print("$label geschlossen / closed<br/>");
+                print("<div class=\"closed\">$label geschlossen / closed</div>");
                 break;
             }
             $closed = ($day == $condition);
             if ($closed) {
-                print("$label geschlossen / closed<br/>");
+                print("<div class=\"closed\">$label geschlossen / closed</div>");
                 break;
             }
         }
         if ($closed) {
             continue;
         }
+
+//~         print('<span>');
 
         $name = "choice-$day";
         $requested = get_parameter($name, 'no');
@@ -245,19 +247,19 @@ function show_database($uid, $lastuid) {
             $text = $requested;
         }
 
-        print("$label");
+        $line = '';
         foreach (TEXTS as $entry) {
             $value = $entry[0];
-            $label = $entry[1];
+            $longname = $entry[1];
             $id = "$value-$day";
             $checked = ($text == $value) ? ' checked' : '';
-            print("<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"$value\"$checked$disabled/>" .
-                "<label class=\"$value\" for=\"$id\">$label</label>");
+            $line .= "<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"$value\"$checked$disabled/>" .
+                "<label class=\"$value\" for=\"$id\">$longname</label>";
         }
         if ($comment != '') {
             $comment = " ($comment)";
         }
-        print("$comment<br>\n");
+        print("<div class=\"open\">$label$line$comment</div>\n");
     }
     print('</fieldset>');
 }
@@ -310,8 +312,8 @@ via the Mannheim reservation system MA<small>RS</small>.</p>
 
 <fieldset class="personaldata">
 <legend>Benutzerdaten / personal data</legend>
-<label for="uid">Benutzerkennung:*</label><input id="uid" name="uid" placeholder="user id" required="required" value="<?=$uid?>"/>
-<label for="password">Passwort:*</label><input id="password" name="password" placeholder="********" required="required" type="password" value="<?=$password?>"/>
+<label class="uid" for="uid">Benutzerkennung:*</label><input id="uid" name="uid" placeholder="user id" required="required" value="<?=$uid?>"/>
+<label class="password" for="password">Passwort:*</label><input id="password" name="password" placeholder="********" required="required" type="password" value="<?=$password?>"/>
 <input id="lastuid" name="lastuid" type="hidden" value="<?=$uid?>"/>
 </fieldset>
 
@@ -349,7 +351,7 @@ if ($master && $task == 'dump') {
     // Show some information for the current uid.
     $usertext = get_usertext();
     print("<p>$usertext</p>");
-    print("<p>Meine Sitzplatzbuchungen / My seat bookings</p>");
+    print("<h3>Meine Sitzplatzbuchungen / My seat bookings</h3>");
     // Show all bookings.
     show_database($uid, $lastuid);
     if ($email != '') {
@@ -364,8 +366,8 @@ if ($master && $task == 'dump') {
     }
 } else {
     ?>
-    <p>Die <a href="/datenschutzerklaerung/">Informationen zum Datenschutz</a> wurden mir zur Verfügung gestellt.<br/>
-    The <a href="/en/privacy-policy/">privacy information</a> was provided to me.</p>
+    <p>Die <a href="/datenschutzerklaerung/" target="_blank">Informationen zum Datenschutz</a> wurden mir zur Verfügung gestellt.<br/>
+    The <a href="/en/privacy-policy/" target="_blank">privacy information</a> was provided to me.</p>
     <?php
 }
 //<button type="reset">Eingaben zurücksetzen</button>
@@ -373,7 +375,7 @@ if ($master && $task == 'dump') {
 if ($uid == '' || $task == '') {
     if ($authorized) {
 ?>
-<button type="submit">Eingaben absenden</button>
+<button class="submit" type="submit">Eingaben absenden</button>
 <br/>
 <input type="checkbox" name="email" id="email" value="checked" <?=$email?>/>
 <label for="email">Informieren Sie mich bitte per E-Mail über meine aktuellen Sitzplatzbuchungen.
@@ -381,7 +383,7 @@ Please inform me by e-mail about my current bookings.</label>
 <?php
     } else {
 ?>
-<button type="submit">Anmelden</button>
+<button class="submit" type="submit">Anmelden</button>
 <?php
     }
 ?>
@@ -389,8 +391,8 @@ Please inform me by e-mail about my current bookings.</label>
 <?php
     if ($master) {
 ?>
+<h3>Admin-Funktionen</h3>
 <p>
-Admin-Funktionen:
 <ul>
 <li><a href="./?task=dump" target="_blank">Alle Buchungen ausgeben</a>
 <li><a href="./?task=a3-report" target="_blank">Tagesplanung A3</a>
