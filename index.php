@@ -332,12 +332,6 @@ $authorized = false;
 <?php
 if ($uid == '' || $task == '') {
 ?>
-<h2>Sitzplatzbuchung / Seat booking</h2>
-<p>Buchen Sie einen Sitzplatz in den Bibliotheksbereichen und verwalten Sie
-Ihre Sitzplatzbuchungen über das Mannheimer Reservierungssystem MA<small>RS</small>.<br/>
-Book a seat in the library locations and manage your seat bookings
-via the Mannheim reservation system MA<small>RS</small>.</p>
-
 <form id="reservation" method="post">
 
 <fieldset class="personaldata">
