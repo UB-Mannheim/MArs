@@ -303,7 +303,7 @@ function day_report($location) {
     $reservations = $result->fetch_all(MYSQLI_ASSOC);
     $result->free();
     $db->close();
-    print('Datum Bibliotheksbereich Benutzerkennung Name<br/>');
+    print('Datum Bibliotheksbereich Universitätskennung Name<br/>');
     foreach ($reservations as $booking) {
         print_r($booking);
         print('<br/>');
@@ -342,10 +342,10 @@ via the Mannheim reservation system MA<small>RS</small>.</p>
 
 <fieldset class="personaldata">
 <legend>Benutzerdaten / personal data</legend>
-<label class="uid" for="uid">Benutzerkennung:*</label><input id="uid" name="uid" placeholder="user id" required="required" value="<?=$uid?>"/>
+<label class="uid" for="uid">Universitätskennung:*</label><input id="uid" name="uid" placeholder="user id" required="required" value="<?=$uid?>"/>
 <label class="password" for="password">Passwort:*</label><input id="password" name="password" placeholder="********" required="required" type="password" value="<?=$password?>"/>
 <input id="lastuid" name="lastuid" type="hidden" value="<?=$uid?>"/>
-<button class="logout" type="button"><a class="logout" href=".">Abmelden / Logout</a></button>
+<button class="logout" type="button"><a class="logout" href="/">Abmelden / Logout</a></button>
 </fieldset>
 
 <?php
@@ -393,7 +393,7 @@ if ($master && $task == 'dump') {
     if ($password == '') {
         print('<p>Bitte ergänzen Sie Ihre Anmeldedaten um Ihr Passwort.</p>');
     } else {
-        print('<p>Die Anmeldedaten sind ungültig. Bitte prüfen Sie Benutzerkennung und Passwort.</p>');
+        print('<p>Die Anmeldedaten sind ungültig. Bitte prüfen Sie Universitätskennung und Passwort.</p>');
     }
 } else {
     ?>
