@@ -1,6 +1,6 @@
 <?php
 
-// Settings for seat reservation.
+// Settings for seat booking.
 //
 // Copy this template to config.php and update it to your local needs.
 
@@ -13,27 +13,36 @@ define('DB_HOST', 'localhost');
 // Name of database.
 define('DB_NAME', 'sitzplatzreservierung');
 
+// Name of database.
+define('DB_TABLE', 'seatbookings');
+
 // Name of database user.
 define('DB_USER', 'sitzplatzreservierung');
 
 // Password of database user.
 define('DB_PASS', 'mysecret');
 
-// Delete reservations older than $MAX_AGE days.
-define('MAX_AGE', 14);
-// Allow reservations for the next MAX_DAYS days.
+// Delete bookings older than $MAX_AGE days.
+define('MAX_AGE', 28);
+// Allow bookings for the next MAX_DAYS days. Update also HINTS text below.
 define('MAX_DAYS', 14);
 
-// Short and long texts for reservations.
+// Short and long texts for bookings.
 define('TEXTS', [
-    ['a3', 'Bibliotheksbereich A3'],
-    ['eh', 'Bibliotheksbereich Ehrenhof'],
-    ['no', 'keine Reservierung']
+    'a3' => 'Bibliotheksbereich A3',
+    'eh' => 'Bibliotheksbereich Schloss Ehrenhof',
+    'no' => 'keine Buchung'
 ]);
 
 define('LIMIT', [
-    'a3' => 50,
-    'eh' => 70,
+    'a3' => 80,
+    'eh' => 80,
+]);
+
+define('PERSONAL_LIMIT', 5);
+
+define('USERGROUPS', [
+    // Allowed user groups.
 ]);
 
 // Test users.
