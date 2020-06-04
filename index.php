@@ -345,7 +345,7 @@ via the Mannheim reservation system MA<small>RS</small>.</p>
 <label class="uid" for="uid">Universitätskennung:*</label><input id="uid" name="uid" placeholder="user id" required="required" value="<?=$uid?>"/>
 <label class="password" for="password">Passwort:*</label><input id="password" name="password" placeholder="********" required="required" type="password" value="<?=$password?>"/>
 <input id="lastuid" name="lastuid" type="hidden" value="<?=$uid?>"/>
-<button class="logout" type="button"><a class="logout" href="/">Abmelden / Logout</a></button>
+<button class="logout" type="button"><a class="logout" href="logout.html">Abmelden / Logout</a></button>
 </fieldset>
 
 <?php
