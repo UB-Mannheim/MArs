@@ -1,12 +1,21 @@
 <?php
 /*
- * Sitzplatzreservierung für Bibliotheksbereiche
- * 2020-05-30 Prototyp begonnen /sw
+ * Seat booking for libraries
  *
- * Datenbankschema:
- * name - user id
- * text - booking information
- * date - date for booking
+ * (C) 2020 UB Mannheim
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published
+ * by the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  * Note: TODO comments mark missing and incomplete code.
  */
@@ -50,7 +59,8 @@ function get_database() {
 // Dump all bookings.
 function dump_database() {
     $db = get_database();
-    $result = $db->query("SELECT date,text,name FROM reservierungen ORDER BY date,name");
+    $table = DB_TABLE;
+    $result = $db->query("SELECT date,text,name FROM $table ORDER BY date,name");
     print("date       pl uid\n");
     while ($reservation = $result->fetch_assoc()) {
         $date = $reservation['date'];
@@ -67,7 +77,8 @@ function mail_database($uid) {
         return;
     }
     $db = get_database();
-    $result = $db->query("SELECT date,text FROM reservierungen where name='$uid' ORDER BY date");
+    $table = DB_TABLE;
+    $result = $db->query("SELECT date,text FROM $table where name='$uid' ORDER BY date");
     $mailtext = "Datum      Bibliotheksbereich\n";
     $today = date('Y-m-d', time());
     while ($reservation = $result->fetch_assoc()) {
@@ -91,8 +102,9 @@ function mail_database($uid) {
 // Drop existing table with all bookings and create a new empty one.
 function init_database() {
     $db = get_database();
-    $result = $db->query("DROP TABLE reservierungen");
-    $result = $db->query("CREATE TABLE `reservierungen` (
+    $table = DB_TABLE;
+    $result = $db->query("DROP TABLE $table");
+    $result = $db->query("CREATE TABLE `$table` (
         `id` INT NOT NULL AUTO_INCREMENT,
         `name` VARCHAR(16) NOT NULL,
         `text` VARCHAR(8) NOT NULL,
@@ -106,13 +118,14 @@ function init_database() {
 // Add up to 10 random bookings for testing.
 function preset_database() {
     $db = get_database();
+    $table = DB_TABLE;
     $now = time();
     for ($i = 0; $i < 10; $i++) {
         $uid = TEST_USERS[rand(0, count(TEST_USERS) - 1)];
         // TODO: Fixme.
         $text = TEXTS[rand(0, count(TEXTS) - 2)][0];
         $date = date('Y-m-d', $now + 24 * 60 * 60 * rand(0 - MAX_AGE, 7));
-        $result = $db->query("INSERT INTO reservierungen (name, text, date) VALUES ('$uid','$text','$date')");
+        $result = $db->query("INSERT INTO $table (name, text, date) VALUES ('$uid','$text','$date')");
     }
     $db->close();
 }
@@ -120,39 +133,46 @@ function preset_database() {
 // Add, modify or delete bookings in the database.
 function update_database($uid, $date, $oldvalue, $value) {
     $db = get_database();
+    $table = DB_TABLE;
     $comment = "";
     $no_reservation = 'no';
     $success_text = '<span class="success">Aktion erfolgreich</span>';
     $failure_text = '<span class="failure">Aktion nicht erfolgreich</span>';
     if ($value == $no_reservation) {
         // Delete booking.
-        $result = $db->query("DELETE FROM reservierungen WHERE name='$uid' AND date='$date'");
+        $result = $db->query("DELETE FROM $table WHERE name='$uid' AND date='$date'");
         $success = $result ? $success_text : $failure_text;
         $comment = DEBUG ? "gelöscht: $oldvalue, $success" : $success;
     } else {
         // Limit bookings.
-        $result = $db->query("SELECT COUNT(*) FROM reservierungen WHERE date='$date' AND text='$value'");
+        $result = $db->query("SELECT COUNT(*) FROM $table WHERE date='$date' AND text='$value'");
         $count = $result ? $result->fetch_row()[0] : 0;
         $limit = LIMIT[$value];
         $today = date('Y-m-d', time());
-        $result = $db->query("SELECT COUNT(*) FROM reservierungen WHERE date>='$today' AND name='$uid'");
+        $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>='$today' AND name='$uid'");
         $personal_bookings = $result ? $result->fetch_row()[0] : 999;
 //~         trace("bookings for $uid from $today = $personal_bookings");
         if ($count > $limit) {
             $comment = '<span class="failure">Bibliotheksbereich ausgebucht</span>';
-        } elseif ($personal_bookings > 5) {
-            $comment = '<span class="failure">Persönliches Buchungslimit erreicht</span>';
         } elseif ($oldvalue == $no_reservation) {
             // New bookings.
-            $result = $db->query("INSERT INTO reservierungen (name, text, date) VALUES ('$uid','$value','$date')");
-            $success = $result ? $success_text : $failure_text;
-            $comment = DEBUG ? "reserviert: $value, $success" : $success;
+            if ($personal_bookings >= PERSONAL_LIMIT) {
+                $comment = '<span class="failure">Persönliches Buchungslimit erreicht</span>';
+            } else {
+                $result = $db->query("INSERT INTO $table (name, text, date) VALUES ('$uid','$value','$date')");
+                $success = $result ? $success_text : $failure_text;
+                $comment = DEBUG ? "reserviert: $value, $success" : $success;
+            }
         } else {
             // Modified booking.
-            $result = $db->query("DELETE FROM reservierungen WHERE name='$uid' AND date='$date'");
-            $result = $db->query("INSERT INTO reservierungen (name, text, date) VALUES ('$uid','$value','$date')");
-            $success = $result ? $success_text : $failure_text;
-            $comment = DEBUG ? "aktualisiert: $oldvalue -> $value, $success" : $success;
+            if ($personal_bookings > PERSONAL_LIMIT) {
+                $comment = '<span class="failure">Persönliches Buchungslimit erreicht</span>';
+            } else {
+                $result = $db->query("DELETE FROM $table WHERE name='$uid' AND date='$date'");
+                $result = $db->query("INSERT INTO $table (name, text, date) VALUES ('$uid','$value','$date')");
+                $success = $result ? $success_text : $failure_text;
+                $comment = DEBUG ? "aktualisiert: $oldvalue -> $value, $success" : $success;
+            }
         }
     }
     $db->close();
@@ -162,7 +182,8 @@ function update_database($uid, $date, $oldvalue, $value) {
 // Show stored bookings in a web form which allows modifications.
 function show_database($uid, $lastuid) {
     $db = get_database();
-    $result = $db->query("SELECT date, text FROM reservierungen WHERE name = '$uid' ORDER BY date");
+    $table = DB_TABLE;
+    $result = $db->query("SELECT date, text FROM $table WHERE name = '$uid' ORDER BY date");
     $reservations = $result->fetch_all(MYSQLI_ASSOC);
     $result->free();
     //echo 'row=' . htmlentities($row);
@@ -277,7 +298,8 @@ function day_report($location) {
     $today = date('Y-m-d', $now);
 
     $db = get_database();
-    $result = $db->query("SELECT date, text, name FROM reservierungen WHERE date = '$today' AND text = '$location' ORDER BY date");
+    $table = DB_TABLE;
+    $result = $db->query("SELECT date, text, name FROM $table WHERE date = '$today' AND text = '$location' ORDER BY date");
     $reservations = $result->fetch_all(MYSQLI_ASSOC);
     $result->free();
     $db->close();
