@@ -26,6 +26,7 @@ Administrative Funktionen und Testmöglichkeiten werden mit einem Masterpasswort
 - Anzeige aller Buchungen
 - Initialisieren einer leeren Datenbank
 - Erzeugen von zufälligen Buchungen für Testzwecke
+- Tagesberichte für die buchbaren Bereiche
 
 Weitere Funktionen wie Löschen alter Buchungen oder Erzeugen von Berichten
 können nachgerüstet oder über SQL-Befehle realisiert werden.
@@ -47,20 +48,11 @@ Aktuell implementiert ist dabei die Anbindung an MariaDB.
     CREATE USER 'sitzplatzreservierung'@localhost IDENTIFIED BY 'mypassword';
     GRANT ALL PRIVILEGES ON sitzplatzreservierung.* to sitzplatzreservierung@localhost;
 
-
 Buchungsrestriktionen sind teilweise in der Datenbank realisiert, aktuell nur eine Buchung pro Tag und Benutzer.
 Weitere, z. B. Prüfung der Eingaben, lassen sich ebenfalls in der Datenbank realisieren.
 Der PHP-Code enthält zusätzliche Prüfungen.
 
 Die Anzeige lässt sich optional per CSS angepassen.
-
-### Offene Punkte
-
-* Projektnamen auswählen
-* Benutzerdaten aus ALMA
-* Mehrsprachigkeit lässt sich z. B. mit Hilfe von `gettext` nachrüsten.
-* Anbindung von E-Mail-Benachrichtigung fehlt noch (php-swiftmailer, php-mail)
-* php-ssh2 installieren und statt `exec` verwenden
 
 ### Lizenz
 
