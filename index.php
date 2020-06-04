@@ -299,15 +299,39 @@ function day_report($location) {
 
     $db = get_database();
     $table = DB_TABLE;
+
+    // TODO: Remove demo hack.
+    if ($today < "2020-06-05") {
+        $today = "2020-06-05";
+    }
+
     $result = $db->query("SELECT date, text, name FROM $table WHERE date = '$today' AND text = '$location' ORDER BY date");
     $reservations = $result->fetch_all(MYSQLI_ASSOC);
     $result->free();
     $db->close();
-    print('Datum Bibliotheksbereich Universitätskennung Name<br/>');
+
+    print("<pre>\n");
+    $date = $today;
+    $longname = TEXTS[$location];
+    print("MARS Tagesbericht $date $longname\n\n");
+    print("Nr. Datum      Bibliotheksbereich                  Kennung   Name\n");
+    $nr = 0;
+    $names = array();
     foreach ($reservations as $booking) {
-        print_r($booking);
-        print('<br/>');
+        $nr++;
+        $name = $booking['name'];
+        if (isset($names[$name])) {
+            $fullname = $names[$name];
+        } else {
+            get_ldap($name, $ldap);
+            $givenName = $ldap['givenName'];
+            $sn = $ldap['sn'];
+            $fullname = "$sn, $givenName";
+            $names[$name] = $fullname;
+        }
+        printf("%3d %s %-36s%-10s%s\n", $nr, $date, $longname, $name, $fullname);
     }
+    print("</pre>\n");
 }
 
 // Get form values from input (normally POST) if available.
@@ -347,7 +371,7 @@ if ($uid == '' || $task == '') {
 <?php
 }
 
-if ($authorized) {
+if ($authorized && $task == '') {
 ?>
 <button class="logout" type="button"><a class="logout" href=".">Abmelden / Logout</a></button>
 <?php
