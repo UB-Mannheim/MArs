@@ -90,7 +90,6 @@ function mail_database($uid) {
         // Convert date representation.
         $date = date('d.m.Y', strtotime($date));
         // Translate short into long location name.
-//~         trace($date . ': ' . $reservation['text']);
         $text = TEXTS[$reservation['text']];
         $mailtext .= "$date $text\n";
     }
@@ -151,7 +150,6 @@ function update_database($uid, $date, $oldvalue, $value) {
         $today = date('Y-m-d', time());
         $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>='$today' AND name='$uid'");
         $personal_bookings = $result ? $result->fetch_row()[0] : 999;
-//~         trace("bookings for $uid from $today = $personal_bookings");
         if ($count > $limit) {
             $comment = '<span class="failure">Bibliotheksbereich ausgebucht</span>';
         } elseif ($oldvalue == $no_reservation) {
@@ -200,11 +198,6 @@ function show_database($uid, $lastuid) {
     // Round current time to start of day.
     $now = strtotime(date('Y-m-d', $now));
 
-//~     trace("now=$now, start=$start");
-//~     $date_now = date('Y-m-d H:i:s', $now);
-//~     $date_start = date('Y-m-d H:i:s', $start);
-//~     trace("now=$date_now, nxt=$date_start");
-
     // Last day which may be booked (time rounded to start of day).
     $last = $now + 24 * 60 * 60 * MAX_DAYS;
 
@@ -223,7 +216,6 @@ function show_database($uid, $lastuid) {
         $text = 'no';
         if ($time < $start) {
             $disabled = ' disabled';
-//~             trace("$day is disabled");
         }
 
         $label = date('d.m.', $time);
@@ -237,7 +229,6 @@ function show_database($uid, $lastuid) {
         if ($i < count($reservations)) {
             $text = $reservations[$i]['text'];
         }
-//~         trace("$day, $resday=$text");
         if ($resday != $day) {
             $text = 'no';
         }
