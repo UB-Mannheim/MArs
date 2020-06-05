@@ -370,7 +370,9 @@ if ($uid == '' || $task == '') {
 
 <fieldset class="personaldata">
 <legend>Benutzerdaten / personal data</legend>
-<label class="uid" for="uid">Universitätskennung:*</label><input id="uid" name="uid" placeholder="user id" required="required" value="<?=$uid?>"/>
+<label class="uid" for="uid">Universitätskennung:*</label>
+<input id="uid" name="uid" placeholder="user id" maxlength="8"
+  pattern="^([a-z_0-9]{0,8})$" required="required" value="<?=$uid?>"/>
 <label class="password" for="password">Passwort:*</label><input id="password" name="password" placeholder="********" required="required" type="password" value="<?=$password?>"/>
 <input id="lastuid" name="lastuid" type="hidden" value="<?=$authorized ? $uid : ''?>"/>
 </fieldset>
