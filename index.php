@@ -305,10 +305,10 @@ function day_report($location) {
     $result->free();
     $db->close();
 
-    print("<pre>\n");
     $date = $today;
     $longname = TEXTS[$location];
-    print("MARS Tagesbericht $date $longname\n\n");
+    print("<h2>MARS Tagesbericht $date $longname</h2>\n");
+    print("<pre>\n");
     print("Nr. Datum      Bibliotheksbereich                  Kennung   Name\n");
 
     // Get all full names from LDAP and sort them.
