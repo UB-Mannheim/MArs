@@ -300,11 +300,6 @@ function day_report($location) {
     $db = get_database();
     $table = DB_TABLE;
 
-    // TODO: Remove demo hack.
-    if ($today < "2020-06-05") {
-        $today = "2020-06-05";
-    }
-
     $result = $db->query("SELECT date, text, name FROM $table WHERE date = '$today' AND text = '$location' ORDER BY date");
     $reservations = $result->fetch_all(MYSQLI_ASSOC);
     $result->free();
@@ -315,20 +310,23 @@ function day_report($location) {
     $longname = TEXTS[$location];
     print("MARS Tagesbericht $date $longname\n\n");
     print("Nr. Datum      Bibliotheksbereich                  Kennung   Name\n");
-    $nr = 0;
+
+    // Get all full names from LDAP and sort them.
     $names = array();
     foreach ($reservations as $booking) {
-        $nr++;
         $name = $booking['name'];
-        if (isset($names[$name])) {
-            $fullname = $names[$name];
-        } else {
-            get_ldap($name, $ldap);
-            $givenName = $ldap['givenName'];
-            $sn = $ldap['sn'];
-            $fullname = "$sn, $givenName";
-            $names[$name] = $fullname;
-        }
+        get_ldap($name, $ldap);
+        $givenName = $ldap['givenName'];
+        $sn = $ldap['sn'];
+        $fullname = "$sn, $givenName";
+        $names[$fullname] = $name;
+    }
+    ksort($names);
+
+    // Generate report.
+    $nr = 0;
+    foreach ($names as $fullname => $name) {
+        $nr++;
         printf("%3d %s %-36s%-10s%s\n", $nr, $date, $longname, $name, $fullname);
     }
     print("</pre>\n");
