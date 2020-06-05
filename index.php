@@ -21,7 +21,7 @@
  */
 
 // Read configuration for database access.
-require_once('config.php');
+require_once 'config.php';
 
 function alert($text)
 {
@@ -341,6 +341,12 @@ $email = get_parameter('email');
 $uid = get_parameter('uid');
 $lastuid = get_parameter('lastuid');
 $password = get_parameter('password');
+
+if (!preg_match('/^[a-z_0-9]{0,8}$/', $uid)) {
+    // uid is longer than 8 characters or contains invalid characters.
+    alert("Ungültige Universitätskennung");
+    $uid = '';
+}
 
 // Is there a username with valid password?
 $authorized = false;
