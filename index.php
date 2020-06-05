@@ -23,11 +23,13 @@
 // Read configuration for database access.
 require_once('config.php');
 
-function alert($text) {
+function alert($text)
+{
     print("<script>alert('$text');</script>");
 }
 
-function trace($text) {
+function trace($text)
+{
     global $uid;
     if ($uid == 'stweil') {
         alert($text);
@@ -35,7 +37,8 @@ function trace($text) {
 }
 
 // Get parameter from web (GET, POST) or command line (environment).
-function get_parameter($name, $default='') {
+function get_parameter($name, $default = '')
+{
     $parameter = $default;
     if (isset($_REQUEST[$name])) {
         // Value from GET or POST (web).
@@ -48,7 +51,8 @@ function get_parameter($name, $default='') {
 }
 
 // Get handle for database access.
-function get_database() {
+function get_database()
+{
     $db = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
     if ($error = $db->connect_errno) {
         die("Failed to connect to database, $error\n");
@@ -57,7 +61,8 @@ function get_database() {
 }
 
 // Dump all bookings.
-function dump_database() {
+function dump_database()
+{
     $db = get_database();
     $table = DB_TABLE;
     $result = $db->query("SELECT date,text,name FROM $table ORDER BY date,name");
@@ -72,7 +77,8 @@ function dump_database() {
     $db->close();
 }
 
-function mail_database($uid) {
+function mail_database($uid)
+{
     if (!function_exists('sendmail')) {
         return;
     }
@@ -99,7 +105,8 @@ function mail_database($uid) {
 }
 
 // Drop existing table with all bookings and create a new empty one.
-function init_database() {
+function init_database()
+{
     $db = get_database();
     $table = DB_TABLE;
     $result = $db->query("DROP TABLE $table");
@@ -115,7 +122,8 @@ function init_database() {
 }
 
 // Add up to 10 random bookings for testing.
-function preset_database() {
+function preset_database()
+{
     $db = get_database();
     $table = DB_TABLE;
     $now = time();
@@ -130,7 +138,8 @@ function preset_database() {
 }
 
 // Add, modify or delete bookings in the database.
-function update_database($uid, $date, $oldvalue, $value) {
+function update_database($uid, $date, $oldvalue, $value)
+{
     $db = get_database();
     $table = DB_TABLE;
     $comment = "";
@@ -178,7 +187,8 @@ function update_database($uid, $date, $oldvalue, $value) {
 }
 
 // Show stored bookings in a web form which allows modifications.
-function show_database($uid, $lastuid) {
+function show_database($uid, $lastuid)
+{
     $db = get_database();
     $table = DB_TABLE;
     $result = $db->query("SELECT date, text FROM $table WHERE name = '$uid' ORDER BY date");
@@ -284,7 +294,8 @@ function show_database($uid, $lastuid) {
 }
 
 // Daily report for a location.
-function day_report($location) {
+function day_report($location)
+{
     $now = time();
     $today = date('Y-m-d', $now);
 
@@ -348,7 +359,7 @@ if ($uid != '') {
 }
 
 if ($uid == '' || $task == '') {
-?>
+    ?>
 <form id="reservation" method="post">
 
 <fieldset class="personaldata">
@@ -357,13 +368,13 @@ if ($uid == '' || $task == '') {
 <label class="password" for="password">Passwort:*</label><input id="password" name="password" placeholder="********" required="required" type="password" value="<?=$password?>"/>
 <input id="lastuid" name="lastuid" type="hidden" value="<?=$authorized ? $uid : ''?>"/>
 </fieldset>
-<?php
+    <?php
 }
 
 if ($authorized && $task == '') {
-?>
+    ?>
 <button class="logout" type="button"><a class="logout" href=".">Abmelden / Logout</a></button>
-<?php
+    <?php
 }
 
 // Should admin commands be allowed?
@@ -416,23 +427,23 @@ if ($master && $task == 'dump') {
 
 if ($uid == '' || $task == '') {
     if ($authorized) {
-?>
+        ?>
 <button class="submit" type="submit">Eingaben absenden</button>
 <br/>
 <input type="checkbox" name="email" id="email" value="checked" <?=$email?>/>
 <label for="email">Informieren Sie mich bitte per E-Mail über meine aktuellen Sitzplatzbuchungen.
 Please inform me by e-mail about my current bookings.</label>
-<?php
+        <?php
     } else {
-?>
+        ?>
 <button class="submit" type="submit">Anmelden</button>
-<?php
+        <?php
     }
-?>
+    ?>
 
-<?php
+    <?php
     if ($master) {
-?>
+        ?>
 <h3>Admin-Funktionen</h3>
 <p>
 <ul>
@@ -441,14 +452,14 @@ Please inform me by e-mail about my current bookings.</label>
 <li><a href="./?task=eh-report" target="_blank">Tagesplanung Schloss Ehrenhof</a>
 </ul>
 </p>
-<?php
-}
-?>
+        <?php
+    }
+    ?>
 
 </form>
 
-<?=HINTS?>
-<?php
+    <?=HINTS?>
+    <?php
 }
 ?>
 
