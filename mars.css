@@ -38,6 +38,10 @@ fieldset.personaldata {
   margin-right: 5px;
 }
 
+input.uid {
+  width: 8em;
+}
+
 label.uid {
   padding-right: 6px;
 }

@@ -391,7 +391,7 @@ if ($uid == '' || $task == '') {
 <fieldset class="personaldata">
 <legend>Benutzerdaten / personal data</legend>
 <label class="uid" for="uid">Universitätskennung:*</label>
-<input id="uid" name="uid" placeholder="user id" maxlength="8"
+<input class="uid" id="uid" name="uid" placeholder="user id" maxlength="8"
   pattern="^([a-z_0-9]{0,8})$" required="required" value="<?=$uid?>"/>
 <label class="password" for="password">Passwort:*</label><input id="password" name="password" placeholder="********" required="required" type="password" value="<?=$password?>"/>
 <input id="lastuid" name="lastuid" type="hidden" value="<?=$authorized ? $uid : ''?>"/>
@@ -493,6 +493,15 @@ Please inform me by e-mail about my current bookings.</label>
     <?php
 }
 ?>
+
+<script>
+    // Fix height of iframe.
+    let iFrame = window.parent.document.getElementById("seatbooking");
+    if (iFrame) {
+        let iFrameDocument = iFrame.contentWindow.document;
+        iFrame.height = iFrame.contentWindow.document.body.scrollHeight + 20;
+    }
+</script>
 
 </body>
 </html>
