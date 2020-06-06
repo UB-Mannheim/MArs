@@ -294,13 +294,33 @@ function show_database($uid, $lastuid)
 }
 
 // Daily report for a location.
-function day_report($location)
+function day_report($location = false)
 {
     $now = time();
     $today = date('Y-m-d', $now);
 
     $db = get_database();
     $table = DB_TABLE;
+
+    if (!$location) {
+        // Summary of daily bookings per location.
+        $result = $db->query("SELECT date, text, COUNT(text) AS n FROM seatbookings GROUP BY date, text");
+        $reservations = $result->fetch_all(MYSQLI_ASSOC);
+        $result->free();
+        $db->close();
+        print("<h2>MARS Buchungsübersicht</h2>\n");
+        print("<pre>\n");
+        print("Datum      Bibliotheksbereich                  Buchungen\n");
+        foreach ($reservations as $booking) {
+            $date = $booking['date'];
+            $location = $booking['text'];
+            $count = $booking['n'];
+            $longname = TEXTS[$location];
+            printf("%s %-36s%9d\n", $date, $longname, $count);
+        }
+        print("</pre>\n");
+        return;
+    }
 
     $result = $db->query("SELECT date, text, name FROM $table WHERE date = '$today' AND text = '$location' ORDER BY date");
     $reservations = $result->fetch_all(MYSQLI_ASSOC);
@@ -396,6 +416,8 @@ if ($master && $task == 'dump') {
     day_report('a3');
 } elseif ($master && $task == 'eh-report') {
     day_report('eh');
+} elseif ($master && $task == 'day-report') {
+    day_report();
 } elseif ($master && $task == 'init') {
     init_database();
     print('<pre>');
@@ -456,6 +478,7 @@ Please inform me by e-mail about my current bookings.</label>
 <p>
 <ul>
 <li><a href="./?task=dump" target="_blank">Alle Buchungen ausgeben</a>
+<li><a href="./?task=day-report" target="_blank">Buchungsübersicht</a>
 <li><a href="./?task=a3-report" target="_blank">Tagesplanung A3</a>
 <li><a href="./?task=eh-report" target="_blank">Tagesplanung Schloss Ehrenhof</a>
 </ul>
