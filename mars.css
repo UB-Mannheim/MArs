@@ -1,9 +1,10 @@
 body {
-  font-family: sans-serif;
+  font-family: Helvetica,Arial,sans-serif;
   font-size: 14px;
 }
 
 a.logout {
+  color: black;
   font-size: 18px;
   text-decoration: none;
 }
