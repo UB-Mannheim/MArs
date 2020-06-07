@@ -159,7 +159,7 @@ function update_database($uid, $date, $oldvalue, $value)
         $today = date('Y-m-d', time());
         $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>='$today' AND name='$uid'");
         $personal_bookings = $result ? $result->fetch_row()[0] : 999;
-        if ($count > $limit) {
+        if ($count >= $limit) {
             $comment = '<span class="failure">Bibliotheksbereich ausgebucht</span>';
         } elseif ($oldvalue == $no_reservation) {
             // New bookings.
