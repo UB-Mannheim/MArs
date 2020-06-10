@@ -31,7 +31,7 @@ define('MAX_DAYS', 14);
 define('TEXTS', [
     'a3' => 'Bibliotheksbereich A3',
     'eh' => 'Bibliotheksbereich Schloss Ehrenhof',
-    'no' => 'keine Buchung'
+    'no' => _('bookings.none')
 ]);
 
 define('LIMIT', [
@@ -76,7 +76,12 @@ require_once 'Swift/swift_required.php';
 // Mail implementation using Swift Mailer.
 // See documentation: https://swiftmailer.symfony.com/docs/introduction.html
 function sendmail($uid, $email, $text) {
-    $text = "Diese Reservierungen sind für die Benutzerkennung $uid vorgemerkt:\n\n" . $text;
+    $body = sprintf(_('mail.salutation'), $uid);
+    $body .= "\n\n" . sprintf(_('mail.bookings'), $uid);
+    $body .= "\n\n" . $text;
+    $body .= "\n" . _('mail.link');
+    $body .= "\nhttps://" .$_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'] . "?uid=" . $uid;
+    $body .= "\n\n" . _('mail.greetings');
 
     // Sendmail for transport.
     $transport = new Swift_SendmailTransport('/usr/sbin/sendmail -bs');
@@ -87,10 +92,10 @@ function sendmail($uid, $email, $text) {
     $from = ['user@example.org' => 'Demo Sender'];
 
     // Create a message
-    $message = (new Swift_Message('Sitzplatzreservierung'))
+    $message = (new Swift_Message(_('mail.subject')))
         ->setFrom($from)
         ->setTo($email)
-        ->setBody($text)
+        ->setBody($body)
     ;
 
     // Send the message

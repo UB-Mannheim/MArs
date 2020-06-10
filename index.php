@@ -23,6 +23,44 @@
 // Read configuration for database access.
 require_once 'config.php';
 
+$locale = getLang();
+putenv("LANG=$locale");
+setlocale(LC_ALL, $locale);
+bindtextdomain('MArs', 'locale');
+bind_textdomain_codeset('MArs', 'UTF-8');
+textdomain('MArs');
+
+function getLang() {
+    if (isset($_REQUEST['lang'])) {
+        // User requested language by URL parameter.
+        $locale = $_REQUEST['lang'];
+        $_SESSION['lang'] = $locale;
+    } elseif (isset($_SESSION['lang'])) {
+        // Get language from session data.
+        $locale = $_SESSION['lang'];
+    } elseif (isset($_SERVER['HTTP_ACCEPT_LANGUAGE'])) {
+        // Get language from browser settings.
+        $locale = locale_accept_from_http($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+    } else {
+        $locale = 'en';
+    }
+
+    switch (substr($locale, 0, 2)) {
+        case 'de':
+            $locale = 'de_DE';
+            break;
+        case 'en':
+            $locale = 'en_US';
+            break;
+        // more locales would go here
+        default:
+            // To Do: make default locale configurable?
+            $locale = 'en_US';
+            break;
+            }
+    return $locale . ".UTF-8";
+}
+
 function alert($text)
 {
     print("<script>alert('$text');</script>");
@@ -144,8 +182,8 @@ function update_database($uid, $date, $oldvalue, $value)
     $table = DB_TABLE;
     $comment = "";
     $no_reservation = 'no';
-    $success_text = '<span class="success">Aktion erfolgreich</span>';
-    $failure_text = '<span class="failure">Aktion nicht erfolgreich</span>';
+    $success_text = '<span class="success">' . _('form.action.success') . '</span>';
+    $failure_text = '<span class="failure">'. _('form.action.failure') .'</span>';
     if ($value == $no_reservation) {
         // Delete booking.
         $result = $db->query("DELETE FROM $table WHERE name='$uid' AND date='$date'");
@@ -160,11 +198,11 @@ function update_database($uid, $date, $oldvalue, $value)
         $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>='$today' AND name='$uid'");
         $personal_bookings = $result ? $result->fetch_row()[0] : 999;
         if ($count >= $limit) {
-            $comment = '<span class="failure">Bibliotheksbereich ausgebucht</span>';
+            $comment = '<span class="failure">' . _('form.failure.libraryfull') . '</span>';
         } elseif ($oldvalue == $no_reservation) {
             // New bookings.
             if ($personal_bookings >= PERSONAL_LIMIT) {
-                $comment = '<span class="failure">Persönliches Buchungslimit erreicht</span>';
+                $comment = '<span class="failure">' . _('form.failure.personallimit') . '</span>';
             } else {
                 $result = $db->query("INSERT INTO $table (name, text, date) VALUES ('$uid','$value','$date')");
                 $success = $result ? $success_text : $failure_text;
@@ -173,7 +211,7 @@ function update_database($uid, $date, $oldvalue, $value)
         } else {
             // Modified booking.
             if ($personal_bookings > PERSONAL_LIMIT) {
-                $comment = '<span class="failure">Persönliches Buchungslimit erreicht</span>';
+                $comment = '<span class="failure">' . _('form.failure.personallimit') . '</span>';
             } else {
                 $result = $db->query("DELETE FROM $table WHERE name='$uid' AND date='$date'");
                 $result = $db->query("INSERT INTO $table (name, text, date) VALUES ('$uid','$value','$date')");
@@ -215,7 +253,7 @@ function show_database($uid, $lastuid)
     $first = $now;
 
     print('<fieldset>');
-    print('<legend>Buchungen / bookings</legend>');
+    print('<legend>' . _('bookings.form.legend') . '</legend>');
 
     // Get the first reserved day from the booking list.
     $i = 0;
@@ -250,12 +288,12 @@ function show_database($uid, $lastuid)
         foreach (CLOSED as $condition) {
             $closed = ($weekday == $condition);
             if ($closed) {
-                print("<div class=\"closed\">$label geschlossen / closed</div>");
+                print("<div class=\"closed\">$label " . _('closed') . "</div>");
                 break;
             }
             $closed = ($day == $condition);
             if ($closed) {
-                print("<div class=\"closed\">$label geschlossen / closed</div>");
+                print("<div class=\"closed\">$label " . _('closed') . "</div>");
                 break;
             }
         }
@@ -364,7 +402,7 @@ $password = get_parameter('password');
 
 if (!preg_match('/^[a-z_0-9]{0,8}$/', $uid)) {
     // uid is longer than 8 characters or contains invalid characters.
-    alert("Ungültige Universitätskennung");
+    alert(_('auth.invalid.id'));
     $uid = '';
 }
 
@@ -373,9 +411,9 @@ $authorized = false;
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?php echo(substr($locale,0,2)) ?>">
 <head>
-<title>UB Sitzplatzbuchung</title>
+<title><?php echo _("title")?></title>
 <link rel="stylesheet" type="text/css" href="mars.css" media="all">
 </head>
 <body>
@@ -389,11 +427,11 @@ if ($uid == '' || $task == '') {
 <form id="reservation" method="post">
 
 <fieldset class="personaldata">
-<legend>Benutzerdaten / personal data</legend>
-<label class="uid" for="uid">Universitätskennung:*</label>
+<legend><?php echo _('auth.form.legend') ?></legend>
+<label class="uid" for="uid"><?php echo _('auth.form.id') ?>:*</label>
 <input class="uid" id="uid" name="uid" placeholder="user id" maxlength="8"
   pattern="^([a-z_0-9]{0,8})$" required="required" value="<?=$uid?>"/>
-<label class="password" for="password">Passwort:*</label><input id="password" name="password" placeholder="********" required="required" type="password" value="<?=$password?>"/>
+<label class="password" for="password"><?php echo _('auth.form.password') ?>:*</label><input id="password" name="password" placeholder="********" required="required" type="password" value="<?=$password?>"/>
 <input id="lastuid" name="lastuid" type="hidden" value="<?=$authorized ? $uid : ''?>"/>
 </fieldset>
     <?php
@@ -401,7 +439,7 @@ if ($uid == '' || $task == '') {
 
 if ($authorized && $task == '') {
     ?>
-<button class="logout" type="button"><a class="logout" href=".">Abmelden / Logout</a></button>
+	    <button class="logout" type="button"><a class="logout" href="."><?php echo _('auth.logout') ?></a></button>
     <?php
 }
 
@@ -434,7 +472,7 @@ if ($master && $task == 'dump') {
     // Show some information for the current uid.
     $usertext = get_usertext();
     print("<p>$usertext</p>");
-    print("<h3>Meine Sitzplatzbuchungen / My seat bookings</h3>");
+    print("<h3>" . _('bookings.mybookings') . "</h3>");
     // Show all bookings.
     show_database($uid, $lastuid);
     if ($email != '') {
@@ -443,30 +481,26 @@ if ($master && $task == 'dump') {
     }
 } elseif ($uid != '') {
     if ($password == '') {
-        print('<p>Bitte ergänzen Sie Ihre Anmeldedaten um Ihr Passwort.</p>');
+        print('<p>' . _('auth.password.needed') . '</p>');
     } else {
-        print('<p>Die Anmeldedaten sind ungültig. Bitte prüfen Sie Universitätskennung und Passwort.</p>');
+        print('<p>' . _('auth.invalid.credentials') . '</p>');
     }
 } else {
-    ?>
-    <p>Die <a href="/datenschutzerklaerung/" target="_blank">Informationen zum Datenschutz</a> wurden mir zur Verfügung gestellt.<br/>
-    The <a href="/en/privacy-policy/" target="_blank">privacy information</a> was provided to me.</p>
-    <?php
+    print('<p>' . _('privacy') . '</p>');
 }
 //<button type="reset">Eingaben zurücksetzen</button>
 
 if ($uid == '' || $task == '') {
     if ($authorized) {
         ?>
-<button class="submit" type="submit">Eingaben absenden</button>
+		<button class="submit" type="submit"><?php echo _('bookings.form.submit') ?></button>
 <br/>
 <input type="checkbox" name="email" id="email" value="checked" <?=$email?>/>
-<label for="email">Informieren Sie mich bitte per E-Mail über meine aktuellen Sitzplatzbuchungen.
-Please inform me by e-mail about my current bookings.</label>
+<label for="email"><?php echo _('bookings.form.email') ?></label>
         <?php
     } else {
         ?>
-<button class="submit" type="submit">Anmelden</button>
+		<button class="submit" type="submit"><?php echo _('auth.form.login') ?></button>
         <?php
     }
     ?>
@@ -474,13 +508,13 @@ Please inform me by e-mail about my current bookings.</label>
     <?php
     if ($master) {
         ?>
-<h3>Admin-Funktionen</h3>
+<h3><?php echo _('admin.functions') ?></h3>
 <p>
 <ul>
-<li><a href="./?task=dump" target="_blank">Alle Buchungen ausgeben</a>
-<li><a href="./?task=day-report" target="_blank">Buchungsübersicht</a>
-<li><a href="./?task=a3-report" target="_blank">Tagesplanung A3</a>
-<li><a href="./?task=eh-report" target="_blank">Tagesplanung Schloss Ehrenhof</a>
+<li><a href="./?task=dump" target="_blank"><?php echo _('admin.bookings.all') ?></a>
+<li><a href="./?task=day-report" target="_blank"><?php echo _('admin.bookings.report.day.all') ?></a>
+<li><a href="./?task=a3-report" target="_blank"><?php echo _('admin.bookings.report.day.a3') ?></a>
+<li><a href="./?task=eh-report" target="_blank"><?php echo _('admin.bookings.report.day.be') ?></a>
 </ul>
 </p>
         <?php

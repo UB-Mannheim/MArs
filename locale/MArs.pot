@@ -1,0 +1,138 @@
+# Locale template for MArs
+# Copyright (C) 2020
+# This file is distributed under the same license as the MArs package.
+# Stefan Weil stefan.weil@bib.uni-mannheim.de
+# Dennis Müller dennis.mueller@bib.uni-mannheim.de
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-06-10 16:31+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: config-template.php:35
+msgid "bookings.none"
+msgstr ""
+
+#: config-template.php:80
+msgid "mail.salutation"
+msgstr ""
+
+#: config-template.php:81
+msgid "mail.bookings"
+msgstr ""
+
+#: config-template.php:83
+msgid "mail.link"
+msgstr ""
+
+#: config-template.php:85
+msgid "mail.greetings"
+msgstr ""
+
+#: config-template.php:96
+msgid "mail.subject"
+msgstr ""
+
+#: index.php:186
+msgid "form.action.success"
+msgstr ""
+
+#: index.php:187
+msgid "form.action.failure"
+msgstr ""
+
+#: index.php:202
+msgid "form.failure.libraryfull"
+msgstr ""
+
+#: index.php:206 index.php:215
+msgid "form.failure.personallimit"
+msgstr ""
+
+#: index.php:257
+msgid "bookings.form.legend"
+msgstr ""
+
+#: index.php:292 index.php:297
+msgid "closed"
+msgstr ""
+
+#: index.php:406
+msgid "auth.invalid.id"
+msgstr ""
+
+#: index.php:417
+msgid "title"
+msgstr ""
+
+#: index.php:431
+msgid "auth.form.legend"
+msgstr ""
+
+#: index.php:432
+msgid "auth.form.id"
+msgstr ""
+
+#: index.php:435
+msgid "auth.form.password"
+msgstr ""
+
+#: index.php:443
+msgid "auth.logout"
+msgstr ""
+
+#: index.php:476
+msgid "bookings.mybookings"
+msgstr ""
+
+#: index.php:485
+msgid "auth.password.needed"
+msgstr ""
+
+#: index.php:487
+msgid "auth.invalid.credentials"
+msgstr ""
+
+#: index.php:490
+msgid "privacy"
+msgstr ""
+
+#: index.php:497
+msgid "bookings.form.submit"
+msgstr ""
+
+#: index.php:500
+msgid "bookings.form.email"
+msgstr ""
+
+#: index.php:504
+msgid "auth.form.login"
+msgstr ""
+
+#: index.php:512
+msgid "admin.functions"
+msgstr ""
+
+#: index.php:515
+msgid "admin.bookings.all"
+msgstr ""
+
+#: index.php:516
+msgid "admin.bookings.report.day.all"
+msgstr ""
+
+#: index.php:517
+msgid "admin.bookings.report.day.a3"
+msgstr ""
+
+#: index.php:518
+msgid "admin.bookings.report.day.be"
+msgstr ""
