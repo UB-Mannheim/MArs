@@ -1,6 +1,55 @@
 body {
-  font-family: sans-serif;
+  font-family: Helvetica,Arial,sans-serif;
   font-size: 14px;
+}
+
+a.logout {
+  color: black;
+  font-size: 18px;
+  text-decoration: none;
+}
+
+button.logout {
+  padding-left: 10px;
+}
+
+button.submit {
+  font-size: 20px;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+div.closed {
+  color: grey;
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+div.open {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+
+.weekday {
+  min-width: 32px;
+  display: inline-block;
+}
+
+fieldset.personaldata {
+  margin-right: 5px;
+}
+
+input.uid {
+  width: 8em;
+}
+
+label.uid {
+  padding-right: 6px;
+}
+
+label.password {
+  padding-left: 10px;
+  padding-right: 6px;
 }
 
 label.day {
@@ -13,6 +62,23 @@ label.a3 {
 
 label.eh {
   margin-right: 5px;
+}
+
+legend {
+  font-size: 16px;
+}
+
+li {
+  padding-bottom: 6px;
+}
+
+span.failure {
+  background-color: red;
+  font-weight: bold;
+}
+span.success {
+  background-color: greenyellow;
+  font-weight: bold;
 }
 
 
