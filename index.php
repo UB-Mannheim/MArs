@@ -386,16 +386,36 @@ if ($uid != '') {
 
 if ($uid == '' || $task == '') {
     ?>
-<form id="reservation" method="post">
+<form id="reservation" method="post" class="powermail_form powermail_form_1 powermail_form_reservation nolabel">
 
-<fieldset class="personaldata">
-<legend>Benutzerdaten / personal data</legend>
+<!--<fieldset class="personaldata">-->
+<div class="powermail_fieldwrap powermail_fieldwrap_type_headline nolabel">
+    <div class="powermail_field">
+        <h4>Benutzerdaten / personal data</h4>
+    </div>
+</div>
+<div id="userid" class="powermail_fieldwrap powermail_fieldwrap_type_input nolabel">
+    <label for="uid" class="powermail_label mandatory" title="Universitätskennung">Universitätskennung</label>
+    <div class="powermail_field">
+        <input id="uid" class="powermail_input" name="uid" maxlength="8" type="text" pattern="^([a-z_0-9]{0,8})$" required="required" value="<?=$uid?>"/>
+    </div>
+</div>
+<div id="userid" class="powermail_fieldwrap powermail_fieldwrap_type_input nolabel">
+    <label for="password" class="powermail_label mandatory" title="Passwort">Passwort</label>
+    <div class="powermail_field">
+        <input id="password" class="powermail_input" name="password" required="required" type="password" value="<?=$password?>"/>
+    </div>
+</div>
+<input id="lastuid" name="lastuid" type="hidden" value="<?=$authorized ? $uid : ''?>"/>
+
+<!--
 <label class="uid" for="uid">Universitätskennung:*</label>
 <input class="uid" id="uid" name="uid" placeholder="user id" maxlength="8"
   pattern="^([a-z_0-9]{0,8})$" required="required" value="<?=$uid?>"/>
-<label class="password" for="password">Passwort:*</label><input id="password" name="password" placeholder="********" required="required" type="password" value="<?=$password?>"/>
-<input id="lastuid" name="lastuid" type="hidden" value="<?=$authorized ? $uid : ''?>"/>
-</fieldset>
+<label class="password" for="password">Passwort:*</label>
+<input id="password" name="password" placeholder="********" required="required" type="password" value="<?=$password?>"/>
+<input id="lastuid" name="lastuid" type="hidden" value="<?=$authorized ? $uid : ''?>"/>-->
+<!--</fieldset>-->
     <?php
 }
 
@@ -465,8 +485,16 @@ if ($uid == '' || $task == '') {
 Please inform me by e-mail about my current bookings.</label>
         <?php
     } else {
+//<button class="submit" type="submit">Anmelden</button>
         ?>
-<button class="submit" type="submit">Anmelden</button>
+
+<div class="powermail_fieldwrap powermail_fieldwrap_type_submit powermail_fieldwrap_abschicken nolabel">
+    <label for="login" class="powermail_label leer"></label>
+    <input name="L" type="hidden" value="0">
+    <div class="powermail_field">
+        <input id="login" name="login" class="powermail_submit btn btn-primary" value="Anmelden" type="submit">
+    </div>
+</div>
         <?php
     }
     ?>

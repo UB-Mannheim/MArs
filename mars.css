@@ -80,3 +80,44 @@ span.success {
   background-color: greenyellow;
   font-weight: bold;
 }
+
+
+form.powermail_form label {
+    width: 20%;
+    padding-right: 6px;
+    text-align: right;
+    vertical-align: top;
+    font-weight: normal;
+    display: inline-block;
+}
+
+form.powermail_form_reservation div.powermail_fieldwrap div.powermail_field {
+    display: inline-block;
+    width: 20%;
+}
+
+form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type_submit.powermail_fieldwrap_abschicken div.powermail_field {
+    display: inline-block;
+    width: 80%;
+}
+
+form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type_submit.powermail_fieldwrap_abschicken div.powermail_field input#login {
+    width: 80%;
+    height: 40px;
+    background-color: #990000;
+    color: #fff;
+    cursor: pointer;
+}
+
+form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type_submit.powermail_fieldwrap_abschicken div.powermail_field input#login:hover {
+    background-color: #6C0020;
+}
+
+
+form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type_headline div.powermail_field {
+    display: inline-block;
+    width: 100%;
+}
+form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type_headline div.powermail_field h4 {
+    margin-top: 0;
+}
