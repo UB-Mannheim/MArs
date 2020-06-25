@@ -39,8 +39,9 @@ fieldset.personaldata {
   margin-right: 5px;
 }
 
-input.uid {
-  width: 8em;
+input#uid,
+input#password {
+  width: 10em;
 }
 
 label.uid {
@@ -91,6 +92,7 @@ form.powermail_form {
 
 form.powermail_form label {
     width: 20%;
+    min-width: 140px;
     padding-right: 6px;
     text-align: right;
     vertical-align: top;
@@ -135,4 +137,8 @@ form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type
 
 form.powermail_form div.powermail_fieldwrap {
     margin-bottom: 12px;
+}
+
+form.powermail_form div.powermail_fieldwrap_type_headline {
+    margin-bottom: 0;
 }
