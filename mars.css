@@ -81,6 +81,13 @@ span.success {
   font-weight: bold;
 }
 
+form.powermail_form {
+    border: 1px solid #cccccc;
+    padding: 3px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 15px;
+}
 
 form.powermail_form label {
     width: 20%;
@@ -91,6 +98,10 @@ form.powermail_form label {
     display: inline-block;
 }
 
+form.powermail_form.powermail_form_reservation label.mandatory:after {
+    content: ':*'
+}
+
 form.powermail_form_reservation div.powermail_fieldwrap div.powermail_field {
     display: inline-block;
     width: 20%;
@@ -98,11 +109,11 @@ form.powermail_form_reservation div.powermail_fieldwrap div.powermail_field {
 
 form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type_submit.powermail_fieldwrap_abschicken div.powermail_field {
     display: inline-block;
-    width: 80%;
+    width: 100%;
 }
 
 form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type_submit.powermail_fieldwrap_abschicken div.powermail_field input#login {
-    width: 80%;
+    width: 100%;
     height: 40px;
     background-color: #990000;
     color: #fff;
@@ -113,11 +124,11 @@ form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type
     background-color: #6C0020;
 }
 
-
 form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type_headline div.powermail_field {
     display: inline-block;
     width: 100%;
 }
+
 form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type_headline div.powermail_field h4 {
     margin-top: 0;
 }
