@@ -132,3 +132,7 @@ form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type
 form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type_headline div.powermail_field h4 {
     margin-top: 0;
 }
+
+form.powermail_form div.powermail_fieldwrap {
+    margin-bottom: 12px;
+}
