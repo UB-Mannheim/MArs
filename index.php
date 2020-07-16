@@ -406,7 +406,7 @@ if ($authorized && $task == '') {
 }
 
 // Should admin commands be allowed?
-$master = ($authorized && $authorized == 'master');
+$master = ($authorized === 'master');
 
 if ($master && $task == 'dump') {
     print("<pre>\n");
