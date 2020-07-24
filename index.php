@@ -385,6 +385,7 @@ if ($uid != '') {
 }
 
 if ($uid == '' || $task == '') {
+    $pw = htmlspecialchars($password);
     ?>
 <form id="reservation" method="post">
 
@@ -393,7 +394,7 @@ if ($uid == '' || $task == '') {
 <label class="uid" for="uid">Universitätskennung:*</label>
 <input class="uid" id="uid" name="uid" placeholder="user id" maxlength="8"
   pattern="^([a-z_0-9]{0,8})$" required="required" value="<?=$uid?>"/>
-<label class="password" for="password">Passwort:*</label><input id="password" name="password" placeholder="********" required="required" type="password" value="<?=$password?>"/>
+<label class="password" for="password">Passwort:*</label><input id="password" name="password" placeholder="********" required="required" type="password" value="<?=$pw?>"/>
 <input id="lastuid" name="lastuid" type="hidden" value="<?=$authorized ? $uid : ''?>"/>
 </fieldset>
     <?php
