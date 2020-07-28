@@ -140,7 +140,7 @@ function preset_database()
 }
 
 // Add, modify or delete bookings in the database.
-function update_database($uid, $date, $oldvalue, $value)
+function update_database($uid, $group, $date, $oldvalue, $value)
 {
     $db = get_database();
     $table = DB_TABLE;
@@ -155,9 +155,10 @@ function update_database($uid, $date, $oldvalue, $value)
         $comment = DEBUG ? "gelöscht: $oldvalue, $success" : $success;
     } else {
         // Limit bookings.
-        $result = $db->query("SELECT COUNT(*) FROM $table WHERE date='$date' AND text='$value'");
+        $member = ($group === 'member') ? 1 : 0;
+        $result = $db->query("SELECT COUNT(*) FROM $table WHERE date='$date' AND text='$value' AND member=$member");
         $count = $result ? $result->fetch_row()[0] : 0;
-        $limit = LIMIT[$value];
+        $limit = LIMIT[$group][$value];
         $today = date('Y-m-d', time());
         $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>='$today' AND name='$uid'");
         $personal_bookings = $result ? $result->fetch_row()[0] : 999;
@@ -165,20 +166,20 @@ function update_database($uid, $date, $oldvalue, $value)
             $comment = '<span class="failure">Bibliotheksbereich ausgebucht</span>';
         } elseif ($oldvalue == $no_reservation) {
             // New bookings.
-            if ($personal_bookings >= PERSONAL_LIMIT) {
+            if ($personal_bookings >= PERSONAL_LIMIT[$group]) {
                 $comment = '<span class="failure">Persönliches Buchungslimit erreicht</span>';
             } else {
-                $result = $db->query("INSERT INTO $table (name, text, date) VALUES ('$uid','$value','$date')");
+                $result = $db->query("INSERT INTO $table (name, member, text, date) VALUES ('$uid',$member,'$value','$date')");
                 $success = $result ? $success_text : $failure_text;
                 $comment = DEBUG ? "reserviert: $value, $success" : $success;
             }
         } else {
             // Modified booking.
-            if ($personal_bookings > PERSONAL_LIMIT) {
+            if ($personal_bookings > PERSONAL_LIMIT[$group]) {
                 $comment = '<span class="failure">Persönliches Buchungslimit erreicht</span>';
             } else {
                 $result = $db->query("DELETE FROM $table WHERE name='$uid' AND date='$date'");
-                $result = $db->query("INSERT INTO $table (name, text, date) VALUES ('$uid','$value','$date')");
+                $result = $db->query("INSERT INTO $table (name, member, text, date) VALUES ('$uid',$member,'$value','$date')");
                 $success = $result ? $success_text : $failure_text;
                 $comment = DEBUG ? "aktualisiert: $oldvalue -> $value, $success" : $success;
             }
@@ -189,7 +190,7 @@ function update_database($uid, $date, $oldvalue, $value)
 }
 
 // Show stored bookings in a web form which allows modifications.
-function show_database($uid, $lastuid)
+function show_database($uid, $lastuid, $group)
 {
     $db = get_database();
     $table = DB_TABLE;
@@ -203,8 +204,8 @@ function show_database($uid, $lastuid)
     $now = time();
 
     // First day which can be booked (time rounded to start of day).
-    // Accept bookings for same day until 10:00.
-    $start = $now + (24 - 10) * 60 * 60;
+    // Accept bookings for same day until 9:30.
+    $start = $now + ((24 - 9) * 60 - 30) * 60;
     $start = strtotime(date('Y-m-d', $start));
 
     // Round current time to start of day.
@@ -276,7 +277,7 @@ function show_database($uid, $lastuid)
         } elseif ($text == $requested) {
             $comment = DEBUG ? 'unverändert' : '';
         } else {
-            $comment = update_database($uid, $day, $text, $requested);
+            $comment = update_database($uid, $group, $day, $text, $requested);
             $text = $requested;
         }
 
@@ -324,7 +325,7 @@ function day_report($location = false)
         return;
     }
 
-    $result = $db->query("SELECT date, text, name FROM $table WHERE date = '$today' AND text = '$location' ORDER BY date");
+    $result = $db->query("SELECT date, member, text, name FROM $table WHERE date = '$today' AND text = '$location' ORDER BY date");
     $reservations = $result->fetch_all(MYSQLI_ASSOC);
     $result->free();
     $db->close();
@@ -335,9 +336,14 @@ function day_report($location = false)
     print("<pre>\n");
     print("Nr. Datum      Bibliotheksbereich                  Uni-ID    Name\n");
 
+    $nr = 0;
+
+    print("(members)\n");
+
     // Get all full names from LDAP and sort them.
     $names = array();
     foreach ($reservations as $booking) {
+        if (!$booking['member']) continue;
         $name = $booking['name'];
         get_ldap($name, $ldap);
         $givenName = $ldap['givenName'];
@@ -348,7 +354,27 @@ function day_report($location = false)
     ksort($names);
 
     // Generate report.
-    $nr = 0;
+    foreach ($names as $fullname => $name) {
+        $nr++;
+        printf("%3d %s %-36s%-10s%s\n", $nr, $date, $longname, $name, $fullname);
+    }
+
+    print("(external users)\n");
+
+    // Get all full names from LDAP and sort them.
+    $names = array();
+    foreach ($reservations as $booking) {
+        if ($booking['member']) continue;
+        $name = $booking['name'];
+        get_ldap($name, $ldap);
+        $givenName = $ldap['givenName'];
+        $sn = $ldap['sn'];
+        $fullname = "$sn, $givenName";
+        $names[$fullname] = $name;
+    }
+    ksort($names);
+
+    // Generate report.
     foreach ($names as $fullname => $name) {
         $nr++;
         printf("%3d %s %-36s%-10s%s\n", $nr, $date, $longname, $name, $fullname);
@@ -439,7 +465,7 @@ if ($master && $task == 'dump') {
     print("<p>$usertext</p>");
     print("<h3>Meine Sitzplatzbuchungen / My seat bookings</h3>");
     // Show all bookings.
-    show_database($uid, $lastuid);
+    show_database($uid, $lastuid, $ldap['group']);
     if ($email != '') {
         // Send user bookings per e-mail.
         mail_database($uid);
