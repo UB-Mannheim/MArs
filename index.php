@@ -304,7 +304,7 @@ function day_report($location = false)
 
     if (!$location) {
         // Summary of daily bookings per location.
-        $result = $db->query("SELECT date, text, COUNT(text) AS n FROM seatbookings GROUP BY date, text");
+        $result = $db->query("SELECT date, text, COUNT(text) AS n FROM $table GROUP BY date, text");
         $reservations = $result->fetch_all(MYSQLI_ASSOC);
         $result->free();
         $db->close();
