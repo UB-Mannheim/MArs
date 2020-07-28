@@ -113,6 +113,7 @@ function init_database()
     $result = $db->query("CREATE TABLE `$table` (
         `id` INT NOT NULL AUTO_INCREMENT,
         `name` VARCHAR(16) NOT NULL,
+        `member` BOOLEAN DEFAULT 1 NOT NULL,
         `text` VARCHAR(8) NOT NULL,
         `date` DATE NOT NULL,
         CONSTRAINT unique_reservation UNIQUE (date, name),
@@ -132,6 +133,7 @@ function preset_database()
         // TODO: Fixme.
         $text = TEXTS[rand(0, count(TEXTS) - 2)][0];
         $date = date('Y-m-d', $now + 24 * 60 * 60 * rand(0 - MAX_AGE, 7));
+        // TODO: Optionally update and insert external users, too.
         $result = $db->query("INSERT INTO $table (name, text, date) VALUES ('$uid','$text','$date')");
     }
     $db->close();
