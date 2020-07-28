@@ -21,6 +21,7 @@ Die Auswahl der Buchungsmöglichkeiten ist konfigurierbar.
 
 Die Authentisierung erfolgt z. B. durch Benutzerkennung und Passwort (konfigurierbar).
 Die Implementierung der UB Mannheim authentisiert mit LDAP.
+Die Benutzerkennung heißt dort Uni-ID.
 Administrative Funktionen und Testmöglichkeiten werden mit einem Masterpasswort freigeschaltet.
 
 - Anzeige aller Buchungen

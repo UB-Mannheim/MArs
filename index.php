@@ -333,7 +333,7 @@ function day_report($location = false)
     $longname = TEXTS[$location];
     print("<h2>MARS Tagesbericht $date $longname</h2>\n");
     print("<pre>\n");
-    print("Nr. Datum      Bibliotheksbereich                  Kennung   Name\n");
+    print("Nr. Datum      Bibliotheksbereich                  Uni-ID    Name\n");
 
     // Get all full names from LDAP and sort them.
     $names = array();
@@ -366,7 +366,7 @@ $password = get_parameter('password');
 
 if (!preg_match('/^[a-z_0-9]{0,8}$/', $uid)) {
     // uid is longer than 8 characters or contains invalid characters.
-    alert("Ungültige Universitätskennung");
+    alert("Ungültige Uni-ID");
     $uid = '';
 }
 
@@ -393,8 +393,8 @@ if ($uid == '' || $task == '') {
 
 <fieldset class="personaldata">
 <legend>Benutzerdaten / personal data</legend>
-<label class="uid" for="uid">Universitätskennung:*</label>
-<input class="uid" id="uid" name="uid" placeholder="user id" maxlength="8"
+<label class="uid" for="uid">Uni-ID:*</label>
+<input class="uid" id="uid" name="uid" placeholder="uni id" maxlength="8"
   pattern="^([a-z_0-9]{0,8})$" required="required" value="<?=$uid?>"/>
 <label class="password" for="password">Passwort:*</label><input id="password" name="password" placeholder="********" required="required" type="password" value="<?=$pw?>"/>
 <input id="lastuid" name="lastuid" type="hidden" value="<?=$authorized ? $uid : ''?>"/>
@@ -448,7 +448,7 @@ if ($master && $task == 'dump') {
     if ($password == '') {
         print('<p>Bitte ergänzen Sie Ihre Anmeldedaten um Ihr Passwort.</p>');
     } else {
-        print('<p>Die Anmeldedaten sind ungültig. Bitte prüfen Sie Universitätskennung und Passwort.</p>');
+        print('<p>Die Anmeldedaten sind ungültig. Bitte prüfen Sie Uni-ID und Passwort.</p>');
     }
 } else {
     ?>
