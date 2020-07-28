@@ -115,7 +115,6 @@ form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type
 }
 
 form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type_submit.powermail_fieldwrap_logout div.powermail_field input#logout,
-input#logout,
 form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type_submit.powermail_fieldwrap_abschicken div.powermail_field input#login {
     width: 100%;
     height: 40px;
