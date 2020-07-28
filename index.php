@@ -385,6 +385,7 @@ if ($uid != '') {
 }
 
 if ($uid == '' || $task == '') {
+    $pw = htmlspecialchars($password);
     ?>
 <form id="reservation" method="post" class="powermail_form powermail_form_1 powermail_form_reservation nolabel">
 
@@ -426,7 +427,7 @@ if ($authorized && $task == '') {
 }
 
 // Should admin commands be allowed?
-$master = ($authorized && $authorized == 'master');
+$master = ($authorized === 'master');
 
 if ($master && $task == 'dump') {
     print("<pre>\n");
