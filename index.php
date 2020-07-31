@@ -204,8 +204,8 @@ function show_database($uid, $lastuid, $group)
     $now = time();
 
     // First day which can be booked (time rounded to start of day).
-    // Accept bookings for same day until 9:30.
-    $start = $now + ((24 - 9) * 60 - 30) * 60;
+    // Accept bookings for same day until 9:00.
+    $start = $now + ((24 - 9) * 60 - 0) * 60;
     $start = strtotime(date('Y-m-d', $start));
 
     // Round current time to start of day.
