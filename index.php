@@ -47,7 +47,7 @@ function get_parameter($name, $default = '')
         // Value from environment (command line).
         $parameter = $_SERVER[$name];
     }
-    return $parameter;
+    return htmlspecialchars($parameter);
 }
 
 // Get handle for database access.
@@ -409,11 +409,10 @@ $authorized = false;
 <body>
 <?php
 if ($uid != '') {
-    $authorized = get_authorization($uid, $password);
+    $authorized = get_authorization($uid, htmlspecialchars_decode($password));
 }
 
 if ($uid == '' || $task == '') {
-    $pw = htmlspecialchars($password);
     ?>
 <form id="reservation" method="post">
 
@@ -422,7 +421,7 @@ if ($uid == '' || $task == '') {
 <label class="uid" for="uid">Uni-ID:*</label>
 <input class="uid" id="uid" name="uid" placeholder="uni id" maxlength="8"
   pattern="^([a-z_0-9]{0,8})$" required="required" value="<?=$uid?>"/>
-<label class="password" for="password">Passwort:*</label><input id="password" name="password" placeholder="********" required="required" type="password" value="<?=$pw?>"/>
+<label class="password" for="password">Passwort:*</label><input id="password" name="password" placeholder="********" required="required" type="password" value="<?=$password?>"/>
 <input id="lastuid" name="lastuid" type="hidden" value="<?=$authorized ? $uid : ''?>"/>
 </fieldset>
     <?php
