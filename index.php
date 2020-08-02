@@ -160,7 +160,7 @@ function update_database($uid, $group, $date, $oldvalue, $value)
         $count = $result ? $result->fetch_row()[0] : 0;
         $limit = LIMIT[$group][$value];
         $today = date('Y-m-d', time());
-        $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>='$today' AND name='$uid'");
+        $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>'$today' AND name='$uid'");
         $personal_bookings = $result ? $result->fetch_row()[0] : 999;
         if ($count >= $limit) {
             $comment = '<span class="failure">Bibliotheksbereich ausgebucht</span>';
