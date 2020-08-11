@@ -85,7 +85,7 @@ function mail_database($uid)
     $db = get_database();
     $table = DB_TABLE;
     $result = $db->query("SELECT date,text FROM $table where name='$uid' ORDER BY date");
-    $mailtext = "Datum      Bibliotheksbereich\n";
+    $mailtext = "";
     $today = date('Y-m-d', time());
     while ($reservation = $result->fetch_assoc()) {
         $date = $reservation['date'];

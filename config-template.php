@@ -107,7 +107,7 @@ require_once 'Swift/swift_required.php';
 // Mail implementation using Swift Mailer.
 // See documentation: https://swiftmailer.symfony.com/docs/introduction.html
 function sendmail($uid, $text) {
-    $text = "Diese Reservierungen sind für die Benutzerkennung $uid vorgemerkt:\n\n" . $text;
+    $text = "Diese Reservierungen sind für die Benutzerkennung $uid vorgemerkt:\n\nDatum      Bibliotheksbereich\n" . $text;
 
     // Sendmail for transport.
     $transport = new Swift_SendmailTransport('/usr/sbin/sendmail -bs');
