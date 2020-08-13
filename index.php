@@ -307,19 +307,22 @@ function day_report($location = false)
 
     if (!$location) {
         // Summary of daily bookings per location.
-        $result = $db->query("SELECT date, text, COUNT(text) AS n FROM $table GROUP BY date, text");
+        $result = $db->query("select date, text, count(text) AS total, sum(case when member = '1' then 1 else 0 end) AS internal, sum(case when member = '0' then 1 else 0 end) AS external from seatbookings group by date, text");
         $reservations = $result->fetch_all(MYSQLI_ASSOC);
         $result->free();
         $db->close();
+
         print("<h2>MARS Buchungsübersicht</h2>\n");
         print("<pre>\n");
-        print("Datum      Bibliotheksbereich                  Buchungen\n");
+        print("Datum      Bibliotheksbereich                  Gesamt   Mitglieder   Externe\n");
         foreach ($reservations as $booking) {
             $date = $booking['date'];
             $location = $booking['text'];
-            $count = $booking['n'];
+            $count_ext = $booking['external'];
+            $count_member = $booking['internal'];
+            $count_total = $count_ext + $count_member;
             $longname = TEXTS[$location];
-            printf("%s %-36s%9d\n", $date, $longname, $count);
+            printf("%s %-36s%6d%13d%10d\n", $date, $longname, $count_total, $count_member, $count_ext);
         }
         print("</pre>\n");
         return;
