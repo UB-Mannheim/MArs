@@ -307,7 +307,7 @@ function day_report($location = false)
 
     if (!$location) {
         // Summary of daily bookings per location.
-        $result = $db->query("SELECT date, text, COUNT(text) AS total, SUM(CASE WHEN member = '1' THEN 1 ELSE 0 END) AS internal, SUM(CASE WHEN member = '0' THEN 1 ELSE 0 END) AS external FROM seatbookings GROUP BY date, text");
+        $result = $db->query("SELECT date, text, SUM(member) AS internal, SUM(NOT member) AS external FROM seatbookings GROUP BY date, text");
         $reservations = $result->fetch_all(MYSQLI_ASSOC);
         $result->free();
         $db->close();
