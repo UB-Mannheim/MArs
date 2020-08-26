@@ -56,11 +56,7 @@ label.day {
   margin-right: 5px;
 }
 
-label.a3 {
-  margin-right: 5px;
-}
-
-label.eh {
+label.a3, label.a5, label.eh, label.bss {
   margin-right: 5px;
 }
 
@@ -79,4 +75,8 @@ span.failure {
 span.success {
   background-color: greenyellow;
   font-weight: bold;
+}
+
+th {
+  text-align: left;
 }

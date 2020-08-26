@@ -66,13 +66,14 @@ function dump_database()
     $db = get_database();
     $table = DB_TABLE;
     $result = $db->query("SELECT date,text,name FROM $table ORDER BY date,name");
-    print("date       pl uid\n");
+    print("<table><tr><th>date</th><th>pl</th><th>uid</th></tr>");
     while ($reservation = $result->fetch_assoc()) {
         $date = $reservation['date'];
         $text = $reservation['text'];
         $uid = $reservation['name'];
-        print("$date $text $uid\n");
+        print("<tr><td>$date</td><td>$text</td><td>$uid</td></tr>");
     }
+    print("</table>");
     $result->free();
     $db->close();
 }
@@ -313,8 +314,7 @@ function day_report($location = false)
         $db->close();
 
         print("<h2>MARS Buchungsübersicht</h2>\n");
-        print("<pre>\n");
-        print("Datum      Bibliotheksbereich                  Gesamt   Mitglieder   Externe\n");
+        print("<table><tr><th>Datum</th><th>Bibliotheksbereich</th><th>Gesamt</th><th>Mitglieder</th><th>Externe</th></tr>");
         foreach ($reservations as $booking) {
             $date = $booking['date'];
             $location = $booking['text'];
@@ -322,9 +322,9 @@ function day_report($location = false)
             $count_member = $booking['internal'];
             $count_total = $count_ext + $count_member;
             $longname = TEXTS[$location];
-            printf("%s %-36s%6d%13d%10d\n", $date, $longname, $count_total, $count_member, $count_ext);
+            print("<tr><td>$date</td><td>$longname</td><td>$count_total</td><td>$count_member</td><td>$count_ext</td></tr>");
         }
-        print("</pre>\n");
+        print("</table>");
         return;
     }
 
@@ -336,12 +336,11 @@ function day_report($location = false)
     $date = $today;
     $longname = TEXTS[$location];
     print("<h2>MARS Tagesbericht $date $longname</h2>\n");
-    print("<pre>\n");
-    print("Nr. Datum      Bibliotheksbereich                  Uni-ID    Name\n");
+    print("<table><tr><th>Nr.</th><th>Datum</th><th>Bibliotheksbereich</th><th>Uni-ID</th><th>Name</th></tr>");
 
     $nr = 0;
 
-    print("(members)\n");
+    print("<tr><td>members</td></tr>");
 
     // Get all full names from LDAP and sort them.
     $names = array();
@@ -359,10 +358,10 @@ function day_report($location = false)
     // Generate report.
     foreach ($names as $fullname => $name) {
         $nr++;
-        printf("%3d %s %-36s%-10s%s\n", $nr, $date, $longname, $name, $fullname);
+        print("<tr><td>$nr</td><td>$date</td><td>$longname</td><td>$name</td><td>$fullname</td></tr>");
     }
 
-    print("(external users)\n");
+    print("<tr><td>external users</td></tr>");
 
     // Get all full names from LDAP and sort them.
     $names = array();
@@ -380,7 +379,7 @@ function day_report($location = false)
     // Generate report.
     foreach ($names as $fullname => $name) {
         $nr++;
-        printf("%3d %s %-36s%-10s%s\n", $nr, $date, $longname, $name, $fullname);
+        print("<tr><td>$nr</td><td>$date</td><td>$longname</td><td>$name</td><td>$fullname</td></tr>");
     }
     print("</pre>\n");
 }
@@ -440,13 +439,15 @@ if ($authorized && $task == '') {
 $master = ($authorized === 'master');
 
 if ($master && $task == 'dump') {
-    print("<pre>\n");
     dump_database();
-    print("<pre>\n");
 } elseif ($master && $task == 'a3-report') {
     day_report('a3');
+} elseif ($master && $task == 'a5-report') {
+    day_report('a5');
 } elseif ($master && $task == 'eh-report') {
     day_report('eh');
+} elseif ($master && $task == 'bss-report') {
+    day_report('bss');
 } elseif ($master && $task == 'day-report') {
     day_report();
 } elseif ($master && $task == 'init') {
@@ -511,7 +512,9 @@ Please inform me by e-mail about my current bookings.</label>
 <li><a href="./?task=dump" target="_blank">Alle Buchungen ausgeben</a>
 <li><a href="./?task=day-report" target="_blank">Buchungsübersicht</a>
 <li><a href="./?task=a3-report" target="_blank">Tagesplanung A3</a>
+<li><a href="./?task=a5-report" target="_blank">Tagesplanung A5</a>
 <li><a href="./?task=eh-report" target="_blank">Tagesplanung Schloss Ehrenhof</a>
+<li><a href="./?task=bss-report" target="_blank">Tagesplanung Schloss Schneckenhof</a>
 </ul>
 </p>
         <?php
