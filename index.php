@@ -418,7 +418,7 @@ if ($uid == '' || $task == '') {
     ?>
 <form id="reservation" method="post" class="powermail_form powermail_form_reservation nolabel">
 
-<fieldset class="personaldata">
+<!--<fieldset class="personaldata">-->
 <div class="powermail_fieldwrap powermail_fieldwrap_type_headline nolabel">
     <div class="powermail_field">
 <!--<legend>Benutzerdaten / personal data</legend>-->
@@ -427,33 +427,33 @@ if ($uid == '' || $task == '') {
 </div>
 
 <div id="userid" class="powermail_fieldwrap powermail_fieldwrap_type_input">
-	<label for="uid" class="uid powermail_label mandatory" title="Universitätskennung">Uni-ID</label>
-	<div class="powermail_field">
-		<input id="uid" 
-			class="uid powermail_input" 
-			name="uid" 
-			placeholder="Pflichtfeld / Mandatory field" 
-			maxlength="8"
-			pattern="^([a-z_0-9]{0,8})$" 
-			required="required" 
-			type="text"
-			value="<?=$uid?>"/>
-	</div>
+    <label for="uid" class="uid powermail_label mandatory" title="Universitätskennung">Uni-ID</label>
+    <div class="powermail_field">
+        <input id="uid"
+            class="uid powermail_input"
+            name="uid"
+            placeholder="Pflichtfeld / Mandatory field"
+            maxlength="8"
+            pattern="^([a-z_0-9]{0,8})$"
+            required="required"
+            type="text"
+            value="<?=$uid?>"/>
+    </div>
 </div>
 
 <div id="userpw" class="powermail_fieldwrap powermail_fieldwrap_type_input">
-	<label for="password" class="password powermail_label mandatory">Passwort</label>
-	<div class="powermail_field">
-		<input id="password" 
-			name="password" 
-			placeholder="Pflichtfeld / Mandatory field" 
-			required="required" 
-			type="password" 
-			value="<?=$password?>"/>
-	</div>
+    <label for="password" class="password powermail_label mandatory">Passwort</label>
+    <div class="powermail_field">
+        <input id="password"
+            name="password"
+            placeholder="Pflichtfeld / Mandatory field"
+            required="required"
+            type="password"
+            value="<?=$password?>"/>
+    </div>
 </div>
 <input id="lastuid" name="lastuid" type="hidden" value="<?=$authorized ? $uid : ''?>"/>
-</fieldset>
+<!--</fieldset>-->
     <?php
 }
 
@@ -516,17 +516,32 @@ if ($master && $task == 'dump') {
     }
 } else {
     ?>
-    <p>Die <a href="/datenschutzerklaerung/" target="_blank">Informationen zum Datenschutz</a> wurden mir zur Verfügung gestellt.<br/>
-    The <a href="/en/privacy-policy/" target="_blank">privacy information</a> was provided to me.</p>
+<div class="powermail_fieldwrap powermail_fieldwrap_type_html powermail_fieldwrap_datenschutzerklaerung  ">
+    <div class="powermail_field ">
+        <label for="powermail_field_datenschutzerklaerung" class="powermail_label" title=""></label>
+        <div class="powermail_field">
+            Die <a href="/datenschutzerklaerung/" target="_blank">Informationen zum Datenschutz</a> wurden mir zur Verfügung gestellt.<br/>
+            The <a href="/en/privacy-policy/" target="_blank">privacy information</a> was provided to me.
+        </div>
+    </div>
+</div>
     <?php
 }
 //<button type="reset">Eingaben zurücksetzen</button>
 
 if ($uid == '' || $task == '') {
     if ($authorized) {
-//<button class="submit" type="submit">Eingaben absenden</button>
         ?>
-<div class="powermail_fieldwrap powermail_fieldwrap_type_submit powermail_fieldwrap_abschicken nolabel">
+<button class="submit" type="submit">Eingaben absenden</button>
+<br/>
+<input type="checkbox" name="email" id="email" value="checked" <?=$email?>/>
+<label for="email">Informieren Sie mich bitte per E-Mail über meine aktuellen Sitzplatzbuchungen.
+Please inform me by e-mail about my current bookings.</label>
+        <?php
+    } else {
+//<button class="submit" type="submit">Anmelden</button>
+        ?>
+<div class="powermail_fieldwrap powermail_fieldwrap_type_submit powermail_fieldwrap_abschicken">
     <label for="login" class="powermail_label leer"></label>
     <input name="L" type="hidden" value="0">
     <div class="powermail_field">
@@ -534,14 +549,6 @@ if ($uid == '' || $task == '') {
     </div>
 </div>
 
-<br/>
-<input type="checkbox" name="email" id="email" value="checked" <?=$email?>/>
-<label for="email">Informieren Sie mich bitte per E-Mail über meine aktuellen Sitzplatzbuchungen.
-Please inform me by e-mail about my current bookings.</label>
-        <?php
-    } else {
-        ?>
-<button class="submit" type="submit">Anmelden</button>
         <?php
     }
     ?>
