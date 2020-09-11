@@ -39,8 +39,9 @@ fieldset.personaldata {
   margin-right: 5px;
 }
 
-input.uid {
-  width: 8em;
+input#uid,
+input#password {
+	width: 10em;
 }
 
 label.uid {
@@ -79,4 +80,69 @@ span.success {
 
 th {
   text-align: left;
+}
+
+
+form.powermail_form {
+    border: 1px solid #cccccc;
+    padding: 3px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 15px;
+}
+
+form.powermail_form label {
+    width: 20%;
+	min-width: 140px;
+    padding-right: 6px;
+    text-align: right;
+    vertical-align: top;
+    font-weight: normal;
+    display: inline-block;
+}
+
+form.powermail_form.powermail_form_reservation label.mandatory:after {
+    content: ':*'
+}
+
+form.powermail_form_reservation div.powermail_fieldwrap div.powermail_field {
+    display: inline-block;
+    width: 20%;
+}
+
+form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type_submit.powermail_fieldwrap_abschicken div.powermail_field {
+    display: inline-block;
+    width: 100%;
+}
+
+form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type_submit.powermail_fieldwrap_logout div.powermail_field input#logout,
+form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type_submit.powermail_fieldwrap_abschicken div.powermail_field input#login {
+    width: 100%;
+    height: 40px;
+    background-color: #990000;
+    color: #fff;
+    cursor: pointer;
+}
+
+form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type_submit.powermail_fieldwrap_logout div.powermail_field input#logout:hover,
+form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type_submit.powermail_fieldwrap_abschicken div.powermail_field input#login:hover {
+    background-color: #6C0020;
+}
+
+
+form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type_headline div.powermail_field {
+    display: inline-block;
+    width: 100%;
+}
+
+form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type_headline div.powermail_field h4 {
+    margin-top: 0;
+}
+
+form.powermail_form div.powermail_fieldwrap {
+    margin-bottom: 12px;
+}
+
+form.powermail_form div.powermail_fieldwrap_type_headline {
+    margin-bottom: 0;
 }

@@ -416,22 +416,57 @@ if ($uid != '') {
 
 if ($uid == '' || $task == '') {
     ?>
-<form id="reservation" method="post">
+<form id="reservation" method="post" class="powermail_form powermail_form_reservation nolabel">
 
 <fieldset class="personaldata">
-<legend>Benutzerdaten / personal data</legend>
-<label class="uid" for="uid">Uni-ID:*</label>
-<input class="uid" id="uid" name="uid" placeholder="uni id" maxlength="8"
-  pattern="^([a-z_0-9]{0,8})$" required="required" value="<?=$uid?>"/>
-<label class="password" for="password">Passwort:*</label><input id="password" name="password" placeholder="********" required="required" type="password" value="<?=$password?>"/>
+<div class="powermail_fieldwrap powermail_fieldwrap_type_headline nolabel">
+    <div class="powermail_field">
+<!--<legend>Benutzerdaten / personal data</legend>-->
+        <h4>Benutzerdaten / personal data</h4>
+    </div>
+</div>
+
+<div id="userid" class="powermail_fieldwrap powermail_fieldwrap_type_input">
+	<label for="uid" class="uid powermail_label mandatory" title="Universitätskennung">Uni-ID</label>
+	<div class="powermail_field">
+		<input id="uid" 
+			class="uid powermail_input" 
+			name="uid" 
+			placeholder="Pflichtfeld / Mandatory field" 
+			maxlength="8"
+			pattern="^([a-z_0-9]{0,8})$" 
+			required="required" 
+			type="text"
+			value="<?=$uid?>"/>
+	</div>
+</div>
+
+<div id="userpw" class="powermail_fieldwrap powermail_fieldwrap_type_input">
+	<label for="password" class="password powermail_label mandatory">Passwort</label>
+	<div class="powermail_field">
+		<input id="password" 
+			name="password" 
+			placeholder="Pflichtfeld / Mandatory field" 
+			required="required" 
+			type="password" 
+			value="<?=$password?>"/>
+	</div>
+</div>
 <input id="lastuid" name="lastuid" type="hidden" value="<?=$authorized ? $uid : ''?>"/>
 </fieldset>
     <?php
 }
 
 if ($authorized && $task == '') {
+//<button class="logout" type="button"><a class="logout" href=".">Abmelden / Logout</a></button>
     ?>
-<button class="logout" type="button"><a class="logout" href=".">Abmelden / Logout</a></button>
+<div class="powermail_fieldwrap powermail_fieldwrap_type_submit powermail_fieldwrap_logout nolabel">
+    <label for="logout" class="powermail_label leer"></label>
+    <input name="L" type="hidden" value="0">
+    <div class="powermail_field">
+        <input id="logout" name="logout" class="powermail_submit btn btn-primary" value="Abmelden / Logout" type="submit">
+    </div>
+</div>
     <?php
 }
 
@@ -489,8 +524,16 @@ if ($master && $task == 'dump') {
 
 if ($uid == '' || $task == '') {
     if ($authorized) {
+//<button class="submit" type="submit">Eingaben absenden</button>
         ?>
-<button class="submit" type="submit">Eingaben absenden</button>
+<div class="powermail_fieldwrap powermail_fieldwrap_type_submit powermail_fieldwrap_abschicken nolabel">
+    <label for="login" class="powermail_label leer"></label>
+    <input name="L" type="hidden" value="0">
+    <div class="powermail_field">
+        <input id="login" name="login" class="powermail_submit btn btn-primary" value="Anmelden" type="submit">
+    </div>
+</div>
+
 <br/>
 <input type="checkbox" name="email" id="email" value="checked" <?=$email?>/>
 <label for="email">Informieren Sie mich bitte per E-Mail über meine aktuellen Sitzplatzbuchungen.
