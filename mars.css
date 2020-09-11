@@ -35,24 +35,6 @@ div.open {
   display: inline-block;
 }
 
-fieldset.personaldata {
-  margin-right: 5px;
-}
-
-input#uid,
-input#password {
-	width: 10em;
-}
-
-label.uid {
-  padding-right: 6px;
-}
-
-label.password {
-  padding-left: 10px;
-  padding-right: 6px;
-}
-
 label.day {
   margin-right: 5px;
 }
@@ -93,7 +75,7 @@ form.powermail_form {
 
 form.powermail_form label {
     width: 20%;
-	min-width: 140px;
+    min-width: 140px;
     padding-right: 6px;
     text-align: right;
     vertical-align: top;
@@ -107,12 +89,11 @@ form.powermail_form.powermail_form_reservation label.mandatory:after {
 
 form.powermail_form_reservation div.powermail_fieldwrap div.powermail_field {
     display: inline-block;
-    width: 20%;
 }
 
 form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type_submit.powermail_fieldwrap_abschicken div.powermail_field {
     display: inline-block;
-    width: 100%;
+    width: 70%;
 }
 
 form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type_submit.powermail_fieldwrap_logout div.powermail_field input#logout,
@@ -129,7 +110,6 @@ form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type
     background-color: #6C0020;
 }
 
-
 form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type_headline div.powermail_field {
     display: inline-block;
     width: 100%;
@@ -145,4 +125,24 @@ form.powermail_form div.powermail_fieldwrap {
 
 form.powermail_form div.powermail_fieldwrap_type_headline {
     margin-bottom: 0;
+}
+
+.powermail_fieldwrap_datenschutzerklaerung a,
+.powermail_fieldwrap_datenschutzerklaerung a:link,
+.powermail_fieldwrap_datenschutzerklaerung a:visited,
+.powermail_fieldwrap_datenschutzerklaerung a:hover,
+.powermail_fieldwrap_datenschutzerklaerung a:focus,
+.powermail_fieldwrap_datenschutzerklaerung a:active {
+    color: #990000;
+    text-decoration: none;
+}
+
+.powermail_fieldwrap_datenschutzerklaerung a:focus,
+.powermail_fieldwrap_datenschutzerklaerung a:hover {
+    color: #4d0000;
+    text-decoration: underline;
+}
+.powermail_fieldwrap_datenschutzerklaerung a:active,
+.powermail_fieldwrap_datenschutzerklaerung a:hover {
+    outline: 0;
 }
