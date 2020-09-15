@@ -440,7 +440,72 @@ $authorized = false;
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<?php
+    session_start();
+    $locale = '';
+
+    define('LOCALE_DIR', realpath('./locale'));
+
+    if (!defined('DEFAULT_LOCALE')) {
+        define('DEFAULT_LOCALE', 'de_DE');
+    };
+
+    require_once( realpath('./lib/php-gettext/gettext.inc'));
+
+    $supported_locales  = array('de_DE', 'en_US');
+    $encoding           = 'UTF-8';
+
+    if (!isset($_GET["L"]) or (isset($_GET["L"]) and $_GET["L"] === '0')) {
+        // Set the language to german
+        $locale = 'de_DE';
+        $_SESSION['language']  = 'de';
+    } else if (isset($_GET["L"]) and $_GET["L"] === '1') {
+        // Set the language to english
+        $locale = 'en_US';
+        $_SESSION['language'] = 'en';
+    } else {
+         // Parameter L currently not used
+        if (!isset($_SESSION['language'])) {
+            //---------------------------------------
+            // Session variable not yes set
+            //---------------------------------------
+
+            // Depending on the browser language
+            $lang = substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2);
+            $acceptLang = ['de', 'en'];
+            $lang = in_array($lang, $acceptLang) ? $lang : 'de';
+
+            if ($lang === 'de') {
+                $locale = 'de_DE';
+                $_SESSION['language'] = 'de';
+            } else if ($lang === 'en') {
+                $locale = 'en_US';
+                $_SESSION['language'] = 'en';
+            }
+        } else {
+            //---------------------------------------
+            // Depending on the set session language
+            //---------------------------------------
+            if ($_SESSION['language'] === 'de') {
+                $locale = 'de_DE';
+            } else if ($_SESSION['language'] === 'en') {
+                $locale = 'en_US';
+            }
+        }
+    };
+
+    T_setlocale(LC_MESSAGES, $locale);
+    // Set the text domain as 'messages'
+    $domain = 'MArs';
+
+    T_bindtextdomain($domain, LOCALE_DIR);
+    T_bind_textdomain_codeset($domain, $encoding);
+    T_textdomain($domain);
+
+    // look for translation now in ./locale/de_DE/LC_MESSAGES/a.mo
+?>
+
+<html lang="<?php echo $_SESSION['language'] ?>">
 <head>
 <title>UB Sitzplatzbuchung</title>
 <meta charset="utf-8">

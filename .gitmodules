@@ -1,0 +1,3 @@
+[submodule "lib/php-gettext"]
+	path = lib/php-gettext
+	url = https://github.com/neo22s/php-gettext.git
