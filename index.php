@@ -193,6 +193,9 @@ function update_database($uid, $group, $date, $oldvalue, $value)
 // Show stored bookings in a web form which allows modifications.
 function show_database($uid, $lastuid, $group)
 {
+    $weekdays = array('So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa');
+    //$weekdays = array('Sun', 'Mon', 'Tue', 'Med', 'Thu', 'Fri', 'Sat');
+
     $db = get_database();
     $table = DB_TABLE;
     $result = $db->query("SELECT date, text FROM $table WHERE name = '$uid' ORDER BY date");
@@ -220,6 +223,16 @@ function show_database($uid, $lastuid, $group)
 
     print('<fieldset>');
     print('<legend>Buchungen / bookings</legend>');
+    print('<table>');
+    // Print Headline for table
+    print('<tr><th></th>');
+    $nNrLongnames = 0;
+    foreach (TEXTS as $value => $longname) {
+        print('<th>' . $longname . '</th>');
+        $nNrLongnames++;
+    };
+    $nNrLongnames++;
+    print('<th>&nbsp;</th></tr>');
 
     // Get the first reserved day from the booking list.
     $i = 0;
@@ -248,18 +261,34 @@ function show_database($uid, $lastuid, $group)
         }
 
         // Skip days which cannot be booked.
-        $weekday = date('D', $time);
+        //$weekday = date('D', $time);
+        $weekday = $weekdays[date('w', $time)];
+        //print( '<br />' . date('w', $time) . " ===>" . $weekday . ' ===>' . $time . "<br/>");
+
         $label = "<label><span class=\"weekday\">$weekday</span> $label</label>";
         $closed = false;
         foreach (CLOSED as $condition) {
             $closed = ($weekday == $condition);
+
             if ($closed) {
-                print("<div class=\"closed\">$label geschlossen / closed</div>");
+                //print("<div class=\"closed\">$label geschlossen / closed</div>");
+                //print('<tr class="closed"><td>' . $label . '</td><td colspan="' . $nNrLongnames . '">geschlossen / closed</td></tr>' . "\n");
+                print('<tr class="closed"><td>' . $label . '</td>');
+                foreach (TEXTS as $value => $longname) {
+                    print('<td><span class="closed-day closed-day-de">&nbsp;</span></td>');
+                };
+                print('<td></td></tr>');
                 break;
             }
             $closed = ($day == $condition);
             if ($closed) {
-                print("<div class=\"closed\">$label geschlossen / closed</div>");
+                //print("<div class=\"closed\">$label geschlossen / closed</div>");
+                //print("<tr class=\"closed\"><td>$label</td><td colspan='" . $nNrLongnames . "'>geschlossen / closed</td></tr>\n");
+                print("<tr class=\"closed\"><td>$label</td>");
+                foreach (TEXTS as $value => $longname) {
+                    print('<td><span class="closed-day closed-day-de">&nbsp;</span></td>');
+                };
+                print('<td></td></tr>');
                 break;
             }
         }
@@ -285,15 +314,23 @@ function show_database($uid, $lastuid, $group)
         $line = '';
         foreach (TEXTS as $value => $longname) {
             $id = "$value-$day";
+
             $checked = ($text == $value) ? ' checked' : '';
-            $line .= "<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"$value\"$checked$disabled/>" .
-                "<label class=\"$value\" for=\"$id\">$longname</label>";
+            $cTitle = $longname;
+            if ($disabled)  {
+                $cTitle = 'Keine Änderung mehr möglich';
+            }
+            $line .= '<td class="dateradio ' . $value . ' ' . $disabled . '" title=' . "'" . $cTitle . ': ' . date('d.m.', $time) . "'>" .
+                     "<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"$value\"$checked$disabled/>" .
+                     "</td>"; /*
+                "<label class=\"$value\" for=\"$id\">$longname</label>";*/
         }
         if ($comment != '') {
             $comment = " $comment";
         }
-        print("<div class=\"open\">$label$line$comment</div>\n");
+        print("<tr class=\"open\"><td class=\"buchbar\">$label</td>$line<td>$comment</td></tr>\n");
     }
+    print('</table>');
     print('</fieldset>');
 }
 
@@ -406,6 +443,7 @@ $authorized = false;
 <html lang="en">
 <head>
 <title>UB Sitzplatzbuchung</title>
+<meta charset="utf-8">
 <link rel="stylesheet" type="text/css" href="mars.css" media="all">
 </head>
 <body>
@@ -427,7 +465,7 @@ if ($uid == '' || $task == '') {
 </div>
 
 <div id="userid" class="powermail_fieldwrap powermail_fieldwrap_type_input">
-    <label for="uid" class="uid powermail_label mandatory" title="Universitätskennung">Uni-ID</label>
+    <label for="uid" class="uid powermail_label" title="Universitätskennung">Uni-ID<span class="mandatory">*</span></label>
     <div class="powermail_field">
         <input id="uid"
             class="uid powermail_input"
@@ -442,7 +480,7 @@ if ($uid == '' || $task == '') {
 </div>
 
 <div id="userpw" class="powermail_fieldwrap powermail_fieldwrap_type_input">
-    <label for="password" class="password powermail_label mandatory">Passwort</label>
+    <label for="password" class="password powermail_label">Passwort<span class="mandatory">*</span></label>
     <div class="powermail_field">
         <input id="password"
             name="password"
@@ -500,7 +538,7 @@ if ($master && $task == 'dump') {
 } elseif ($authorized) {
     // Show some information for the current uid.
     $usertext = get_usertext();
-    print("<p>$usertext</p>");
+    print("<p>Sie sind angemeldet als $usertext</p>");
     print("<h3>Meine Sitzplatzbuchungen / My seat bookings</h3>");
     // Show all bookings.
     show_database($uid, $lastuid, $ldap['group']);
@@ -516,12 +554,12 @@ if ($master && $task == 'dump') {
     }
 } else {
     ?>
-<div class="powermail_fieldwrap powermail_fieldwrap_type_html powermail_fieldwrap_datenschutzerklaerung  ">
+<div class="powermail_fieldwrap powermail_fieldwrap_type_html powermail_fieldwrap_datenschutz">
     <div class="powermail_field ">
-        <label for="powermail_field_datenschutzerklaerung" class="powermail_label" title=""></label>
-        <div class="powermail_field">
-            Die <a href="/datenschutzerklaerung/" target="_blank">Informationen zum Datenschutz</a> wurden mir zur Verfügung gestellt.<br/>
-            The <a href="/en/privacy-policy/" target="_blank">privacy information</a> was provided to me.
+        <div id="conditional-display-1218" class="conditional-display" data-cond-field="" data-cond-value="">
+            <p>Die <a href="https://www.uni-mannheim.de/datenschutzerklaerung/universitaetsbibliothek-hinweise/" target="_blank">Informationen zum Datenschutz</a> wurden mir zur Verfügung gestellt.<br/>
+            The <a href="https://www.uni-mannheim.de/en/privacy-policy/" target="_blank">privacy information</a> was provided to me.
+            </p>
         </div>
     </div>
 </div>
@@ -531,21 +569,22 @@ if ($master && $task == 'dump') {
 
 if ($uid == '' || $task == '') {
     if ($authorized) {
+//<button class="submit" type="submit">Eingaben absenden</button>
         ?>
-<button class="submit" type="submit">Eingaben absenden</button>
 <br/>
 <input type="checkbox" name="email" id="email" value="checked" <?=$email?>/>
 <label for="email">Informieren Sie mich bitte per E-Mail über meine aktuellen Sitzplatzbuchungen.
 Please inform me by e-mail about my current bookings.</label>
+<br/>
+<button class="submit" type="submit">Eingaben absenden</button>
         <?php
     } else {
 //<button class="submit" type="submit">Anmelden</button>
         ?>
 <div class="powermail_fieldwrap powermail_fieldwrap_type_submit powermail_fieldwrap_abschicken">
-    <label for="login" class="powermail_label leer"></label>
-    <input name="L" type="hidden" value="0">
-    <div class="powermail_field">
-        <input id="login" name="login" class="powermail_submit btn btn-primary" value="Anmelden" type="submit">
+    <div class="powermail_field ">
+        <input name="L" type="hidden" value="0">
+        <input id="login" name="login" class="powermail_submit" type="submit" value="Anmelden">
     </div>
 </div>
 
