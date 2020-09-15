@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-15 17:18+0200\n"
+"POT-Creation-Date: 2020-09-15 17:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -57,6 +57,10 @@ msgstr ""
 msgid "Abmelden"
 msgstr ""
 
+#: ../index.php:617
+msgid "Sie sind angemeldet als"
+msgstr ""
+
 #: ../index.php:618
 msgid "Meine Sitzplatzbuchungen"
 msgstr ""
@@ -65,15 +69,19 @@ msgstr ""
 msgid "Bitte ergänzen Sie Ihre Anmeldedaten um Ihr Passwort"
 msgstr ""
 
+#: ../index.php:629
+msgid "Die Anmeldedaten sind ungültig. Bitte prüfen Sie Uni-ID und Passwort"
+msgstr ""
+
 #: ../index.php:652
 msgid ""
 "Informieren Sie mich bitte per E-Mail über meine aktuellen Sitzplatzbuchungen"
 msgstr ""
 
-#: ../index.php:655
+#: ../index.php:654
 msgid "Eingaben absenden"
 msgstr ""
 
-#: ../index.php:663
+#: ../index.php:662
 msgid "Anmelden"
 msgstr ""

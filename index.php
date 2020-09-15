@@ -614,7 +614,7 @@ if ($master && $task == 'dump') {
 } elseif ($authorized) {
     // Show some information for the current uid.
     $usertext = get_usertext();
-    print("<p>Sie sind angemeldet als $usertext</p>");
+    print("<p>" . T_('Sie sind angemeldet als') . " $usertext</p>");
     print("<h3>" . T_('Meine Sitzplatzbuchungen') . "</h3>");
     // Show all bookings.
     show_database($uid, $lastuid, $ldap['group']);

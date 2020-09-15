@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-15 17:18+0200\n"
+"POT-Creation-Date: 2020-09-15 17:31+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Bernd Fallert <bernd.fallert@bib.uni-mannheim.de>\n"
 "Language-Team: \n"
@@ -52,6 +52,10 @@ msgstr "Password"
 msgid "Abmelden"
 msgstr "Logout"
 
+#: ../index.php:617
+msgid "Sie sind angemeldet als"
+msgstr "You are logged in as"
+
 #: ../index.php:618
 msgid "Meine Sitzplatzbuchungen"
 msgstr "My seat bookings"
@@ -60,14 +64,18 @@ msgstr "My seat bookings"
 msgid "Bitte ergänzen Sie Ihre Anmeldedaten um Ihr Passwort"
 msgstr "Please add your password to your login data"
 
+#: ../index.php:629
+msgid "Die Anmeldedaten sind ungültig. Bitte prüfen Sie Uni-ID und Passwort"
+msgstr "The login details are invalid. Please check your Uni-ID and password"
+
 #: ../index.php:652
 msgid "Informieren Sie mich bitte per E-Mail über meine aktuellen Sitzplatzbuchungen"
 msgstr "Please inform me by e-mail about my current bookings"
 
-#: ../index.php:655
+#: ../index.php:654
 msgid "Eingaben absenden"
 msgstr "Submit entries"
 
-#: ../index.php:663
+#: ../index.php:662
 msgid "Anmelden"
 msgstr "Login"
