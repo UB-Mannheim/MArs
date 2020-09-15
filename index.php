@@ -507,7 +507,7 @@ $authorized = false;
 
 <html lang="<?php echo $_SESSION['language'] ?>">
 <head>
-<title>UB Sitzplatzbuchung</title>
+<title><?php echo( T_('UB Sitzplatzbuchung')) ?></title>
 <meta charset="utf-8">
 <link rel="stylesheet" type="text/css" href="mars.css" media="all">
 </head>
