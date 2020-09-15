@@ -277,8 +277,12 @@ function show_database($uid, $lastuid, $group)
                 //print("<div class=\"closed\">$label geschlossen / closed</div>");
                 //print('<tr class="closed"><td>' . $label . '</td><td colspan="' . $nNrLongnames . '">geschlossen / closed</td></tr>' . "\n");
                 print('<tr class="closed"><td>' . $label . '</td>');
+                $languageClass = 'closed-day-de';
+                if ($_SESSION['language'] === 'en') {
+                    $languageClass = 'closed-day-en';
+                }
                 foreach (TEXTS as $value => $longname) {
-                    print('<td><span class="closed-day closed-day-de">&nbsp;</span></td>');
+                    print('<td><span class="closed-day ' . $languageClass . '">&nbsp;</span></td>');
                 };
                 print('<td></td></tr>');
                 break;
@@ -288,8 +292,12 @@ function show_database($uid, $lastuid, $group)
                 //print("<div class=\"closed\">$label geschlossen / closed</div>");
                 //print("<tr class=\"closed\"><td>$label</td><td colspan='" . $nNrLongnames . "'>geschlossen / closed</td></tr>\n");
                 print("<tr class=\"closed\"><td>$label</td>");
+                $languageClass = 'closed-day-de';
+                if ($_SESSION['language'] === 'en') {
+                    $languageClass = 'closed-day-en';
+                }
                 foreach (TEXTS as $value => $longname) {
-                    print('<td><span class="closed-day closed-day-de">&nbsp;</span></td>');
+                    print('<td><span class="closed-day ' . $languageClass . '">&nbsp;</span></td>');
                 };
                 print('<td></td></tr>');
                 break;
@@ -303,12 +311,12 @@ function show_database($uid, $lastuid, $group)
         $requested = get_parameter($name, 'no');
         $comment = '';
         if ($time < $start) {
-            $comment = DEBUG ? 'nicht änderbar' : '';
+            $comment = DEBUG ? T_('nicht änderbar') : '';
         } elseif ($uid != $lastuid) {
             // Initial call with the current user id.
-            $comment = DEBUG ? 'änderbar' : '';
+            $comment = DEBUG ? T_('änderbar') : '';
         } elseif ($text == $requested) {
-            $comment = DEBUG ? 'unverändert' : '';
+            $comment = DEBUG ? T_('unverändert') : '';
         } else {
             $comment = update_database($uid, $group, $day, $text, $requested);
             $text = $requested;
@@ -321,7 +329,7 @@ function show_database($uid, $lastuid, $group)
             $checked = ($text == $value) ? ' checked' : '';
             $cTitle = $longname;
             if ($disabled)  {
-                $cTitle = 'Keine Änderung mehr möglich';
+                $cTitle = T_('Keine Änderung mehr möglich');
             }
             $line .= '<td class="dateradio ' . $value . ' ' . $disabled . '" title=' . "'" . $cTitle . ': ' . date('d.m.', $time) . "'>" .
                      "<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"$value\"$checked$disabled/>" .
@@ -607,7 +615,7 @@ if ($master && $task == 'dump') {
     // Show some information for the current uid.
     $usertext = get_usertext();
     print("<p>Sie sind angemeldet als $usertext</p>");
-    print("<h3>Meine Sitzplatzbuchungen / My seat bookings</h3>");
+    print("<h3>" . T_('Meine Sitzplatzbuchungen') . "</h3>");
     // Show all bookings.
     show_database($uid, $lastuid, $ldap['group']);
     if ($email != '') {
@@ -616,9 +624,9 @@ if ($master && $task == 'dump') {
     }
 } elseif ($uid != '') {
     if ($password == '') {
-        print('<p>Bitte ergänzen Sie Ihre Anmeldedaten um Ihr Passwort.</p>');
+        print('<p>' . T_('Bitte ergänzen Sie Ihre Anmeldedaten um Ihr Passwort') . '.</p>');
     } else {
-        print('<p>Die Anmeldedaten sind ungültig. Bitte prüfen Sie Uni-ID und Passwort.</p>');
+        print('<p>' . T_('Die Anmeldedaten sind ungültig. Bitte prüfen Sie Uni-ID und Passwort') . '.</p>');
     }
 } else {
     ?>
@@ -641,10 +649,9 @@ if ($uid == '' || $task == '') {
         ?>
 <br/>
 <input type="checkbox" name="email" id="email" value="checked" <?=$email?>/>
-<label for="email">Informieren Sie mich bitte per E-Mail über meine aktuellen Sitzplatzbuchungen.
-Please inform me by e-mail about my current bookings.</label>
+<label for="email"><?php echo T_('Informieren Sie mich bitte per E-Mail über meine aktuellen Sitzplatzbuchungen') ?>.</label>
 <br/>
-<button class="submit" type="submit">Eingaben absenden</button>
+<button class="submit" type="submit"><?php echo T_('Eingaben absenden') ?></button>
         <?php
     } else {
 //<button class="submit" type="submit">Anmelden</button>
@@ -652,7 +659,7 @@ Please inform me by e-mail about my current bookings.</label>
 <div class="powermail_fieldwrap powermail_fieldwrap_type_submit powermail_fieldwrap_abschicken">
     <div class="powermail_field ">
         <input name="L" type="hidden" value="0">
-        <input id="login" name="login" class="powermail_submit" type="submit" value="Anmelden">
+        <input id="login" name="login" class="powermail_submit" type="submit" value="<?php echo T_('Anmelden') ?>">
     </div>
 </div>
 

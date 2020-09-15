@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-15 16:52+0200\n"
+"POT-Creation-Date: 2020-09-15 17:18+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Bernd Fallert <bernd.fallert@bib.uni-mannheim.de>\n"
 "Language-Team: \n"
@@ -14,24 +14,60 @@ msgstr ""
 
 #: ../index.php:228
 msgid "Buchungen"
-msgstr ""
+msgstr "Buchungen"
 
-#: ../index.php:513
+#: ../index.php:314
+msgid "nicht änderbar"
+msgstr "nicht änderbar"
+
+#: ../index.php:317
+msgid "änderbar"
+msgstr "änderbar"
+
+#: ../index.php:319
+msgid "unverändert"
+msgstr "unverändert"
+
+#: ../index.php:332
+msgid "Keine Änderung mehr möglich"
+msgstr "Keine Änderung mehr möglich"
+
+#: ../index.php:521
 msgid "UB Sitzplatzbuchung"
 msgstr "UB Sitzplatzbuchung"
 
-#: ../index.php:531
+#: ../index.php:539
 msgid "Benutzerdaten"
 msgstr "Benutzerdaten"
 
-#: ../index.php:541 ../index.php:555
+#: ../index.php:549 ../index.php:563
 msgid "Pflichtfeld"
 msgstr "Pflichtfeld"
 
-#: ../index.php:551
+#: ../index.php:559
 msgid "Passwort"
 msgstr "Passwort"
 
-#: ../index.php:573
+#: ../index.php:581
 msgid "Abmelden"
 msgstr "Abmelden"
+
+#: ../index.php:618
+msgid "Meine Sitzplatzbuchungen"
+msgstr "Meine Sitzplatzbuchungen"
+
+#: ../index.php:627
+msgid "Bitte ergänzen Sie Ihre Anmeldedaten um Ihr Passwort"
+msgstr "Bitte ergänzen Sie Ihre Anmeldedaten um Ihr Passwort"
+
+#: ../index.php:652
+msgid "Informieren Sie mich bitte per E-Mail über meine aktuellen Sitzplatzbuchungen"
+msgstr "Informieren Sie mich bitte per E-Mail über meine aktuellen Sitzplatzbuchungen"
+
+#: ../index.php:655
+msgid "Eingaben absenden"
+msgstr "Eingaben absenden"
+
+#: ../index.php:663
+msgid "Anmelden"
+msgstr "Anmelden"
