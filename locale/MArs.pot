@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-15 16:25+0200\n"
+"POT-Creation-Date: 2020-09-15 16:52+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,26 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../index.php:510
+#: ../index.php:228
+msgid "Buchungen"
+msgstr ""
+
+#: ../index.php:513
 msgid "UB Sitzplatzbuchung"
+msgstr ""
+
+#: ../index.php:531
+msgid "Benutzerdaten"
+msgstr ""
+
+#: ../index.php:541 ../index.php:555
+msgid "Pflichtfeld"
+msgstr ""
+
+#: ../index.php:551
+msgid "Passwort"
+msgstr ""
+
+#: ../index.php:573
+msgid "Abmelden"
 msgstr ""

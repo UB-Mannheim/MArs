@@ -193,8 +193,11 @@ function update_database($uid, $group, $date, $oldvalue, $value)
 // Show stored bookings in a web form which allows modifications.
 function show_database($uid, $lastuid, $group)
 {
-    $weekdays = array('So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa');
-    //$weekdays = array('Sun', 'Mon', 'Tue', 'Med', 'Thu', 'Fri', 'Sat');
+    if ($_SESSION['language'] === 'de') {
+        $weekdays = array('So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa');
+    } else {
+        $weekdays = array('Sun', 'Mon', 'Tue', 'Med', 'Thu', 'Fri', 'Sat');
+    }
 
     $db = get_database();
     $table = DB_TABLE;
@@ -222,7 +225,7 @@ function show_database($uid, $lastuid, $group)
     $first = $now;
 
     print('<fieldset>');
-    print('<legend>Buchungen / bookings</legend>');
+    print('<legend>' . T_('Buchungen') . '</legend>');
     print('<table>');
     // Print Headline for table
     print('<tr><th></th>');
@@ -525,17 +528,17 @@ if ($uid == '' || $task == '') {
 <div class="powermail_fieldwrap powermail_fieldwrap_type_headline nolabel">
     <div class="powermail_field">
 <!--<legend>Benutzerdaten / personal data</legend>-->
-        <h4>Benutzerdaten / personal data</h4>
+        <h4><?php echo T_('Benutzerdaten') ?></h4>
     </div>
 </div>
 
 <div id="userid" class="powermail_fieldwrap powermail_fieldwrap_type_input">
-    <label for="uid" class="uid powermail_label" title="Universitätskennung">Uni-ID<span class="mandatory">*</span></label>
+    <label for="uid" class="uid powermail_label" title="Uni-ID">Uni-ID<span class="mandatory">*</span></label>
     <div class="powermail_field">
         <input id="uid"
             class="uid powermail_input"
             name="uid"
-            placeholder="Pflichtfeld / Mandatory field"
+            placeholder="<?php echo T_('Pflichtfeld') ?>"
             maxlength="8"
             pattern="^([a-z_0-9]{0,8})$"
             required="required"
@@ -545,11 +548,11 @@ if ($uid == '' || $task == '') {
 </div>
 
 <div id="userpw" class="powermail_fieldwrap powermail_fieldwrap_type_input">
-    <label for="password" class="password powermail_label">Passwort<span class="mandatory">*</span></label>
+    <label for="password" class="password powermail_label"><?php echo T_('Passwort') ?><span class="mandatory">*</span></label>
     <div class="powermail_field">
         <input id="password"
             name="password"
-            placeholder="Pflichtfeld / Mandatory field"
+            placeholder="<?php echo T_('Pflichtfeld') ?>"
             required="required"
             type="password"
             value="<?=$password?>"/>
@@ -567,7 +570,7 @@ if ($authorized && $task == '') {
     <label for="logout" class="powermail_label leer"></label>
     <input name="L" type="hidden" value="0">
     <div class="powermail_field">
-        <input id="logout" name="logout" class="powermail_submit btn btn-primary" value="Abmelden / Logout" type="submit">
+        <input id="logout" name="logout" class="powermail_submit btn btn-primary" value="<?php echo T_('Abmelden') ?>" type="submit">
     </div>
 </div>
     <?php
