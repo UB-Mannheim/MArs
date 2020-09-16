@@ -31,7 +31,7 @@ define('MAX_DAYS', 14);
 define('TEXTS', [
     'a3' => 'Bibliotheksbereich A3',
     'eh' => 'Bibliotheksbereich Schloss Ehrenhof',
-    'no' => T_('keine Buchung')
+    'no' => _('keine Buchung')
 ]);
 
 // Maximum number of daily bookings.
@@ -107,7 +107,6 @@ require_once 'Swift/swift_required.php';
 // Mail implementation using Swift Mailer.
 // See documentation: https://swiftmailer.symfony.com/docs/introduction.html
 function sendmail($uid, $text) {
-    $text = "Diese Reservierungen sind für die Benutzerkennung $uid vorgemerkt:\n\nDatum      Bibliotheksbereich\n" . $text;
     $text = sprintf(_("Diese Sitzplatzbuchungen sind für die Benutzerkennung %s vorgemerkt"),$uid) . ":\n\n" . _('Datum') . "      " . _('Bibliotheksbereich') . "\n" . $text;
 
     // Sendmail for transport.
