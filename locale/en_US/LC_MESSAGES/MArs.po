@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-16 10:15+0200\n"
+"POT-Creation-Date: 2020-09-16 13:26+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Bernd Fallert <bernd.fallert@bib.uni-mannheim.de>\n"
 "Language-Team: \n"
@@ -11,6 +11,30 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.1\n"
+
+#: ../index.php:150
+msgid "Aktion erfolgreich"
+msgstr "Action successful"
+
+#: ../index.php:151
+msgid "Aktion nicht erfolgreich"
+msgstr "Action unsuccessful"
+
+#: ../index.php:156
+msgid "gelöscht"
+msgstr "deleted"
+
+#: ../index.php:167
+msgid "Bibliotheksbereich ausgebucht"
+msgstr "Library area fully booked"
+
+#: ../index.php:171 ../index.php:180
+msgid "Persönliches Buchungslimit erreicht"
+msgstr "Personal booking limit reached"
+
+#: ../index.php:185
+msgid "aktualisiert"
+msgstr "updated"
 
 #: ../index.php:228
 msgid "Buchungen"
@@ -85,16 +109,16 @@ msgstr "Login"
 msgid "keine Buchung"
 msgstr "No booking"
 
-#: ../config.php:251
+#: ../config.php:250
 #, php-format
 msgid "Keine E-Mail-Adresse für %s gefunden"
 msgstr "No email address found for %s"
 
-#: ../config.php:257
+#: ../config.php:256
 msgid "UB Mannheim - Keine Sitzplatzbuchungen"
 msgstr "UL Mannheim - No seat reservations"
 
-#: ../config.php:258
+#: ../config.php:257
 msgid ""
 "Für Ihre Uni-ID sind keine Sitzplatzbuchungen in den Bibliotheksbereichen "
 "der UB Mannheim angelegt"
@@ -102,24 +126,24 @@ msgstr ""
 "There are no seat bookings for your Uni-ID in the library areas of the "
 "Mannheim University Library"
 
-#: ../config.php:260
+#: ../config.php:259
 msgid "UB Mannheim - Sitzplatzbuchungen"
 msgstr "UL Mannheim - UL Seat Booking"
 
-#: ../config.php:261
+#: ../config.php:260
 #, php-format
 msgid "Diese Sitzplatzbuchungen sind für die Uni-ID %s vorgemerkt"
 msgstr "These seat bookings are reserved for the Uni-ID %s"
 
-#: ../config.php:261 ../config-template.php:111
+#: ../config.php:260 ../config-template.php:110
 msgid "Datum"
 msgstr "Date"
 
-#: ../config.php:261 ../config-template.php:111
+#: ../config.php:260 ../config-template.php:110
 msgid "Bibliotheksbereich"
 msgstr "Library location"
 
-#: ../config.php:262
+#: ../config.php:261
 msgid ""
 "Informieren Sie sich vor Ihrem Besuch bitte über die Hygieneregeln in den "
 "Bibliotheksbereichen"
@@ -127,31 +151,31 @@ msgstr ""
 "Please inform yourself about the hygiene regulations for the subject "
 "libraries before your visit"
 
-#: ../config.php:265
+#: ../config.php:264
 msgid "Verwalten Sie Ihre Sitzplatzbuchungen hier"
 msgstr "Manage your seat bookings here"
 
-#: ../config.php:266
+#: ../config.php:265
 msgid "Mit freundlichen Grüssen"
 msgstr "Sincerely yours"
 
-#: ../config.php:266
+#: ../config.php:265
 msgid "Ihre Universitaetsbibliothek"
 msgstr "Your university library"
 
-#: ../config.php:271
+#: ../config.php:270
 msgid "Sehr geehrter Herr"
 msgstr "Dir"
 
-#: ../config.php:273
+#: ../config.php:272
 msgid "Sehr geehrte Frau"
 msgstr "Dear"
 
-#: ../config-template.php:111
+#: ../config-template.php:110
 #, php-format
 msgid "Diese Sitzplatzbuchungen sind für die Benutzerkennung %s vorgemerkt"
 msgstr "These seat bookings are reserved for the Uni-ID %s"
 
-#: ../config-template.php:123
+#: ../config-template.php:122
 msgid "Sitzplatzreservierung"
 msgstr "Seat Reservations"
