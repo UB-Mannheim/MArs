@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-15 17:31+0200\n"
+"POT-Creation-Date: 2020-09-16 10:15+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Bernd Fallert <bernd.fallert@bib.uni-mannheim.de>\n"
 "Language-Team: \n"
@@ -69,7 +69,8 @@ msgid "Die Anmeldedaten sind ungültig. Bitte prüfen Sie Uni-ID und Passwort"
 msgstr "The login details are invalid. Please check your Uni-ID and password"
 
 #: ../index.php:652
-msgid "Informieren Sie mich bitte per E-Mail über meine aktuellen Sitzplatzbuchungen"
+msgid ""
+"Informieren Sie mich bitte per E-Mail über meine aktuellen Sitzplatzbuchungen"
 msgstr "Please inform me by e-mail about my current bookings"
 
 #: ../index.php:654
@@ -79,3 +80,78 @@ msgstr "Submit entries"
 #: ../index.php:662
 msgid "Anmelden"
 msgstr "Login"
+
+#: ../config.php:37 ../config-template.php:34
+msgid "keine Buchung"
+msgstr "No booking"
+
+#: ../config.php:251
+#, php-format
+msgid "Keine E-Mail-Adresse für %s gefunden"
+msgstr "No email address found for %s"
+
+#: ../config.php:257
+msgid "UB Mannheim - Keine Sitzplatzbuchungen"
+msgstr "UL Mannheim - No seat reservations"
+
+#: ../config.php:258
+msgid ""
+"Für Ihre Uni-ID sind keine Sitzplatzbuchungen in den Bibliotheksbereichen "
+"der UB Mannheim angelegt"
+msgstr ""
+"There are no seat bookings for your Uni-ID in the library areas of the "
+"Mannheim University Library"
+
+#: ../config.php:260
+msgid "UB Mannheim - Sitzplatzbuchungen"
+msgstr "UL Mannheim - UL Seat Booking"
+
+#: ../config.php:261
+#, php-format
+msgid "Diese Sitzplatzbuchungen sind für die Uni-ID %s vorgemerkt"
+msgstr "These seat bookings are reserved for the Uni-ID %s"
+
+#: ../config.php:261 ../config-template.php:111
+msgid "Datum"
+msgstr "Date"
+
+#: ../config.php:261 ../config-template.php:111
+msgid "Bibliotheksbereich"
+msgstr "Library location"
+
+#: ../config.php:262
+msgid ""
+"Informieren Sie sich vor Ihrem Besuch bitte über die Hygieneregeln in den "
+"Bibliotheksbereichen"
+msgstr ""
+"Please inform yourself about the hygiene regulations for the subject "
+"libraries before your visit"
+
+#: ../config.php:265
+msgid "Verwalten Sie Ihre Sitzplatzbuchungen hier"
+msgstr "Manage your seat bookings here"
+
+#: ../config.php:266
+msgid "Mit freundlichen Grüssen"
+msgstr "Sincerely yours"
+
+#: ../config.php:266
+msgid "Ihre Universitaetsbibliothek"
+msgstr "Your university library"
+
+#: ../config.php:271
+msgid "Sehr geehrter Herr"
+msgstr "Dir"
+
+#: ../config.php:273
+msgid "Sehr geehrte Frau"
+msgstr "Dear"
+
+#: ../config-template.php:111
+#, php-format
+msgid "Diese Sitzplatzbuchungen sind für die Benutzerkennung %s vorgemerkt"
+msgstr "These seat bookings are reserved for the Uni-ID %s"
+
+#: ../config-template.php:123
+msgid "Sitzplatzreservierung"
+msgstr "Seat Reservations"

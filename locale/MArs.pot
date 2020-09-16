@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-09-15 17:31+0200\n"
+"POT-Creation-Date: 2020-09-16 10:23+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -84,4 +84,75 @@ msgstr ""
 
 #: ../index.php:662
 msgid "Anmelden"
+msgstr ""
+
+#: ../config.php:37 ../config-template.php:34
+msgid "keine Buchung"
+msgstr ""
+
+#: ../config.php:251
+#, php-format
+msgid "Keine E-Mail-Adresse für %s gefunden"
+msgstr ""
+
+#: ../config.php:257
+msgid "UB Mannheim - Keine Sitzplatzbuchungen"
+msgstr ""
+
+#: ../config.php:258
+msgid ""
+"Für Ihre Uni-ID sind keine Sitzplatzbuchungen in den Bibliotheksbereichen "
+"der UB Mannheim angelegt"
+msgstr ""
+
+#: ../config.php:260
+msgid "UB Mannheim - Sitzplatzbuchungen"
+msgstr ""
+
+#: ../config.php:261
+#, php-format
+msgid "Diese Sitzplatzbuchungen sind für die Uni-ID %s vorgemerkt"
+msgstr ""
+
+#: ../config.php:261 ../config-template.php:111
+msgid "Datum"
+msgstr ""
+
+#: ../config.php:261 ../config-template.php:111
+msgid "Bibliotheksbereich"
+msgstr ""
+
+#: ../config.php:262
+msgid ""
+"Informieren Sie sich vor Ihrem Besuch bitte über die Hygieneregeln in den "
+"Bibliotheksbereichen"
+msgstr ""
+
+#: ../config.php:265
+msgid "Verwalten Sie Ihre Sitzplatzbuchungen hier"
+msgstr ""
+
+#: ../config.php:266
+msgid "Mit freundlichen Grüssen"
+msgstr ""
+
+#: ../config.php:266
+msgid "Ihre Universitaetsbibliothek"
+msgstr ""
+
+#: ../config.php:271
+msgid "Sehr geehrter Herr"
+msgstr ""
+
+#: ../config.php:273
+msgid "Sehr geehrte Frau"
+msgstr ""
+
+#: ../config-template.php:111
+#, php-format
+msgid "Diese Sitzplatzbuchungen sind für die Benutzerkennung %s vorgemerkt"
+msgstr ""
+
+#: ../config-template.php:123
+msgid "Sitzplatzreservierung"
 msgstr ""
