@@ -147,13 +147,13 @@ function update_database($uid, $group, $date, $oldvalue, $value)
     $table = DB_TABLE;
     $comment = "";
     $no_reservation = 'no';
-    $success_text = '<span class="success">Aktion erfolgreich</span>';
-    $failure_text = '<span class="failure">Aktion nicht erfolgreich</span>';
+    $success_text = '<span class="success">' . _('Aktion erfolgreich') . '</span>';
+    $failure_text = '<span class="failure">' . _('Aktion nicht erfolgreich') . '</span>';
     if ($value == $no_reservation) {
         // Delete booking.
         $result = $db->query("DELETE FROM $table WHERE name='$uid' AND date='$date'");
         $success = $result ? $success_text : $failure_text;
-        $comment = DEBUG ? "gelöscht: $oldvalue, $success" : $success;
+        $comment = DEBUG ? _('gelöscht') . ": $oldvalue, $success" : $success;
     } else {
         // Limit bookings.
         $member = ($group === 'member') ? 1 : 0;
@@ -164,11 +164,11 @@ function update_database($uid, $group, $date, $oldvalue, $value)
         $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>'$today' AND name='$uid'");
         $personal_bookings = $result ? $result->fetch_row()[0] : 999;
         if ($count >= $limit) {
-            $comment = '<span class="failure">Bibliotheksbereich ausgebucht</span>';
+            $comment = '<span class="failure">' . _('Bibliotheksbereich ausgebucht') . '</span>';
         } elseif ($oldvalue == $no_reservation) {
             // New bookings.
             if ($personal_bookings >= PERSONAL_LIMIT[$group]) {
-                $comment = '<span class="failure">Persönliches Buchungslimit erreicht</span>';
+                $comment = '<span class="failure">' . _('Persönliches Buchungslimit erreicht') . '</span>';
             } else {
                 $result = $db->query("INSERT INTO $table (name, member, text, date) VALUES ('$uid',$member,'$value','$date')");
                 $success = $result ? $success_text : $failure_text;
@@ -177,12 +177,12 @@ function update_database($uid, $group, $date, $oldvalue, $value)
         } else {
             // Modified booking.
             if ($personal_bookings > PERSONAL_LIMIT[$group]) {
-                $comment = '<span class="failure">Persönliches Buchungslimit erreicht</span>';
+                $comment = '<span class="failure">' . _('Persönliches Buchungslimit erreicht') . '</span>';
             } else {
                 $result = $db->query("DELETE FROM $table WHERE name='$uid' AND date='$date'");
                 $result = $db->query("INSERT INTO $table (name, member, text, date) VALUES ('$uid',$member,'$value','$date')");
                 $success = $result ? $success_text : $failure_text;
-                $comment = DEBUG ? "aktualisiert: $oldvalue -> $value, $success" : $success;
+                $comment = DEBUG ? _('aktualisiert') . ": $oldvalue -> $value, $success" : $success;
             }
         }
     }

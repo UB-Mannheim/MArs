@@ -53,9 +53,10 @@ li {
 }
 
 span.failure {
-  background-color: red;
-  font-weight: bold;
+  color: #990000;
 }
+
+span.failure,
 span.success {
     /*background-color: greenyellow;*/
     font-weight: bold;
