@@ -95,8 +95,8 @@ form.powermail_form div.powermail_fieldwrap_type_headline {
     border: 1px solid #f1f1f1;
     background-color: #f1f1f1;
     */
-    border: 1px solid #abb8ca;
-    background-color: #abb8ca;
+    border: 1px solid #fff;
+    background-color: #fff;
     padding: 7px;
     margin: 0px;
     display: inline-block;
@@ -104,16 +104,38 @@ form.powermail_form div.powermail_fieldwrap_type_headline {
     border-radius: 10px;
     height: 22px;
 }
+/*
 .closed-day-de::after {
     top: -9px;
     position: relative;
+    width: 80px;
 }
+*/
+
+.closed-day::after {
+    content: '---------';
+    color: transparent;
+    position: relative;
+    top: 3px;
+    border-top: 3px solid #ccc;
+}
+
 .closed-day-de:hover::after {
     content: 'geschlossen';
+    margin-left: -6px;
+    position: relative;
+    border-top: none;
+    top: -9px;
+    color: #ccc;
 }
 
 .closed-day-en:hover::after {
     content: 'closed';
+    margin-left: -6px;
+    position: relative;
+    border-top: none;
+    top: -9px;
+    color: #ccc;
 }
 
 .uma-global-content input[type="radio"] ~ .radio-dummy {
@@ -146,6 +168,14 @@ form.powermail_form div.powermail_fieldwrap_type_headline {
     text-align: center;
 }
 
+.uma-global-content input[type="radio"]:disabled ~ .radio-dummy::after {
+    content: '---------';
+    border-top: 3px solid #ccc;
+    top: 8px;
+    position: relative;
+    color: transparent;
+}
+
 .uma-global-content td.dateradio.disabled input[type="radio"]:hover ~ .radio-dummy::after {
     content: '---';
     top: 24px;
@@ -155,6 +185,17 @@ form.powermail_form div.powermail_fieldwrap_type_headline {
     color: #f2f2f2;
     font-size: 39px;
     border-top: 3px solid #fff;
+}
+
+.uma-global-content input[type="radio"]:disabled ~ .radio-dummy {
+    background: #f1f1f1;
+    border-color: #abb8ca;
+    box-shadow: none;
+}
+
+.uma-global-content td.dateradio.no.disabled input[type="radio"]:checked ~ .radio-dummy {
+    background: #232e58;
+    border-color: #232e58;
 }
 
 .uma-global-content table tr td,
