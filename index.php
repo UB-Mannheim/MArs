@@ -23,6 +23,12 @@
 // Read configuration for database access.
 require_once 'config.php';
 
+global $argv;
+if ($argv[1] == "mail-staff") {
+    send_staff_mail();
+    exit;
+}
+
 function alert($text)
 {
     print("<script>alert('$text');</script>");
