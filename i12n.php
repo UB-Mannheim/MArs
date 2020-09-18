@@ -22,12 +22,6 @@ if (isset($_REQUEST['L'])) {
     } else if ($_REQUEST['L'] === '1') {
         $locale = 'en_US';
         $_SESSION[ 'language' ]  = 'en';
-    } else if ($_REQUEST['L'] === 'de') {
-        $locale = 'de_DE';
-        $_SESSION[ 'language' ]  = 'de';
-    } else if ($_REQUEST['L'] === 'en') {
-        $locale = 'en_US';
-        $_SESSION[ 'language' ]  = 'en';
     } else {
         $locale = 'de_DE';
         $_SESSION[ 'language' ]  = 'de';

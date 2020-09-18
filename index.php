@@ -518,7 +518,7 @@ if ($authorized && $task == '') {
     <!-- <?php echo(__LINE__); ?> -->
 
     <div class="powermail_field">
-        <input id="L" name="L" type="hidden" value="<?php echo($_SESSION['language']) ?>"/>
+        <input id="L" name="L" type="hidden" value="<?php echo ($_SESSION['language'] === 'de' ? '0' : '1' ) ?>"/>
         <input id="logout" name="logout" class="powermail_submit btn btn-primary" value="<?php echo __('Abmelden') ?>" type="submit">
         <!-- <?php echo(__LINE__); ?> -->
     </div>
@@ -603,7 +603,7 @@ if ($uid == '' || $task == '') {
         ?>
 <div class="powermail_fieldwrap powermail_fieldwrap_type_submit powermail_fieldwrap_abschicken">
     <div class="powermail_field ">
-        <input name="L" type="hidden" value="<?php echo($_SESSION['language']) ?>">
+        <input id="L" name="L" type="hidden" value="<?php echo ($_SESSION['language'] === 'de' ? '0' : '1' ) ?>"/>
         <input id="login" name="login" class="powermail_submit" type="submit" value="<?php echo __('Anmelden') ?>">
         <!-- <?php echo(__LINE__); ?> -->
     </div>
