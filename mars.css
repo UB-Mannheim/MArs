@@ -177,10 +177,9 @@ form.powermail_form div.powermail_fieldwrap_type_headline {
 }
 
 .uma-global-content td.dateradio.disabled input[type="radio"]:hover ~ .radio-dummy::after {
-    content: '---';
-    top: 24px;
+    content: '----';
+    top: 23px;
     position: relative;
-    /*left: 23px;*/
     text-align: center;
     color: #f2f2f2;
     font-size: 39px;
