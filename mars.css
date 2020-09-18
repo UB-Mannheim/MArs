@@ -203,3 +203,8 @@ form.powermail_form div.powermail_fieldwrap_type_headline {
     background-color: #eff1f5;
     text-align: center;
 }
+
+.uma-global-content td.dateradio.disabled input[type="radio"]:checked:disabled ~ .radio-dummy {
+    background: #232e58;
+    border-color: #232e58;
+}
