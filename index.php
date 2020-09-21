@@ -274,35 +274,54 @@ function show_database($uid, $lastuid, $group)
         $label = "<label><span class=\"weekday\">$weekday</span> $label</label>";
         $closed = false;
         foreach (CLOSED as $condition) {
+            $line = '';
             $closed = ($weekday == $condition);
 
             if ($closed) {
                 //print("<div class=\"closed\">$label geschlossen / closed</div>");
                 //print('<tr class="closed"><td>' . $label . '</td><td colspan="' . $nNrLongnames . '">geschlossen / closed</td></tr>' . "\n");
-                print('<tr class="closed"><td>' . $label . '</td>');
+                print("<tr class=\"closed\"><td class=\"closedlabel\">$label</td>");
+
+                $name = "choice-$day";
+
                 $languageClass = 'closed-day-de';
                 if ($_SESSION['language'] === 'en') {
                     $languageClass = 'closed-day-en';
                 }
                 foreach (TEXTS as $value => $longname) {
-                    print('<td><span class="closed-day ' . $languageClass . '">&nbsp;</span></td>');
+                    $id = "$value-$day";
+                    $cTitle = $longname;
+                    //print('<td><span class="closed-day ' . $languageClass . '">&nbsp;</span></td>');
+
+                    $line .= '<td class="dateradio ' . $value . ' closed-day' . '" title=' . "'" . $cTitle . ': ' . date('d.m.', $time) . "'>" .
+                             "<input class=\"closed-day\" type=\"radio\" name=\"$name\" id=\"$id\" value=\"$value\"$disabled/>" .
+                             "</td>";
                 };
-                print('<td></td></tr>');
+                print($line . '<td></td></tr>');
                 break;
             }
             $closed = ($day == $condition);
             if ($closed) {
                 //print("<div class=\"closed\">$label geschlossen / closed</div>");
                 //print("<tr class=\"closed\"><td>$label</td><td colspan='" . $nNrLongnames . "'>geschlossen / closed</td></tr>\n");
-                print("<tr class=\"closed\"><td>$label</td>");
+                print("<tr class=\"closed\"><td class=\"closedlabel\">$label</td>");
+
+                $name = "choice-$day";
+
                 $languageClass = 'closed-day-de';
                 if ($_SESSION['language'] === 'en') {
                     $languageClass = 'closed-day-en';
                 }
                 foreach (TEXTS as $value => $longname) {
-                    print('<td><span class="closed-day ' . $languageClass . '">&nbsp;</span></td>');
+                    $id = "$value-$day";
+                    $cTitle = $longname;
+                    //print('<td><span class="closed-day ' . $languageClass . '">&nbsp;</span></td>');
+
+                    $line .= '<td class="dateradio ' . $value . ' closed-day' . '" title=' . "'" . $cTitle . ': ' . date('d.m.', $time) . "'>" .
+                             "<input class=\"closed-day\" type=\"radio\" name=\"$name\" id=\"$id\" value=\"$value\"$disabled/>" .
+                             "</td>";
                 };
-                print('<td></td></tr>');
+                print($line . '<td></td></tr>');
                 break;
             }
         }
@@ -336,8 +355,7 @@ function show_database($uid, $lastuid, $group)
             }
             $line .= '<td class="dateradio ' . $value . ' ' . $disabled . '" title=' . "'" . $cTitle . ': ' . date('d.m.', $time) . "'>" .
                      "<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"$value\"$checked$disabled/>" .
-                     "</td>"; /*
-                "<label class=\"$value\" for=\"$id\">$longname</label>";*/
+                     "</td>";
         }
         if ($comment != '') {
             $comment = " $comment";
