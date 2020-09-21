@@ -245,6 +245,7 @@ function show_database($uid, $lastuid, $group)
 
     for ($time = $first; $time < $last; $time += 24 * 60 * 60) {
         $disabled = '';
+        $CommentClass = "";
         $day = date('Y-m-d', $time);
         $text = 'no';
         if ($time < $start) {
@@ -252,7 +253,7 @@ function show_database($uid, $lastuid, $group)
         }
 
         $label = date('d.m.', $time);
-        $label = "<label class=\"day\">$label</label>";
+        $label = "<span class=\"day\">$label</span>";
 
         $resday = '';
         while ($i < count($reservations) && ($resday = $reservations[$i]['date']) < $day) {
@@ -352,8 +353,9 @@ function show_database($uid, $lastuid, $group)
         }
         if ($comment != '') {
             $comment = " $comment";
+            $CommentClass = 'comment';
         }
-        print("<tr class=\"open\"><td class=\"buchbar label\">$label</td>$line<td class=\"feedback\">$comment</td></tr>\n");
+        print("<tr class=\"open\"><td class=\"buchbar label $CommentClass\">$label</td>$line<td class=\"feedback\">$comment</td></tr>\n");
     }
     print('</table>');
     print('</fieldset>');

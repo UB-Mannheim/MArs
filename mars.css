@@ -35,7 +35,7 @@ div.open {
   display: inline;
 }
 
-label.day {
+span.day {
   margin-right: 5px;
   display: inline;
 }
@@ -223,7 +223,15 @@ form.powermail_form div.powermail_fieldwrap_type_headline {
     text-align: left;
 }
 
-span.weekday, td.label label {
+span.day,
+span.weekday,
+td.label label {
     top: 4px;
+    position: relative;
+}
+
+/* sideeffekt from uni-ma */
+.buchbar.label.comment {
+    top: 18px;
     position: relative;
 }
