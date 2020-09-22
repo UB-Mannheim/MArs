@@ -235,3 +235,126 @@ td.label label {
     top: 18px;
     position: relative;
 }
+
+
+
+@media all and (max-width: 823px) {
+    .uma-global-content table tr td,
+    .uma-global-content table tr th {
+        padding: 3px;
+        /* Debuging */
+        /*background-color: yellow;*/
+    }
+    .uma-global-content table tbody tr:last-child td{
+        padding-bottom: 15px;
+    }
+}
+
+
+@media all and (max-width: 690px) {
+    .uma-global-content table tr td,
+    .uma-global-content table tr th {
+        padding: 3px;
+        /* Debuging */
+        /*background-color: lightgreen;*/
+    }
+
+    .uma-global-content input[type="radio"] ~ .radio-dummy {
+        width: 80px;
+        height: 22px;
+        border-radius: 7px;
+        margin-bottom: 12px;
+    }
+    .uma-global-content table tbody tr:last-child td{
+        padding-bottom: 15px;
+    }
+}
+
+@media all and (max-width: 650px) {
+    .uma-global-content table tr td,
+    .uma-global-content table tr th {
+        padding: 3px;
+        font-weight: normal;
+        font-size: small;
+        /* Debuging */
+        /*background-color: lightblue;*/
+    }
+
+    .uma-global-content table tr td.dateradio {
+        width: 60px;
+        padding-right: 3rem;
+    }
+    .uma-global-content input[type="radio"] ~ .radio-dummy {
+        width: 60px;
+        height: 22px;
+        border-radius: 7px;
+        margin-bottom: 12px;
+    }
+
+    .uma-global-content table tbody tr:last-child td{
+        padding-bottom: 15px;
+    }
+}
+
+
+@media all and (max-width: 510px) {
+    .uma-global-content table tr td,
+    .uma-global-content table tr th {
+        padding: 3px;
+        font-weight: normal;
+        font-size: smaller;
+        /* Debuging */
+        /*background-color: hotpink;*/
+    }
+
+    .uma-global-content table tr td.dateradio {
+        width: 45px;
+        padding-right: 2rem;
+    }
+    .uma-global-content input[type="radio"] ~ .radio-dummy {
+        width: 45px;
+        height: 22px;
+        border-radius: 7px;
+        margin-bottom: 12px;
+    }
+
+    .uma-global-content table tbody tr:last-child td{
+        padding-bottom: 15px;
+    }
+}
+
+
+@media all and (max-width: 490px) {
+    .uma-global-content table tr td,
+    .uma-global-content table tr th {
+        padding: 3px;
+        font-weight: normal;
+        font-size: smaller;
+        /* Debuging */
+        /*background-color: hotpink;*/
+    }
+
+    .uma-global-content table tr td.label,
+    .uma-global-content table tr td.dateradio {
+        padding-right: 1rem;
+    }
+    .uma-global-content input[type="radio"] ~ .radio-dummy {
+        width: 45px;
+        height: 22px;
+        border-radius: 7px;
+        margin-bottom: 12px;
+    }
+
+    .uma-global-content table tbody tr:last-child td{
+        padding-bottom: 15px;
+    }
+
+    .uma-global-content table tr td.label label{
+        display: inherit;
+        font-size: smaller;
+    }
+
+    .uma-global-content table tr td.label {
+        width: 30px;
+    }
+}
