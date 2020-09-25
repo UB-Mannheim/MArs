@@ -472,17 +472,7 @@ $authorized = false;
 <title><?php echo( __('UB Sitzplatzbuchung')) ?></title>
 <meta charset="utf-8">
 <link rel="stylesheet" type="text/css" href="mars.css" media="all">
-<script>
-function onlyOne(checkbox,cname) {
-    var checkboxes = document.getElementsByName(cname);
-    checkboxes.forEach((item) => {
-        if (item !== checkbox) {
-	    item.checked = false;
-        };	   
-    });
-};
-</script>
-
+<script src="mars.js?202009251414"></script>
 </head>
 <body>
 
