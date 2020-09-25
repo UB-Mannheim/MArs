@@ -227,14 +227,6 @@ function show_database($uid, $lastuid, $group)
     // First day which will be shown.
     $first = $now;
 
-    print("\n" . '<script>' . "\n");
-    print('function onlyOne(checkbox,cname) {' . "\n");
-    print('    var checkboxes = document.getElementsByName(cname);' . "\n");
-    print('    checkboxes.foreach((item) => {' . "\n");
-    print('        if (item !== checkbox) item.checked = false;' . "\n");
-    print('    });' . "\n");
-    print('</script>' . "\n\n");
-
     print('<fieldset>');
     //print('<legend>' . __('Buchungen') . '</legend>');
     print('<table id="reservations">');
@@ -480,8 +472,17 @@ $authorized = false;
 <title><?php echo( __('UB Sitzplatzbuchung')) ?></title>
 <meta charset="utf-8">
 <link rel="stylesheet" type="text/css" href="mars.css" media="all">
+<script>
+function onlyOne(checkbox,cname) {
+    var checkboxes = document.getElementsByName(cname);
+    checkboxes.foreach((item) => {
+        if (item !== checkbox) item.checked = false;
+    });
+</script>
+
 </head>
 <body>
+
 <?php
 if ($uid != '') {
     $authorized = get_authorization($uid, htmlspecialchars_decode($password));
