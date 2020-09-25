@@ -239,34 +239,39 @@ td.label label {
 
 
 /* von Uni-Mannheim übernommen */
-#reservation h4,
-#reservationh5,
-#reservationh6 {
+form#reservation fieldset {
+    border: none;
+}
+
+form#reservation h4,
+form#reservation h5,
+form#reservation h6 {
     font-size: 26px;
 }
 
-#reservation p + h3 {
+form#reservation p + h3 {
     margin-top: 32px;
 }
-#reservation h3 {
+form#reservation h3 {
     font-size: 32px;
 }
 
-#reservation fieldset {
+form#reservation fieldset {
     margin: 0;
     padding: 0;
     border: 0;
 }
 
-#reservation table {
+form#reservation table#reservations {
     border-radius: 0;
     border: none;
     border-collapse: collapse;
+    width: 100%;
 }
 
-#reservation table tr,
-#reservation table tr td,
-#reservation table tr th {
+form#reservation table#reservations tr,
+form#reservation table#reservations tr td,
+form#reservation table#reservations tr th {
     border: 0;
     background-color: #eff1f5;
     text-align: center;
