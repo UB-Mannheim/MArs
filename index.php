@@ -475,9 +475,12 @@ $authorized = false;
 <script>
 function onlyOne(checkbox,cname) {
     var checkboxes = document.getElementsByName(cname);
-    checkboxes.foreach((item) => {
-        if (item !== checkbox) item.checked = false;
+    checkboxes.forEach((item) => {
+        if (item !== checkbox) {
+	    item.checked = false;
+        };	   
     });
+};
 </script>
 
 </head>
