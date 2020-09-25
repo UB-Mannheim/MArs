@@ -20,9 +20,14 @@
  * Note: TODO comments mark missing and incomplete code.
  */
 
-// Read configuration for database access.
-require_once 'config.php';
+// Read configuration
+$confdir = 'local-template';
+if (is_dir('local')) {
+    $confdir = 'local';
+}
+require_once "$confdir/config.php";
 
+// Command line parameter for staff mail (e.g. via cron)
 global $argv;
 if ($argv[1] == "mail-staff") {
     send_staff_mail();
@@ -37,7 +42,7 @@ function alert($text)
 function trace($text)
 {
     global $uid;
-    if ($uid == 'stweil') {
+    if ($uid == TRACE_USER) {
         alert($text);
     }
 }
@@ -103,7 +108,7 @@ function mail_database($uid)
         // Convert date representation.
         $date = date('d.m.Y', strtotime($date));
         // Translate short into long location name.
-        $text = TEXTS[$reservation['text']];
+        $text = AREAS[$reservation['text']]['name'];
         $mailtext .= "$date $text\n";
     }
     $result->free();
@@ -138,7 +143,7 @@ function preset_database()
     for ($i = 0; $i < 10; $i++) {
         $uid = TEST_USERS[rand(0, count(TEST_USERS) - 1)];
         // TODO: Fixme.
-        $text = TEXTS[rand(0, count(TEXTS) - 2)][0];
+        $text = AREAS[rand(0, count(AREAS) - 2)][0];
         $date = date('Y-m-d', $now + 24 * 60 * 60 * rand(0 - MAX_AGE, 7));
         // TODO: Optionally update and insert external users, too.
         $result = $db->query("INSERT INTO $table (name, text, date) VALUES ('$uid','$text','$date')");
@@ -165,7 +170,7 @@ function update_database($uid, $group, $date, $oldvalue, $value)
         $member = ($group === 'member') ? 1 : 0;
         $result = $db->query("SELECT COUNT(*) FROM $table WHERE date='$date' AND text='$value' AND member=$member");
         $count = $result ? $result->fetch_row()[0] : 0;
-        $limit = LIMIT[$group][$value];
+        $limit = AREAS[$value]['limit'][$group];
         $today = date('Y-m-d', time());
         $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>'$today' AND name='$uid'");
         $personal_bookings = $result ? $result->fetch_row()[0] : 999;
@@ -289,11 +294,11 @@ function show_database($uid, $lastuid, $group)
         }
 
         $line = '';
-        foreach (TEXTS as $value => $longname) {
-            $id = "$value-$day";
-            $checked = ($text == $value) ? ' checked' : '';
-            $line .= "<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"$value\"$checked$disabled/>" .
-                "<label class=\"$value\" for=\"$id\">$longname</label>";
+        foreach (AREAS as $area => $values) {
+            $id = "$area-$day";
+            $checked = ($text == $area) ? ' checked' : '';
+            $line .= "<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"$area\"$checked$disabled/>" .
+                "<label class=\"$area\" for=\"$id\">" . $values['name'] . "</label>";
         }
         if ($comment != '') {
             $comment = " $comment";
@@ -327,7 +332,7 @@ function day_report($location = false)
             $count_ext = $booking['external'];
             $count_member = $booking['internal'];
             $count_total = $count_ext + $count_member;
-            $longname = TEXTS[$location];
+            $longname = AREAS[$location]['name'];
             print("<tr><td>$date</td><td>$longname</td><td>$count_total</td><td>$count_member</td><td>$count_ext</td></tr>");
         }
         print("</table>");
@@ -340,7 +345,7 @@ function day_report($location = false)
     $db->close();
 
     $date = $today;
-    $longname = TEXTS[$location];
+    $longname = AREAS[$location]['name'];
     print("<h2>MARS Tagesbericht $date $longname</h2>\n");
     print("<table><tr><th>Nr.</th><th>Datum</th><th>Bibliotheksbereich</th><th>Uni-ID</th><th>Name</th></tr>");
 
@@ -446,16 +451,6 @@ $master = ($authorized === 'master');
 
 if ($master && $task == 'dump') {
     dump_database();
-} elseif ($master && $task == 'a3-report') {
-    day_report('a3');
-} elseif ($master && $task == 'a5-report') {
-    day_report('a5');
-} elseif ($master && $task == 'eh-report') {
-    day_report('eh');
-} elseif ($master && $task == 'bss-report') {
-    day_report('bss');
-} elseif ($master && $task == 'day-report') {
-    day_report();
 } elseif ($master && $task == 'init') {
     init_database();
     print('<pre>');
@@ -468,6 +463,16 @@ if ($master && $task == 'dump') {
     print('<pre>');
     dump_database();
     print('</pre>');
+} elseif ($master && preg_match('/-report$/', $task)) {
+    $param = explode('-', $task);
+    if (count($param) == 2) {
+        $task_area = $param[0];
+        if (array_key_exists($task_area, AREAS)) {
+            day_report($task_area);
+        } elseif ($task_area == "day") {
+            day_report();
+        }
+    }
 } elseif ($authorized) {
     // Show some information for the current uid.
     $usertext = get_usertext();
@@ -517,10 +522,12 @@ Please inform me by e-mail about my current bookings.</label>
 <ul>
 <li><a href="./?task=dump" target="_blank">Alle Buchungen ausgeben</a>
 <li><a href="./?task=day-report" target="_blank">Buchungsübersicht</a>
-<li><a href="./?task=a3-report" target="_blank">Tagesplanung A3</a>
-<li><a href="./?task=a5-report" target="_blank">Tagesplanung A5</a>
-<li><a href="./?task=eh-report" target="_blank">Tagesplanung Schloss Ehrenhof</a>
-<li><a href="./?task=bss-report" target="_blank">Tagesplanung Schloss Schneckenhof</a>
+<?php
+foreach (AREAS as $key => $values) {
+    if ($key == 'no') { continue; }
+    print("<li><a href='./?task=$key-report' target='_blank'>Tagesplanung " . $values['name'] . "</a>");
+}
+?>
 </ul>
 </p>
         <?php
@@ -532,16 +539,12 @@ Please inform me by e-mail about my current bookings.</label>
     <?=HINTS?>
     <?php
 }
-?>
 
-<script>
-    // Fix height of iframe.
-    let iFrame = window.parent.document.getElementById("seatbooking");
-    if (iFrame) {
-        let iFrameDocument = iFrame.contentWindow.document;
-        iFrame.height = iFrame.contentWindow.document.body.scrollHeight + 20;
-    }
-</script>
+// Include JS
+if (file_exists("$confdir/local.js")) {
+    print("<script type='text/javascript' src='$confdir/local.js'></script>");
+}
+?>
 
 </body>
 </html>

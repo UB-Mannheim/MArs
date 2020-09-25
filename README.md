@@ -53,11 +53,9 @@ Buchungsrestriktionen sind teilweise in der Datenbank realisiert, aktuell nur ei
 Weitere, z. B. Prüfung der Eingaben, lassen sich ebenfalls in der Datenbank realisieren.
 Der PHP-Code enthält zusätzliche Prüfungen.
 
-Der PHP-Code besteht aus zwei Teilen, dem (idealerweise) weitgehend universell
-verwendbarem Code in `index.php` und dem einrichtungsspezifischen Code mit
-lokalen Einstellungen in `config.php`.
-
-Die Datei `config-template.php` kann als Vorlage für eine eigene `config.php` dienen.
+Der PHP-Code besteht aus zwei Teilen, dem weitgehend universell verwendbarem Code in `index.php` und dem
+einrichtungsspezifischen Code mit lokalen Einstellungen im Verzeichnis 'local'.
+Das Verzeichnis `local-template` kann als Vorlage für letzteres dienen.
 
 Die Anzeige lässt sich optional per CSS angepassen.
 
