@@ -209,3 +209,37 @@ form.powermail_form div.powermail_fieldwrap_type_headline {
     border-color: #232e58;
     opacity: 0.7;
 }
+
+/* von Uni-Mannheim übernommen */
+#reservation h4,
+#reservationh5,
+#reservationh6 {
+    font-size: 26px;
+}
+
+#reservation p + h3 {
+    margin-top: 32px;
+}
+#reservation h3 {
+    font-size: 32px;
+}
+
+#reservation fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+#reservation table {
+    border-radius: 0;
+    border: none;
+    border-collapse: collapse;
+}
+
+#reservation table tr,
+#reservation table tr td,
+#reservation table tr th {
+    border: 0;
+    background-color: #eff1f5;
+    text-align: center;
+}

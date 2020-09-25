@@ -229,7 +229,7 @@ function show_database($uid, $lastuid, $group)
 
     print('<fieldset>');
     //print('<legend>' . __('Buchungen') . '</legend>');
-    print('<table>');
+    print('<table id="reservations">');
     // Print Headline for table
     print('<tr><th></th>');
     $nNrLongnames = 0;
