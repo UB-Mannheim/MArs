@@ -293,8 +293,12 @@ function show_database($uid, $lastuid, $group)
                     $id = "$value-$day";
                     $cTitle = $longname;
 
+                    // Checkbox-Version nach Urlaub
+                    //$line .= '<td class="dateradio ' . $value . ' closed-day-CLOSED closed-day-' . $languageClass . '" title=' . "'" . $cTitle . ': ' . date('d.m.', $time) . "'>" .
+                    //         "<input class=\"closed-day-input\" type=\"checkbox\" name=\"$name\" id=\"$id\" value=\"$value\" $disabled />" .
+                    //         "</td>";
                     $line .= '<td class="dateradio ' . $value . ' closed-day-CLOSED closed-day-' . $languageClass . '" title=' . "'" . $cTitle . ': ' . date('d.m.', $time) . "'>" .
-                             "<input class=\"closed-day-input\" type=\"checkbox\" name=\"$name\" id=\"$id\" value=\"$value\" $disabled />" .
+                             "<input class=\"closed-day-input\" type=\"radio\" name=\"$name\" id=\"$id\" value=\"$value\" $disabled />" .
                              "</td>";
                 };
                 print($line . '<td class="feefback"></td></tr>');
@@ -311,9 +315,14 @@ function show_database($uid, $lastuid, $group)
                     $id = "$value-$day";
                     $cTitle = $longname;
 
+                    // Checkbox-Version nach Urlaub
+                    //$line .= '<td class="dateradio ' . $value . ' closed-day-CLOSED closed-day-' . $languageClass . '" title=' . "'" . $cTitle . ': ' . date('d.m.', $time) . "'>" .
+                    //         "<input class=\"closed-day-input\" type=\"checkbox\" name=\"$name\" id=\"$id\" value=\"$value\" $disabled />" .
+                    //         "</td>";
                     $line .= '<td class="dateradio ' . $value . ' closed-day-CLOSED closed-day-' . $languageClass . '" title=' . "'" . $cTitle . ': ' . date('d.m.', $time) . "'>" .
-                             "<input class=\"closed-day-input\" type=\"checkbox\" name=\"$name\" id=\"$id\" value=\"$value\" $disabled />" .
+                             "<input class=\"closed-day-input\" type=\"radio\" name=\"$name\" id=\"$id\" value=\"$value\" $disabled />" .
                              "</td>";
+
                 };
                 print($line . '<td class="feefback"></td></tr>');
                 break;
@@ -347,9 +356,14 @@ function show_database($uid, $lastuid, $group)
             if ($disabled)  {
                 $cTitle = __('Keine Änderung mehr möglich');
             }
-            $line .= '<td class="dateradio ' . $value . ' ' . $disabled . ' open-day-' . $languageClass . '" title=' . "'" . $cTitle . ': ' . date('d.m.', $time) . "'>" .
+            // Checkbox-Version nach Urlaub
+            //$line .= '<td class="dateradio ' . $value . ' ' . $disabled . ' open-day-' . $languageClass . '" title=' . "'" . $cTitle . ': ' . date('d.m.', $time) . "'>" .
                      "<input type=\"checkbox\" name=\"$name\" id=\"$id\" value=\"$value\"$checked$disabled onclick=\"onlyOne(this, '$name')\" />" .
                      "</td>";
+            $line .= '<td class="dateradio ' . $value . ' ' . $disabled . ' open-day-' . $languageClass . '" title=' . "'" . $cTitle . ': ' . date('d.m.', $time) . "'>" .
+                     "<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"$value\"$checked$disabled />" .
+                     "</td>";
+
         }
         if ($comment != '') {
             $comment = " $comment";
@@ -472,7 +486,10 @@ $authorized = false;
 <title><?php echo( __('UB Sitzplatzbuchung')) ?></title>
 <meta charset="utf-8">
 <link rel="stylesheet" type="text/css" href="mars.css" media="all">
-<script src="mars.js?202009251414"></script>
+<?php
+//nach Urlaub aktivieren
+//<script src="mars.js?202009251414"></script>
+?>
 </head>
 <body>
 
