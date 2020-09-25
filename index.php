@@ -227,6 +227,14 @@ function show_database($uid, $lastuid, $group)
     // First day which will be shown.
     $first = $now;
 
+    print("\n" . '<script>' . "\n");
+    print('function onlyOne(checkbox,cname) {' . "\n");
+    print('    var checkboxes = document.getElementsByName(cname);' . "\n");
+    print('    checkboxes.foreach((item) => {' . "\n");
+    print('        if (item !== checkbox) item.checked = false;' . "\n");
+    print('    });' . "\n");
+    print('</script>' . "\n\n");
+
     print('<fieldset>');
     //print('<legend>' . __('Buchungen') . '</legend>');
     print('<table id="reservations">');
@@ -294,7 +302,7 @@ function show_database($uid, $lastuid, $group)
                     $cTitle = $longname;
 
                     $line .= '<td class="dateradio ' . $value . ' closed-day-CLOSED closed-day-' . $languageClass . '" title=' . "'" . $cTitle . ': ' . date('d.m.', $time) . "'>" .
-                             "<input class=\"closed-day-input\" type=\"radio\" name=\"$name\" id=\"$id\" value=\"$value\" $disabled />" .
+                             "<input class=\"closed-day-input\" type=\"checkbox\" name=\"$name\" id=\"$id\" value=\"$value\" $disabled />" .
                              "</td>";
                 };
                 print($line . '<td class="feefback"></td></tr>');
@@ -312,7 +320,7 @@ function show_database($uid, $lastuid, $group)
                     $cTitle = $longname;
 
                     $line .= '<td class="dateradio ' . $value . ' closed-day-CLOSED closed-day-' . $languageClass . '" title=' . "'" . $cTitle . ': ' . date('d.m.', $time) . "'>" .
-                             "<input class=\"closed-day-input\" type=\"radio\" name=\"$name\" id=\"$id\" value=\"$value\" $disabled />" .
+                             "<input class=\"closed-day-input\" type=\"checkbox\" name=\"$name\" id=\"$id\" value=\"$value\" $disabled />" .
                              "</td>";
                 };
                 print($line . '<td class="feefback"></td></tr>');
@@ -348,7 +356,7 @@ function show_database($uid, $lastuid, $group)
                 $cTitle = __('Keine Änderung mehr möglich');
             }
             $line .= '<td class="dateradio ' . $value . ' ' . $disabled . ' open-day-' . $languageClass . '" title=' . "'" . $cTitle . ': ' . date('d.m.', $time) . "'>" .
-                     "<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"$value\"$checked$disabled/>" .
+                     "<input type=\"checkbox\" name=\"$name\" id=\"$id\" value=\"$value\"$checked$disabled onclick=\"onlyOne(this, '$name')\" />" .
                      "</td>";
         }
         if ($comment != '') {
