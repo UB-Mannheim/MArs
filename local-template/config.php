@@ -39,8 +39,7 @@ define('MAX_AGE', 28);
 // Allow bookings for the next MAX_DAYS days.
 define('MAX_DAYS', 14);
 
-// Areas with longnames and seat limits per user type and day
-// You should keep 'no' to allow booking cancellation
+// Areas with longnames and seat limits per user membership and day
 define('AREAS', [
     'area1' => [
         'name' => 'Area One',
@@ -58,13 +57,15 @@ define('AREAS', [
     ],
 ]);
 
-// Maximum number of open bookings per user.
-// TODO add groups?
-define('PERSONAL_LIMIT', 5);
+// Maximum number of open bookings per user, depending on membership
+define('PERSONAL_LIMIT', [
+    'member' => 3,
+    'extern' => 1,
+]);
 
 // Booking can be restricted to certain groups of users.
+// E.g. you could use this array in auth.php to derive if a user is a member or not.
 define('USERGROUPS', [
-    // Allowed user groups.
 ]);
 
 // ====================
@@ -87,6 +88,13 @@ define('TEST_USERS', [
 // User notified in the trace function.
 // Useful for debugging live systems.
 define('TRACE_USER', '');
+
+// ====================
+// Mail
+// ====================
+
+define('FROM_MAIL', ['user@example.org' => 'Demo Sender']);
+define('STAFF_TO_MAIL', 'staff@example.org');
 
 // ====================
 // Misc
