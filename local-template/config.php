@@ -56,7 +56,6 @@ define('AREAS', [
             'extern' => 20
         ],
     ],
-    'no' => 'keine Buchung'
 ]);
 
 // Maximum number of open bookings per user.
