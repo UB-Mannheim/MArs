@@ -89,14 +89,14 @@ function dump_database()
     $db->close();
 }
 
-function mail_database($uid)
+function mail_database($user)
 {
     if (!function_exists('sendmail')) {
         return;
     }
     $db = get_database();
     $table = DB_TABLE;
-    $result = $db->query("SELECT date,text FROM $table where name='$uid' ORDER BY date");
+    $result = $db->query("SELECT date,text FROM $table where name='" . $user['id'] . "' ORDER BY date");
     $mailtext = "";
     $today = date('Y-m-d', time());
     while ($reservation = $result->fetch_assoc()) {
@@ -113,7 +113,7 @@ function mail_database($uid)
     }
     $result->free();
     $db->close();
-    sendmail($uid, $mailtext);
+    sendmail($user, $mailtext);
 }
 
 // Drop existing table with all bookings and create a new empty one.
@@ -152,7 +152,7 @@ function preset_database()
 }
 
 // Add, modify or delete bookings in the database.
-function update_database($uid, $group, $date, $oldvalue, $value)
+function update_database($uid, $is_member, $date, $oldvalue, $value)
 {
     $db = get_database();
     $table = DB_TABLE;
@@ -167,9 +167,10 @@ function update_database($uid, $group, $date, $oldvalue, $value)
         $comment = DEBUG ? "gelöscht: $oldvalue, $success" : $success;
     } else {
         // Limit bookings.
-        $member = ($group === 'member') ? 1 : 0;
+        $member = ($is_member) ? 1 : 0;
         $result = $db->query("SELECT COUNT(*) FROM $table WHERE date='$date' AND text='$value' AND member=$member");
         $count = $result ? $result->fetch_row()[0] : 0;
+        $group = $is_member ? "member" : "extern";
         $limit = AREAS[$value]['limit'][$group];
         $today = date('Y-m-d', time());
         $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>'$today' AND name='$uid'");
@@ -202,7 +203,7 @@ function update_database($uid, $group, $date, $oldvalue, $value)
 }
 
 // Show stored bookings in a web form which allows modifications.
-function show_database($uid, $lastuid, $group)
+function show_database($uid, $lastuid, $is_member)
 {
     $db = get_database();
     $table = DB_TABLE;
@@ -289,7 +290,7 @@ function show_database($uid, $lastuid, $group)
         } elseif ($text == $requested) {
             $comment = DEBUG ? 'unverändert' : '';
         } else {
-            $comment = update_database($uid, $group, $day, $text, $requested);
+            $comment = update_database($uid, $is_member, $day, $text, $requested);
             $text = $requested;
         }
 
@@ -362,10 +363,8 @@ function day_report($location = false)
     foreach ($reservations as $booking) {
         if (!$booking['member']) continue;
         $name = $booking['name'];
-        get_ldap($name, $ldap);
-        $givenName = $ldap['givenName'];
-        $sn = $ldap['sn'];
-        $fullname = "$sn, $givenName";
+        $visitor = get_user_info($name);
+        $fullname = $visitor['surname'] . ", " . $visitor['givenname'];
         $names[$fullname] = $name;
     }
     ksort($names);
@@ -383,10 +382,8 @@ function day_report($location = false)
     foreach ($reservations as $booking) {
         if ($booking['member']) continue;
         $name = $booking['name'];
-        get_ldap($name, $ldap);
-        $givenName = $ldap['givenName'];
-        $sn = $ldap['sn'];
-        $fullname = "$sn, $givenName";
+        $visitor = get_user_info($name);
+        $fullname = $visitor['surname'] . ", " . $visitor['givenname'];
         $names[$fullname] = $name;
     }
     ksort($names);
@@ -407,14 +404,23 @@ $uid = get_parameter('uid');
 $lastuid = get_parameter('lastuid');
 $password = get_parameter('password');
 
-if (!preg_match('/^[a-z_0-9]{0,8}$/', $uid)) {
-    // uid is longer than 8 characters or contains invalid characters.
-    alert("Ungültige Uni-ID");
-    $uid = '';
-}
-
 // Is there a username with valid password?
 $authorized = false;
+
+// Initiate user. User info is gathered in auth.php
+global $user;
+$user = array(
+    'id' => '',
+    'surname' => '',
+    'givenname' => '',
+    'gender' => '',
+    'mail' => '',
+    'is_member' => '',
+    //'fullname' => '',
+    //'usergroup' => '',
+    //'groups' => array(),
+);
+
 
 ?>
 <!DOCTYPE html>
@@ -479,14 +485,19 @@ if ($master && $task == 'dump') {
     }
 } elseif ($authorized) {
     // Show some information for the current uid.
-    $usertext = get_usertext();
+    $usertext = $user['surname'] . ", " . $user['givenname'];
+    if (TEST || $master) {
+        foreach ($user as $key => $value) {
+            $usertext .= "<br/>$key: $value";
+        }
+    }
     print("<p>$usertext</p>");
     print("<h3>Meine Sitzplatzbuchungen / My seat bookings</h3>");
     // Show all bookings.
-    show_database($uid, $lastuid, $ldap['group']);
+    show_database($uid, $lastuid, $user['is_member']);
     if ($email != '') {
         // Send user bookings per e-mail.
-        mail_database($uid);
+        mail_database($user);
     }
 } elseif ($uid != '') {
     if ($password == '') {

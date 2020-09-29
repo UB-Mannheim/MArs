@@ -1,11 +1,19 @@
 <?php
 
-require_once 'Swift/swift_required.php';
-
 // Mail implementation using Swift Mailer.
 // See documentation: https://swiftmailer.symfony.com/docs/introduction.html
-function sendmail($uid, $text) {
-    $text = "Diese Reservierungen sind für die Benutzerkennung $uid vorgemerkt:\n\nDatum      Bibliotheksbereich\n" . $text;
+require_once 'Swift/swift_required.php';
+
+function sendmail($user, $text) {
+
+    $to = $user['mail'];
+    if ($to == '') {
+        alert("Keine E-Mail-Adresse für " . $user['id'] . " gefunden");
+        return;
+    }
+
+    $text = "Sehr geehrte/r " . $user['givenname'] . " " . $user['surname'] . ",\n\n" . $text;
+    $text = "Diese Reservierungen sind für die Benutzerkennung " . $user['id'] . " vorgemerkt:\n\nDatum      Bibliotheksbereich\n" . $text;
 
     // Sendmail for transport.
     $transport = new Swift_SendmailTransport('/usr/sbin/sendmail -bs');
@@ -13,12 +21,9 @@ function sendmail($uid, $text) {
     // Create the Mailer using your created Transport
     $mailer = new Swift_Mailer($transport);
 
-    $from = ['user@example.org' => 'Demo Sender'];
-    $to = $ldap['mail'];
-
     // Create a message
     $message = (new Swift_Message('Sitzplatzreservierung'))
-        ->setFrom($from)
+        ->setFrom(FROM_MAIL)
         ->setTo($to)
         ->setBody($text)
     ;
@@ -35,16 +40,14 @@ function send_staff_mail() {
     $transport = new Swift_SendmailTransport('/usr/sbin/sendmail -bs');
     $mailer = new Swift_Mailer($transport);
 
-    $from = ['user@example.org' => 'Demo Sender'];
-    $to = 'resu@example.org';
     $subject = "Reservierungen für $today";
     $text = "Sehr geehrte Damen und Herren,\n\n";
     $text .= "anbei finden Sie die heutigen Sitzplatzreservierungen.\n\n";
     $text .= "Mit freundlichen Grüßen,\nIhre Universitätsbibliothek";
 
     $message = (new Swift_Message($subject))
-        ->setFrom($from)
-        ->setTo($to)
+        ->setFrom(FROM_MAIL)
+        ->setTo(STAFF_TO_MAIL)
         ->setBody($text)
     ;
 
@@ -58,10 +61,8 @@ function send_staff_mail() {
         if (count($reservations) > 0) {
             $names = array();
             foreach ($reservations as $row) {
-                get_ldap($row[0], $ldap);
-                $givenName = $ldap['givenName'];
-                $sn = $ldap['sn'];
-                $fullname = "$sn, $givenName";
+                $visitor = get_user_info($row[0]);
+                $fullname = $visitor['surname'] . ", " . $visitor['givenname'];
                 $names[] = $fullname;
             }
             sort($names);
