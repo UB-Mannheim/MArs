@@ -143,8 +143,8 @@ function preset_database()
     $now = time();
     for ($i = 0; $i < 10; $i++) {
         $uid = TEST_USERS[rand(0, count(TEST_USERS) - 1)];
-        // TODO: Fixme.
-        $text = AREAS[rand(0, count(AREAS) - 2)][0];
+        // TODO: Fixme. (What is meant to be fixed here?)
+        $text = array_rand(AREAS);
         $date = date('Y-m-d', $now + 24 * 60 * 60 * rand(0 - MAX_AGE, 7));
         // TODO: Optionally update and insert external users, too.
         $result = $db->query("INSERT INTO $table (name, text, date) VALUES ('$uid','$text','$date')");
@@ -301,6 +301,10 @@ function show_database($uid, $lastuid, $group)
             $line .= "<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"$area\"$checked$disabled/>" .
                 "<label class=\"$area\" for=\"$id\">" . $values['name'] . "</label>";
         }
+        $id = "no-$day";
+        $checked = ($text == 'no') ? ' checked' : '';
+        $line .= "<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"no\"$checked$disabled/>" .
+            "<label class=\"no\" for=\"$id\">Keine Buchung</label>";
         if ($comment != '') {
             $comment = " $comment";
         }
@@ -525,7 +529,6 @@ Please inform me by e-mail about my current bookings.</label>
 <li><a href="./?task=day-report" target="_blank">Buchungsübersicht</a>
 <?php
 foreach (AREAS as $key => $values) {
-    if ($key == 'no') { continue; }
     print("<li><a href='./?task=$key-report' target='_blank'>Tagesplanung " . $values['name'] . "</a>");
 }
 ?>
