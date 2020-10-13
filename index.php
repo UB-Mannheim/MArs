@@ -230,7 +230,7 @@ function show_database($uid, $lastuid, $group)
     // Get the first reserved day from the booking list.
     $i = 0;
 
-    for ($time = $first; $time < $last; $time += 24 * 60 * 60) {
+    for ($time = $first; $time < $last; $time = strtotime(" +1 day", $time)) {
         $disabled = '';
         $day = date('Y-m-d', $time);
         $text = 'no';
