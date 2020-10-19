@@ -1,10 +1,5 @@
 <?php
 
-// MAGIC_PASSWORD is used as a master password if it is defined.
-// The master password allows viewing and changing bookings of any user
-// and can give access to additional functionality like reports.
-define('MAGIC_PASSWORD', 'mysecretpassword');
-
 // Gather user information from your local source, e.g. an LDAP server
 function get_user_info($uid) {
     // For demo we just return static values

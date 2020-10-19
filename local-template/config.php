@@ -72,6 +72,11 @@ define('USERGROUPS', [
 // Debug and test
 // ====================
 
+// If defined, MAGIC_PASSWORD is used as a master password in auth.php.
+// The master password allows viewing and changing bookings of any user
+// and can give access to additional functionality like reports.
+define('MAGIC_PASSWORD', 'mysecretpassword');
+
 // Enable test.
 define('TEST', false);
 
