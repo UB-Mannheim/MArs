@@ -92,6 +92,7 @@ function dump_database()
 
 function mail_database($user)
 {
+    global $url_tstamp;
     if (!function_exists('sendmail')) {
         return;
     }
@@ -100,6 +101,9 @@ function mail_database($user)
     $result = $db->query("SELECT date,text FROM $table where name='" . $user['id'] . "' ORDER BY date");
     $mailtext = "";
     $today = date('Y-m-d', time());
+    if ($url_tstamp) {
+        $today = date('Y-m-d', $url_tstamp);
+    }
     while ($reservation = $result->fetch_assoc()) {
         $date = $reservation['date'];
         if ($date < $today) {
@@ -138,9 +142,13 @@ function init_database()
 // Add up to 10 random bookings for testing.
 function preset_database()
 {
+    global $url_tstamp;
     $db = get_database();
     $table = DB_TABLE;
     $now = time();
+    if ($url_tstamp) {
+        $now = $url_tstamp;
+    }
     for ($i = 0; $i < 10; $i++) {
         $uid = TEST_USERS[rand(0, count(TEST_USERS) - 1)];
         // TODO: Fixme. (What is meant to be fixed here?)
@@ -155,6 +163,7 @@ function preset_database()
 // Add, modify or delete bookings in the database.
 function update_database($uid, $is_member, $date, $oldvalue, $value)
 {
+    global $url_tstamp;
     $db = get_database();
     $table = DB_TABLE;
     $comment = "";
@@ -174,6 +183,9 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
         $group = $is_member ? "member" : "extern";
         $limit = AREAS[$value]['limit'][$group];
         $today = date('Y-m-d', time());
+        if ($url_tstamp) {
+            $today = date('Y-m-d', $url_tstamp);
+        }
         $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>'$today' AND name='$uid'");
         $personal_bookings = $result ? $result->fetch_row()[0] : 999;
         if ($count >= $limit) {
@@ -206,6 +218,7 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
 // Show stored bookings in a web form which allows modifications.
 function show_database($uid, $lastuid, $is_member)
 {
+    global $url_tstamp;
     $db = get_database();
     $table = DB_TABLE;
     $result = $db->query("SELECT date, text FROM $table WHERE name = '$uid' ORDER BY date");
@@ -216,6 +229,9 @@ function show_database($uid, $lastuid, $is_member)
 
     // Get current time.
     $now = time();
+    if ($url_tstamp) {
+        $now = $url_tstamp;
+    }
 
     // First day which can be booked (time rounded to start of day).
     // Accept bookings for current day until HH:MM.
@@ -320,7 +336,11 @@ function show_database($uid, $lastuid, $is_member)
 // Daily report for a location.
 function day_report($location = false)
 {
+    global $url_tstamp;
     $now = time();
+    if ($url_tstamp) {
+        $now = $url_tstamp;
+    }
     $today = date('Y-m-d', $now);
 
     $db = get_database();
@@ -462,6 +482,14 @@ if ($authorized && $task == '') {
 
 // Should admin commands be allowed?
 $master = ($authorized === 'master');
+
+// Use fake timestamp for testing.
+// strtotime understands different datetime formats, but use of ISO 8601 is recommended.
+$url_tstamp;
+if ($master) {
+    $url_tstamp = strtotime(get_parameter('date'));
+}
+
 
 if ($master && $task == 'dump') {
     dump_database();
