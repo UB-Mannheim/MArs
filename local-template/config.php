@@ -98,7 +98,7 @@ define('TRACE_USER', '');
 // Mail
 // ====================
 
-define('FROM_MAIL', ['user@example.org' => 'Demo Sender'];
+define('FROM_MAIL', ['user@example.org' => 'Demo Sender']);
 define('STAFF_TO_MAIL', 'staff@example.org');
 
 // ====================
