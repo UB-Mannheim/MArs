@@ -39,6 +39,9 @@ define('MAX_AGE', 28);
 // Allow bookings for the next MAX_DAYS days.
 define('MAX_DAYS', 14);
 
+// Allow bookings for current day until HH:MM
+define('DAILY_DEADLINE', '10:00');
+
 // Areas with longnames and seat limits per user membership and day
 define('AREAS', [
     'area1' => [
