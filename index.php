@@ -217,8 +217,11 @@ function show_database($uid, $lastuid, $is_member)
     $now = time();
 
     // First day which can be booked (time rounded to start of day).
-    // Accept bookings for same day until 9:00.
-    $start = $now + ((24 - 9) * 60 - 0) * 60;
+    // Accept bookings for current day until HH:MM.
+    $deadline    = explode(':', DAILY_DEADLINE);
+    $deadminutes = ($deadline[0] * 60.0 + $deadline[1] * 1.0);
+    // add (1 day - deadline) to now() and round to next or current day
+    $start = $now + (((24 * 60) - $deadminutes) * 60);
     $start = strtotime(date('Y-m-d', $start));
 
     // Round current time to start of day.
