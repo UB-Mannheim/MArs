@@ -20,9 +20,15 @@
  * Note: TODO comments mark missing and incomplete code.
  */
 
-// Read configuration for database access.
-require_once 'config.php';
+// Read configuration
+$scriptdir = dirname(__FILE__);
+$confdir = $scriptdir . '/local';
+if (!is_dir($confdir)) {
+    $confdir = $scriptdir . '/local-template';
+}
+require_once "$confdir/config.php";
 
+// Command line parameter for staff mail (e.g. via cron)
 global $argv;
 if ($argv[1] == "mail-staff") {
     send_staff_mail();
@@ -37,7 +43,7 @@ function alert($text)
 function trace($text)
 {
     global $uid;
-    if ($uid == 'stweil') {
+    if ($uid == TRACE_USER) {
         alert($text);
     }
 }
@@ -84,16 +90,20 @@ function dump_database()
     $db->close();
 }
 
-function mail_database($uid)
+function mail_database($user)
 {
+    global $url_tstamp;
     if (!function_exists('sendmail')) {
         return;
     }
     $db = get_database();
     $table = DB_TABLE;
-    $result = $db->query("SELECT date,text FROM $table where name='$uid' ORDER BY date");
+    $result = $db->query("SELECT date,text FROM $table where name='" . $user['id'] . "' ORDER BY date");
     $mailtext = "";
     $today = date('Y-m-d', time());
+    if ($url_tstamp) {
+        $today = date('Y-m-d', $url_tstamp);
+    }
     while ($reservation = $result->fetch_assoc()) {
         $date = $reservation['date'];
         if ($date < $today) {
@@ -103,12 +113,12 @@ function mail_database($uid)
         // Convert date representation.
         $date = date('d.m.Y', strtotime($date));
         // Translate short into long location name.
-        $text = TEXTS[$reservation['text']];
+        $text = AREAS[$reservation['text']]['name'];
         $mailtext .= "$date $text\n";
     }
     $result->free();
     $db->close();
-    sendmail($uid, $mailtext);
+    sendmail($user, $mailtext);
 }
 
 // Drop existing table with all bookings and create a new empty one.
@@ -132,13 +142,17 @@ function init_database()
 // Add up to 10 random bookings for testing.
 function preset_database()
 {
+    global $url_tstamp;
     $db = get_database();
     $table = DB_TABLE;
     $now = time();
+    if ($url_tstamp) {
+        $now = $url_tstamp;
+    }
     for ($i = 0; $i < 10; $i++) {
         $uid = TEST_USERS[rand(0, count(TEST_USERS) - 1)];
-        // TODO: Fixme.
-        $text = TEXTS[rand(0, count(TEXTS) - 2)][0];
+        // TODO: Fixme. (What is meant to be fixed here?)
+        $text = array_rand(AREAS);
         $date = date('Y-m-d', $now + 24 * 60 * 60 * rand(0 - MAX_AGE, 7));
         // TODO: Optionally update and insert external users, too.
         $result = $db->query("INSERT INTO $table (name, text, date) VALUES ('$uid','$text','$date')");
@@ -147,8 +161,9 @@ function preset_database()
 }
 
 // Add, modify or delete bookings in the database.
-function update_database($uid, $group, $date, $oldvalue, $value)
+function update_database($uid, $is_member, $date, $oldvalue, $value)
 {
+    global $url_tstamp;
     $db = get_database();
     $table = DB_TABLE;
     $comment = "";
@@ -162,11 +177,15 @@ function update_database($uid, $group, $date, $oldvalue, $value)
         $comment = DEBUG ? "gelöscht: $oldvalue, $success" : $success;
     } else {
         // Limit bookings.
-        $member = ($group === 'member') ? 1 : 0;
+        $member = $is_member ? 1 : 0;
         $result = $db->query("SELECT COUNT(*) FROM $table WHERE date='$date' AND text='$value' AND member=$member");
         $count = $result ? $result->fetch_row()[0] : 0;
-        $limit = LIMIT[$group][$value];
+        $group = $is_member ? "member" : "extern";
+        $limit = AREAS[$value]['limit'][$group];
         $today = date('Y-m-d', time());
+        if ($url_tstamp) {
+            $today = date('Y-m-d', $url_tstamp);
+        }
         $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>'$today' AND name='$uid'");
         $personal_bookings = $result ? $result->fetch_row()[0] : 999;
         if ($count >= $limit) {
@@ -197,8 +216,9 @@ function update_database($uid, $group, $date, $oldvalue, $value)
 }
 
 // Show stored bookings in a web form which allows modifications.
-function show_database($uid, $lastuid, $group)
+function show_database($uid, $lastuid, $is_member)
 {
+    global $url_tstamp;
     $db = get_database();
     $table = DB_TABLE;
     $result = $db->query("SELECT date, text FROM $table WHERE name = '$uid' ORDER BY date");
@@ -209,10 +229,16 @@ function show_database($uid, $lastuid, $group)
 
     // Get current time.
     $now = time();
+    if ($url_tstamp) {
+        $now = $url_tstamp;
+    }
 
     // First day which can be booked (time rounded to start of day).
-    // Accept bookings for same day until 9:00.
-    $start = $now + ((24 - 9) * 60 - 0) * 60;
+    // Accept bookings for current day until HH:MM.
+    $deadline    = explode(':', DAILY_DEADLINE);
+    $deadminutes = ($deadline[0] * 60.0 + $deadline[1] * 1.0);
+    // add (1 day - deadline) to now() and round to next or current day
+    $start = $now + (((24 * 60) - $deadminutes) * 60);
     $start = strtotime(date('Y-m-d', $start));
 
     // Round current time to start of day.
@@ -284,17 +310,21 @@ function show_database($uid, $lastuid, $group)
         } elseif ($text == $requested) {
             $comment = DEBUG ? 'unverändert' : '';
         } else {
-            $comment = update_database($uid, $group, $day, $text, $requested);
+            $comment = update_database($uid, $is_member, $day, $text, $requested);
             $text = $requested;
         }
 
         $line = '';
-        foreach (TEXTS as $value => $longname) {
-            $id = "$value-$day";
-            $checked = ($text == $value) ? ' checked' : '';
-            $line .= "<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"$value\"$checked$disabled/>" .
-                "<label class=\"$value\" for=\"$id\">$longname</label>";
+        foreach (AREAS as $area => $values) {
+            $id = "$area-$day";
+            $checked = ($text == $area) ? ' checked' : '';
+            $line .= "<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"$area\"$checked$disabled/>" .
+                "<label class=\"$area\" for=\"$id\">" . $values['name'] . "</label>";
         }
+        $id = "no-$day";
+        $checked = ($text == 'no') ? ' checked' : '';
+        $line .= "<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"no\"$checked$disabled/>" .
+            "<label class=\"no\" for=\"$id\">Keine Buchung</label>";
         if ($comment != '') {
             $comment = " $comment";
         }
@@ -306,7 +336,11 @@ function show_database($uid, $lastuid, $group)
 // Daily report for a location.
 function day_report($location = false)
 {
+    global $url_tstamp;
     $now = time();
+    if ($url_tstamp) {
+        $now = $url_tstamp;
+    }
     $today = date('Y-m-d', $now);
 
     $db = get_database();
@@ -327,7 +361,7 @@ function day_report($location = false)
             $count_ext = $booking['external'];
             $count_member = $booking['internal'];
             $count_total = $count_ext + $count_member;
-            $longname = TEXTS[$location];
+            $longname = AREAS[$location]['name'];
             print("<tr><td>$date</td><td>$longname</td><td>$count_total</td><td>$count_member</td><td>$count_ext</td></tr>");
         }
         print("</table>");
@@ -340,7 +374,7 @@ function day_report($location = false)
     $db->close();
 
     $date = $today;
-    $longname = TEXTS[$location];
+    $longname = AREAS[$location]['name'];
     print("<h2>MARS Tagesbericht $date $longname</h2>\n");
     print("<table><tr><th>Nr.</th><th>Datum</th><th>Bibliotheksbereich</th><th>Uni-ID</th><th>Name</th></tr>");
 
@@ -353,10 +387,8 @@ function day_report($location = false)
     foreach ($reservations as $booking) {
         if (!$booking['member']) continue;
         $name = $booking['name'];
-        get_ldap($name, $ldap);
-        $givenName = $ldap['givenName'];
-        $sn = $ldap['sn'];
-        $fullname = "$sn, $givenName";
+        $visitor = get_user_info($name);
+        $fullname = $visitor['surname'] . ", " . $visitor['givenname'];
         $names[$fullname] = $name;
     }
     ksort($names);
@@ -374,10 +406,8 @@ function day_report($location = false)
     foreach ($reservations as $booking) {
         if ($booking['member']) continue;
         $name = $booking['name'];
-        get_ldap($name, $ldap);
-        $givenName = $ldap['givenName'];
-        $sn = $ldap['sn'];
-        $fullname = "$sn, $givenName";
+        $visitor = get_user_info($name);
+        $fullname = $visitor['surname'] . ", " . $visitor['givenname'];
         $names[$fullname] = $name;
     }
     ksort($names);
@@ -398,14 +428,23 @@ $uid = get_parameter('uid');
 $lastuid = get_parameter('lastuid');
 $password = get_parameter('password');
 
-if (!preg_match('/^[a-z_0-9]{0,8}$/', $uid)) {
-    // uid is longer than 8 characters or contains invalid characters.
-    alert("Ungültige Uni-ID");
-    $uid = '';
-}
-
 // Is there a username with valid password?
 $authorized = false;
+
+// Initiate user. User info is gathered in auth.php
+global $user;
+$user = array(
+    'id' => '',
+    'surname' => '',
+    'givenname' => '',
+    'gender' => '',
+    'mail' => '',
+    'is_member' => '',
+    //'fullname' => '',
+    //'usergroup' => '',
+    //'groups' => array(),
+);
+
 
 ?>
 <!DOCTYPE html>
@@ -444,18 +483,16 @@ if ($authorized && $task == '') {
 // Should admin commands be allowed?
 $master = ($authorized === 'master');
 
+// Use fake timestamp for testing.
+// strtotime understands different datetime formats, but use of ISO 8601 is recommended.
+$url_tstamp;
+if ($master) {
+    $url_tstamp = strtotime(get_parameter('date'));
+}
+
+
 if ($master && $task == 'dump') {
     dump_database();
-} elseif ($master && $task == 'a3-report') {
-    day_report('a3');
-} elseif ($master && $task == 'a5-report') {
-    day_report('a5');
-} elseif ($master && $task == 'eh-report') {
-    day_report('eh');
-} elseif ($master && $task == 'bss-report') {
-    day_report('bss');
-} elseif ($master && $task == 'day-report') {
-    day_report();
 } elseif ($master && $task == 'init') {
     init_database();
     print('<pre>');
@@ -468,16 +505,31 @@ if ($master && $task == 'dump') {
     print('<pre>');
     dump_database();
     print('</pre>');
+} elseif ($master && preg_match('/-report$/', $task)) {
+    $param = explode('-', $task);
+    if (count($param) == 2) {
+        $task_area = $param[0];
+        if (array_key_exists($task_area, AREAS)) {
+            day_report($task_area);
+        } elseif ($task_area == "day") {
+            day_report();
+        }
+    }
 } elseif ($authorized) {
     // Show some information for the current uid.
-    $usertext = get_usertext();
+    $usertext = $user['surname'] . ", " . $user['givenname'];
+    if (TEST || $master) {
+        foreach ($user as $key => $value) {
+            $usertext .= "<br/>$key: $value";
+        }
+    }
     print("<p>$usertext</p>");
     print("<h3>Meine Sitzplatzbuchungen / My seat bookings</h3>");
     // Show all bookings.
-    show_database($uid, $lastuid, $ldap['group']);
+    show_database($uid, $lastuid, $user['is_member']);
     if ($email != '') {
         // Send user bookings per e-mail.
-        mail_database($uid);
+        mail_database($user);
     }
 } elseif ($uid != '') {
     if ($password == '') {
@@ -517,10 +569,11 @@ Please inform me by e-mail about my current bookings.</label>
 <ul>
 <li><a href="./?task=dump" target="_blank">Alle Buchungen ausgeben</a>
 <li><a href="./?task=day-report" target="_blank">Buchungsübersicht</a>
-<li><a href="./?task=a3-report" target="_blank">Tagesplanung A3</a>
-<li><a href="./?task=a5-report" target="_blank">Tagesplanung A5</a>
-<li><a href="./?task=eh-report" target="_blank">Tagesplanung Schloss Ehrenhof</a>
-<li><a href="./?task=bss-report" target="_blank">Tagesplanung Schloss Schneckenhof</a>
+<?php
+foreach (AREAS as $key => $values) {
+    print("<li><a href='./?task=$key-report' target='_blank'>Tagesplanung " . $values['name'] . "</a>");
+}
+?>
 </ul>
 </p>
         <?php
@@ -532,16 +585,12 @@ Please inform me by e-mail about my current bookings.</label>
     <?=HINTS?>
     <?php
 }
-?>
 
-<script>
-    // Fix height of iframe.
-    let iFrame = window.parent.document.getElementById("seatbooking");
-    if (iFrame) {
-        let iFrameDocument = iFrame.contentWindow.document;
-        iFrame.height = iFrame.contentWindow.document.body.scrollHeight + 20;
-    }
-</script>
+// Include JS
+if (file_exists("$confdir/local.js")) {
+    print("<script type='text/javascript' src='$confdir/local.js'></script>");
+}
+?>
 
 </body>
 </html>
