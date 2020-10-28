@@ -32,12 +32,12 @@ div.open {
 
 .weekday {
   min-width: 32px;
-  display: inline-block;
+  display: inline;
 }
 
-
-label.day {
+span.day {
   margin-right: 5px;
+  display: inline;
 }
 
 label.a3, label.a5, label.eh, label.bss {
@@ -53,62 +53,24 @@ li {
 }
 
 span.failure {
-  background-color: red;
-  font-weight: bold;
+  color: #990000;
 }
+
+span.failure,
 span.success {
-  background-color: greenyellow;
-  font-weight: bold;
+    /*background-color: greenyellow;*/
+    font-weight: bold;
+    display: inline-block;
+    padding-left: 6px;
+    padding-right: 6px;
+    top: 5px;
+    position: relative;
 }
 
 th {
   text-align: left;
 }
 
-form.powermail_form {
-    border: 1px solid #cccccc;
-    padding: 3px;
-    padding-left: 8px;
-    padding-right: 8px;
-    padding-top: 15px;
-}
-
-form.powermail_form label {
-    width: 20%;
-	min-width: 140px;
-    padding-right: 6px;
-    text-align: right;
-    vertical-align: top;
-    font-weight: normal;
-    display: inline-block;
-}
-
-form.powermail_form.powermail_form_reservation label.mandatory:after {
-    content: ':*'
-}
-
-form.powermail_form_reservation div.powermail_fieldwrap div.powermail_field {
-    display: inline-block;
-}
-
-form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type_submit.powermail_fieldwrap_abschicken div.powermail_field {
-    display: inline-block;
-    width: 70%;
-}
-
-form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type_submit.powermail_fieldwrap_logout div.powermail_field input#logout,
-form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type_submit.powermail_fieldwrap_abschicken div.powermail_field input#login {
-    width: 100%;
-    height: 40px;
-    background-color: #990000;
-    color: #fff;
-    cursor: pointer;
-}
-
-form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type_submit.powermail_fieldwrap_logout div.powermail_field input#logout:hover,
-form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type_submit.powermail_fieldwrap_abschicken div.powermail_field input#login:hover {
-    background-color: #6C0020;
-}
 
 form.powermail_form_reservation div.powermail_fieldwrap.powermail_fieldwrap_type_headline div.powermail_field {
     display: inline-block;
@@ -127,22 +89,315 @@ form.powermail_form div.powermail_fieldwrap_type_headline {
     margin-bottom: 0;
 }
 
-.powermail_fieldwrap_datenschutzerklaerung a,
-.powermail_fieldwrap_datenschutzerklaerung a:link,
-.powermail_fieldwrap_datenschutzerklaerung a:visited,
-.powermail_fieldwrap_datenschutzerklaerung a:hover,
-.powermail_fieldwrap_datenschutzerklaerung a:focus,
-.powermail_fieldwrap_datenschutzerklaerung a:active {
-    color: #990000;
-    text-decoration: none;
+
+.closed-day {
+    /*
+    border: 1px solid #f1f1f1;
+    background-color: #f1f1f1;
+    */
+    border: 1px solid #fff;
+    background-color: #fff;
+    padding: 7px;
+    margin: 0px;
+    display: inline-block;
+    width: 100px;
+    border-radius: 10px;
+    height: 22px;
 }
 
-.powermail_fieldwrap_datenschutzerklaerung a:focus,
-.powermail_fieldwrap_datenschutzerklaerung a:hover {
-    color: #4d0000;
-    text-decoration: underline;
+.uma-global-content tr.closed td.dateradio.closed-day-de input[type="radio"] ~ .radio-dummy::after {
+    content: '---------';
+    color: transparent;
+    position: relative;
+    top: 8px;
+    border-top: 3px solid #ccc;
 }
-.powermail_fieldwrap_datenschutzerklaerung a:active,
-.powermail_fieldwrap_datenschutzerklaerung a:hover {
-    outline: 0;
+
+.uma-global-content tr.closed td.dateradio.closed-day-en input[type="radio"]:hover ~ .radio-dummy::after,
+.uma-global-content tr.closed td.dateradio.closed-day-de input[type="radio"]:hover ~ .radio-dummy::after {
+    content: 'geschlossen';
+    position: relative;
+    border-top: none;
+    color: #ccc;
+    top: -5px;
+    text-align: center;
+}
+
+.uma-global-content tr.closed td.dateradio.closed-day-en input[type="radio"]:hover ~ .radio-dummy::after {
+    content: 'closed';
+}
+
+.uma-global-content input[type="radio"] ~ .radio-dummy {
+    width: 100px;
+    height: 22px;
+    border-radius: 7px;
+}
+
+.checkbox-wrapper input[type="radio"] {
+    width: 100px !important;
+    opacity: 0;
+    position: absolute;
+    height: 22px !important;
+    top: 0.5rem;
+}
+
+
+.uma-global-content tr.open td.dateradio.open-day-en:not(.no) input[type="radio"]:hover ~ .radio-dummy::after,
+.uma-global-content tr.open td.dateradio.open-day-de:not(.no) input[type="radio"]:hover ~ .radio-dummy::after {
+    content: 'buchen';
+    top: -5px;
+    position: relative;
+    text-align: center;
+}
+.uma-global-content tr.open td.dateradio.open-day-en:not(.no) input[type="radio"]:hover ~ .radio-dummy::after {
+    content: 'booking';
+}
+
+.uma-global-content tr.open td.dateradio.open-day-en.no input[type="radio"]:hover ~ .radio-dummy::after,
+.uma-global-content tr.open td.dateradio.open-day-de.no input[type="radio"]:hover ~ .radio-dummy::after {
+    content: 'stornieren';
+    top: -5px;
+    position: relative;
+    /*left: 5px;*/
+    text-align: center;
+}
+.uma-global-content tr.open td.dateradio.open-day-en.no input[type="radio"]:hover ~ .radio-dummy::after {
+    content: 'storno';
+}
+
+.uma-global-content input[type="radio"]:disabled ~ .radio-dummy::after {
+    content: '---------';
+    border-top: 3px solid #ccc;
+    top: 8px;
+    position: relative;
+    color: transparent;
+}
+
+.uma-global-content tr.open td.dateradio.disabled.open-day-en input[type="radio"]:hover ~ .radio-dummy::after,
+.uma-global-content tr.open td.dateradio.disabled.open-day-de input[type="radio"]:hover ~ .radio-dummy::after {
+    content: '----';
+    top: 23px;
+    position: relative;
+    text-align: center;
+    color: #f2f2f2;
+    font-size: 39px;
+    border-top: 3px solid #fff;
+}
+
+.uma-global-content input[type="radio"]:disabled ~ .radio-dummy {
+    background: #f1f1f1;
+    border-color: #abb8ca;
+    box-shadow: none;
+}
+
+.uma-global-content tr.open td.dateradio.no.disabled input[type="radio"]:checked ~ .radio-dummy {
+    background: #232e58;
+    border-color: #232e58;
+}
+
+.uma-global-content table tr,
+.uma-global-content table tr td,
+.uma-global-content table tr th {
+    border: 0;
+    background-color: #eff1f5;
+    text-align: center;
+}
+
+.uma-global-content tr.open td.dateradio.disabled input[type="radio"]:checked:disabled ~ .radio-dummy {
+    background: #232e58;
+    border-color: #232e58;
+    opacity: 0.7;
+}
+
+.uma-global-content table tr td.dateradio {
+    width: 100px;
+    padding-right: 5rem;
+}
+.uma-global-content table tr td.feedback,
+.uma-global-content table tr td.buchbar,
+.uma-global-content table tr td.dateradio {
+    vertical-align: middle;
+}
+
+.uma-global-content table tr td.feedback {
+    text-align: left;
+}
+
+span.day,
+span.weekday,
+td.label label {
+    top: 4px;
+    position: relative;
+}
+
+/* sideeffekt from uni-ma */
+.buchbar.label.comment {
+    top: 18px;
+    position: relative;
+}
+
+
+
+/* von Uni-Mannheim übernommen */
+form#reservation fieldset {
+    border: none;
+}
+
+form#reservation h4,
+form#reservation h5,
+form#reservation h6 {
+    font-size: 26px;
+}
+
+form#reservation p + h3 {
+    margin-top: 32px;
+}
+form#reservation h3 {
+    font-size: 32px;
+}
+
+form#reservation fieldset {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+
+form#reservation table#reservations {
+    border-radius: 0;
+    border: none;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+form#reservation table#reservations tr,
+form#reservation table#reservations tr td,
+form#reservation table#reservations tr th {
+    border: 0;
+    background-color: #eff1f5;
+    text-align: center;
+}
+
+
+
+
+
+@media all and (max-width: 823px) {
+    .uma-global-content table tr td,
+    .uma-global-content table tr th {
+        padding: 3px;
+        /* Debuging */
+        /*background-color: yellow;*/
+    }
+    .uma-global-content table tbody tr:last-child td{
+        padding-bottom: 15px;
+    }
+}
+
+
+@media all and (max-width: 690px) {
+    .uma-global-content table tr td,
+    .uma-global-content table tr th {
+        padding: 3px;
+        /* Debuging */
+        /*background-color: lightgreen;*/
+    }
+
+    .uma-global-content input[type="radio"] ~ .radio-dummy {
+        width: 80px;
+        height: 22px;
+        border-radius: 7px;
+        margin-bottom: 12px;
+    }
+    .uma-global-content table tbody tr:last-child td{
+        padding-bottom: 15px;
+    }
+}
+
+@media all and (max-width: 650px) {
+    .uma-global-content table tr td,
+    .uma-global-content table tr th {
+        padding: 3px;
+        font-weight: normal;
+        font-size: small;
+        /* Debuging */
+        /*background-color: lightblue;*/
+    }
+
+    .uma-global-content table tr td.dateradio {
+        width: 60px;
+        padding-right: 3rem;
+    }
+    .uma-global-content input[type="radio"] ~ .radio-dummy {
+        width: 60px;
+        height: 22px;
+        border-radius: 7px;
+        margin-bottom: 12px;
+    }
+
+    .uma-global-content table tbody tr:last-child td{
+        padding-bottom: 15px;
+    }
+}
+
+
+@media all and (max-width: 510px) {
+    .uma-global-content table tr td,
+    .uma-global-content table tr th {
+        padding: 3px;
+        font-weight: normal;
+        font-size: smaller;
+        /* Debuging */
+        /*background-color: hotpink;*/
+    }
+
+    .uma-global-content table tr td.dateradio {
+        width: 45px;
+        padding-right: 2rem;
+    }
+    .uma-global-content input[type="radio"] ~ .radio-dummy {
+        width: 45px;
+        height: 22px;
+        border-radius: 7px;
+        margin-bottom: 12px;
+    }
+
+    .uma-global-content table tbody tr:last-child td{
+        padding-bottom: 15px;
+    }
+}
+
+
+@media all and (max-width: 490px) {
+    .uma-global-content table tr td,
+    .uma-global-content table tr th {
+        padding: 3px;
+        font-weight: normal;
+        font-size: smaller;
+        /* Debuging */
+        /*background-color: hotpink;*/
+    }
+
+    .uma-global-content table tr td.label,
+    .uma-global-content table tr td.dateradio {
+        padding-right: 1rem;
+    }
+    .uma-global-content input[type="radio"] ~ .radio-dummy {
+        width: 45px;
+        height: 22px;
+        border-radius: 7px;
+        margin-bottom: 12px;
+    }
+
+    .uma-global-content table tbody tr:last-child td{
+        padding-bottom: 15px;
+    }
+
+    .uma-global-content table tr td.label label{
+        display: inherit;
+        font-size: smaller;
+    }
+
+    .uma-global-content table tr td.label {
+        width: 30px;
+    }
 }

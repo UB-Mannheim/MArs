@@ -1,0 +1,106 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: Bernd Fallert <bernd.fallert@bib.uni-mannheim.de>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en_US\n"
+"X-Generator: Poedit 2.4.1\n"
+
+#: ../index.php:174
+msgid "Aktion erfolgreich"
+msgstr "Action successful"
+
+#: ../index.php:175
+msgid "Aktion nicht erfolgreich"
+msgstr "Action unsuccessful"
+
+#: ../index.php:180
+msgid "geloescht"
+msgstr "deleted"
+
+#: ../index.php:195
+msgid "Bibliotheksbereich ausgebucht"
+msgstr "Library area fully booked"
+
+#: ../index.php:199 ../index.php:208
+msgid "Persoenliches Buchungslimit erreicht"
+msgstr "Personal booking limit reached"
+
+#: ../index.php:203
+msgid "reserviert"
+msgstr "reserved"
+
+#: ../index.php:213
+msgid "aktualisiert"
+msgstr "updated"
+
+#: ../index.php:365
+msgid "nicht aenderbar"
+msgstr "not changeable"
+
+#: ../index.php:368
+msgid "aenderbar"
+msgstr "changeable"
+
+#: ../index.php:370
+msgid "unveraendert"
+msgstr "unchanged"
+
+#: ../index.php:382
+msgid "Keine Aenderung mehr moeglich"
+msgstr "No more changes possible"
+
+#: ../index.php:523
+msgid "UB Sitzplatzbuchung"
+msgstr "UL Seat Booking"
+
+#: ../index.php:541
+msgid "Benutzerdaten"
+msgstr "personal data"
+
+#: ../index.php:551 ../index.php:565
+msgid "Pflichtfeld"
+msgstr "Mandatory field"
+
+#: ../index.php:561
+msgid "Passwort"
+msgstr "Password"
+
+#: ../index.php:633
+msgid "Sie sind angemeldet als"
+msgstr "You are logged in as"
+
+#: ../index.php:634
+msgid "Meine Sitzplatzbuchungen"
+msgstr "My seat bookings"
+
+#: ../index.php:643
+msgid "Bitte ergaenzen Sie Ihre Anmeldedaten um Ihr Passwort"
+msgstr "Please add your password to your login data"
+
+#: ../index.php:645
+msgid "Die Anmeldedaten sind ungueltig. Bitte pruefen Sie Uni-ID und Passwort"
+msgstr "The login details are invalid. Please check your Uni-ID and password"
+
+#: ../index.php:670
+msgid ""
+"Informieren Sie mich bitte per E-Mail ueber meine aktuellen "
+"Sitzplatzbuchungen"
+msgstr "Please inform me by e-mail about my current bookings"
+
+#: ../index.php:675
+msgid "Eingaben absenden"
+msgstr "Submit entries"
+
+#: ../index.php:686
+msgid "Anmelden"
+msgstr "Login"
+
+#: ../index.php:583
+msgid "Abmelden"
+msgstr "Logout"

@@ -1,1 +1,3 @@
 local
+/locale/de_DE/LC_MESSAGES/*.po~
+/locale/en_US/LC_MESSAGES/*.po~

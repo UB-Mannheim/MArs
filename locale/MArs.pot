@@ -1,0 +1,112 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-10-28 15:58+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../index.php:174
+msgid "Aktion erfolgreich"
+msgstr ""
+
+#: ../index.php:175
+msgid "Aktion nicht erfolgreich"
+msgstr ""
+
+#: ../index.php:180
+msgid "geloescht"
+msgstr ""
+
+#: ../index.php:195
+msgid "Bibliotheksbereich ausgebucht"
+msgstr ""
+
+#: ../index.php:199 ../index.php:208
+msgid "Persoenliches Buchungslimit erreicht"
+msgstr ""
+
+#: ../index.php:203
+msgid "reserviert"
+msgstr ""
+
+#: ../index.php:213
+msgid "aktualisiert"
+msgstr ""
+
+#: ../index.php:365
+msgid "nicht aenderbar"
+msgstr ""
+
+#: ../index.php:368
+msgid "aenderbar"
+msgstr ""
+
+#: ../index.php:370
+msgid "unveraendert"
+msgstr ""
+
+#: ../index.php:382
+msgid "Keine Aenderung mehr moeglich"
+msgstr ""
+
+#: ../index.php:523
+msgid "UB Sitzplatzbuchung"
+msgstr ""
+
+#: ../index.php:541
+msgid "Benutzerdaten"
+msgstr ""
+
+#: ../index.php:551 ../index.php:565
+msgid "Pflichtfeld"
+msgstr ""
+
+#: ../index.php:561
+msgid "Passwort"
+msgstr ""
+
+#: ../index.php:633
+msgid "Sie sind angemeldet als"
+msgstr ""
+
+#: ../index.php:634
+msgid "Meine Sitzplatzbuchungen"
+msgstr ""
+
+#: ../index.php:643
+msgid "Bitte ergaenzen Sie Ihre Anmeldedaten um Ihr Passwort"
+msgstr ""
+
+#: ../index.php:645
+msgid "Die Anmeldedaten sind ungueltig. Bitte pruefen Sie Uni-ID und Passwort"
+msgstr ""
+
+#: ../index.php:670
+msgid ""
+"Informieren Sie mich bitte per E-Mail ueber meine aktuellen "
+"Sitzplatzbuchungen"
+msgstr ""
+
+#: ../index.php:675
+msgid "Eingaben absenden"
+msgstr ""
+
+#: ../index.php:686
+msgid "Anmelden"
+msgstr ""
+
+#: ../index.php:583
+msgid "Abmelden"
+msgstr ""

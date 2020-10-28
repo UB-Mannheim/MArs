@@ -19,6 +19,9 @@
  *
  * Note: TODO comments mark missing and incomplete code.
  */
+session_start();
+
+require_once 'i12n.php';
 
 // Read configuration
 $scriptdir = dirname(__FILE__);
@@ -168,13 +171,13 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
     $table = DB_TABLE;
     $comment = "";
     $no_reservation = 'no';
-    $success_text = '<span class="success">Aktion erfolgreich</span>';
-    $failure_text = '<span class="failure">Aktion nicht erfolgreich</span>';
+    $success_text = '<span class="success">' . __('Aktion erfolgreich') . '</span>';
+    $failure_text = '<span class="failure">' . __('Aktion nicht erfolgreich') . '</span>';
     if ($value == $no_reservation) {
         // Delete booking.
         $result = $db->query("DELETE FROM $table WHERE name='$uid' AND date='$date'");
         $success = $result ? $success_text : $failure_text;
-        $comment = DEBUG ? "gelöscht: $oldvalue, $success" : $success;
+        $comment = DEBUG ? __('geloescht') . ": $oldvalue, $success" : $success;
     } else {
         // Limit bookings.
         $member = $is_member ? 1 : 0;
@@ -189,25 +192,25 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
         $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>'$today' AND name='$uid'");
         $personal_bookings = $result ? $result->fetch_row()[0] : 999;
         if ($count >= $limit) {
-            $comment = '<span class="failure">Bibliotheksbereich ausgebucht</span>';
+            $comment = '<span class="failure">' . __('Bibliotheksbereich ausgebucht') . '</span>';
         } elseif ($oldvalue == $no_reservation) {
             // New bookings.
             if ($personal_bookings >= PERSONAL_LIMIT[$group]) {
-                $comment = '<span class="failure">Persönliches Buchungslimit erreicht</span>';
+                $comment = '<span class="failure">' . __('Persoenliches Buchungslimit erreicht') . '</span>';
             } else {
                 $result = $db->query("INSERT INTO $table (name, member, text, date) VALUES ('$uid',$member,'$value','$date')");
                 $success = $result ? $success_text : $failure_text;
-                $comment = DEBUG ? "reserviert: $value, $success" : $success;
+                $comment = DEBUG ? __('reserviert') . ": $value, $success" : $success;
             }
         } else {
             // Modified booking.
             if ($personal_bookings > PERSONAL_LIMIT[$group]) {
-                $comment = '<span class="failure">Persönliches Buchungslimit erreicht</span>';
+                $comment = '<span class="failure">' . __('Persoenliches Buchungslimit erreicht') . '</span>';
             } else {
                 $result = $db->query("DELETE FROM $table WHERE name='$uid' AND date='$date'");
                 $result = $db->query("INSERT INTO $table (name, member, text, date) VALUES ('$uid',$member,'$value','$date')");
                 $success = $result ? $success_text : $failure_text;
-                $comment = DEBUG ? "aktualisiert: $oldvalue -> $value, $success" : $success;
+                $comment = DEBUG ? __('aktualisiert') . ": $oldvalue -> $value, $success" : $success;
             }
         }
     }
@@ -218,8 +221,11 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
 // Show stored bookings in a web form which allows modifications.
 function show_database($uid, $lastuid, $is_member)
 {
-    $weekdays = array('So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa');
-    //$weekdays = array('Sun', 'Mon', 'Tue', 'Med', 'Thu', 'Fri', 'Sat');
+    if ($_SESSION['language'] === 'de') {
+        $weekdays = array('So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa');
+    } else {
+        $weekdays = array('Sun', 'Mon', 'Tue', 'Med', 'Thu', 'Fri', 'Sat');
+    }
 
     global $url_tstamp;
     $db = get_database();
@@ -254,8 +260,8 @@ function show_database($uid, $lastuid, $is_member)
     $first = $now;
 
     print('<fieldset>');
-    print('<legend>Buchungen / bookings</legend>');
-    print('<table>');
+    //print('<legend>' . __('Buchungen') . '</legend>');
+    print('<table id="reservations">');
     // Print Headline for table
     print('<tr><th></th>');
     $nNrLongnames = 0;
@@ -271,6 +277,7 @@ function show_database($uid, $lastuid, $is_member)
 
     for ($time = $first; $time < $last; $time = strtotime("+1 day", $time)) {
         $disabled = '';
+        $CommentClass= '';
         $day = date('Y-m-d', $time);
         $text = 'no';
         if ($time < $start) {
@@ -278,7 +285,7 @@ function show_database($uid, $lastuid, $is_member)
         }
 
         $label = date('d.m.', $time);
-        $label = "<label class=\"day\">$label</label>";
+        $label = "<span class=\"day\">$label</span>";
 
         $resday = '';
         while ($i < count($reservations) && ($resday = $reservations[$i]['date']) < $day) {
@@ -292,19 +299,58 @@ function show_database($uid, $lastuid, $is_member)
             $text = 'no';
         }
 
+        $languageClass = 'de';
+        if ($_SESSION['language'] === 'en') {
+            $languageClass = 'en';
+        }
+
         // Skip days which cannot be booked.
         $weekday = date('D', $time);
         $label = "<label><span class=\"weekday\">$weekday</span> $label</label>";
         $closed = false;
         foreach (CLOSED as $condition) {
+            $line = '';
             $closed = ($weekday == $condition);
             if ($closed) {
-                print("<div class=\"closed\">$label geschlossen / closed</div>");
+                //print("<div class=\"closed\">$label geschlossen / closed</div>");
+                print('<tr class="closed><td class="label">' . $label . '</td>');
+                $name = "choise-$day";
+                $line = '';
+                $languageClass = 'closed-day-de';
+                if ($_SESSION['language'] === 'en') {
+                    $languageClass = 'closed-day-en';
+                }
+                foreach (AREAS as $area => $values) {
+                    $id = "$area-$day";
+                    $cTitle = $values['name'];
+                    //print('<td><span class="closed-day ' . $languageClass . '">&nbsp;</span></td>');
+                    $line .= '<td class="dateradio ' . $value . ' closed-day-CLOSED closed-day' . $languageClass . '" title=' . "'" . $cTitle . ': ' . date('d.m.', $time) . "'>" .
+                             "<input class=\"closed-day-input\" type=\"checkbox\" name=\"$name\" id=\"$id\" value=\"$value\" $disabled/>" .
+                             "</td>";
+                };
+                print($line . '<td class="feedback"></td></tr>');
                 break;
             }
             $closed = ($day == $condition);
             if ($closed) {
-                print("<div class=\"closed\">$label geschlossen / closed</div>");
+                //print("<div class=\"closed\">$label geschlossen / closed</div>");
+                print("<tr class=\"closed\"><td class=\"label\">$label</td>");
+                $name = "choice-$day";
+                $line = '';
+                $languageClass = 'closed-day-de';
+                if ($_SESSION['language'] === 'en') {
+                    $languageClass = 'closed-day-en';
+                }
+                foreach (AREAS as $area => $values) {
+                    $id = "$value-$day";
+                    $cTitle = $values['name'];
+                    //print('<td><span class="closed-day ' . $languageClass . '">&nbsp;</span></td>');
+
+                    $line .= '<td class="dateradio ' . $value . ' closed-day-CLOSED closed-day' . $languageClass . '" title=' . "'" . $cTitle . ': ' . date('d.m.', $time) . "'>" .
+                             "<input class=\"closed-day-input\" type=\"checkbox\" name=\"$name\" id=\"$id\" value=\"$value\" $disabled/>" .
+                             "</td>";
+                };
+                print($line . '<td class="feedback"></td></tr>');
                 break;
             }
         }
@@ -316,12 +362,12 @@ function show_database($uid, $lastuid, $is_member)
         $requested = get_parameter($name, 'no');
         $comment = '';
         if ($time < $start) {
-            $comment = DEBUG ? 'nicht änderbar' : '';
+            $comment = DEBUG ? __('nicht aenderbar') : '';
         } elseif ($uid != $lastuid) {
             // Initial call with the current user id.
-            $comment = DEBUG ? 'änderbar' : '';
+            $comment = DEBUG ? __('aenderbar') : '';
         } elseif ($text == $requested) {
-            $comment = DEBUG ? 'unverändert' : '';
+            $comment = DEBUG ? __('unveraendert') : '';
         } else {
             $comment = update_database($uid, $is_member, $day, $text, $requested);
             $text = $requested;
@@ -333,10 +379,10 @@ function show_database($uid, $lastuid, $is_member)
             $checked = ($text == $area) ? ' checked' : '';
             $cTitle = $values['name'];
             if ($disabled) {
-                $cTitle = 'Keine Änderung mehr möglich';
+                $cTitle = __('Keine Aenderung mehr moeglich');
             }
-            $line .= '<td class="dateradio ' . $value . ' ' . $disabled . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
-                     '<input type="radio" name="' . $name . '" id="' . $id . '" value="' . $area . '"' . $checked$disabled . '/>' .
+            $line .= '<td class="dateradio ' . $value . ' ' . $disabled . ' open-day-' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
+                     '<input type="checkbox" name="' . $name . '" id="' . $id . '" value="' . $area . '"' . $checked$disabled . ' onclick="onlyOne(this, ' . "'" . $name . "')" . '" />' .
                      '</td>';
                 // "<label class=\"$area\" for=\"$id\">" . $values['name'] . "</label>";
         }
@@ -349,8 +395,9 @@ function show_database($uid, $lastuid, $is_member)
             // "<label class=\"no\" for=\"$id\">Keine Buchung</label>";
         if ($comment != '') {
             $comment = " $comment";
+            $CommentClass = 'comment';
         }
-        print('<tr class="open"><td class="buchbar">' . $label . '</td>'. $line . '<td>' . $comment . '</td></tr>' . "\n");
+        print('<tr class="open"><td class="buchbar label' . $CommentClass . '">' . $label . '</td>'. $line . '<td class="feedback">' . $comment . '</td></tr>' . "\n");
     }
     print('</table>');
     print('</fieldset>');
@@ -471,13 +518,15 @@ $user = array(
 
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?php echo $_SESSION['language'] ?>">
 <head>
-<title>UB Sitzplatzbuchung</title>
+<title><?php echo( __('UB Sitzplatzbuchung')) ?></title>
 <meta charset="utf-8">
 <link rel="stylesheet" type="text/css" href="mars.css" media="all">
+<script src="mars.js?202009251414"></script>
 </head>
 <body>
+
 <?php
 if ($uid != '') {
     $authorized = get_authorization($uid, htmlspecialchars_decode($password));
@@ -489,7 +538,7 @@ if ($uid == '' || $task == '') {
 
 <div class="powermail_fieldwrap powermail_fieldwrap_type_headline nolabel">
     <div class="powermail_field">
-        <h4>Benutzerdaten / personal data</h4>
+        <h4><?php echo __('Benutzerdaten') ?></h4>
     </div>
 </div>
 
@@ -499,7 +548,7 @@ if ($uid == '' || $task == '') {
         <input id="uid"
             class="uid powermail_input"
             name="uid"
-            placeholder="Pflichtfeld / Mandatory field"
+            placeholder="<?php echo __('Pflichtfeld') ?>"
             maxlength="8"
             pattern="^([a-z_0-9]{0,8})$"
             required="required"
@@ -509,11 +558,11 @@ if ($uid == '' || $task == '') {
 </div>
 
 <div id="userpw" class="powermail_fieldwrap powermail_fieldwrap_type_input">
-    <label for="password" class="password powermail_label">Passwort<span class="mandatory">*</span></label>
+    <label for="password" class="password powermail_label"><?php echo __('Passwort') ?><span class="mandatory">*</span></label>
     <div class="powermail_field">
         <input id="password"
             name="password"
-            placeholder="Pflichtfeld / Mandatory field"
+            placeholder="<?php echo __('Pflichtfeld') ?>"
             required="required"
             type="password"
             value="<?=$password?>"/>
@@ -528,9 +577,11 @@ if ($authorized && $task == '') {
     ?>
 <div class="powermail_fieldwrap powermail_fieldwrap_type_submit powermail_fieldwrap_logout nolabel">
     <label for="logout" class="powermail_label leer"></label>
-    <input name="L" type="hidden" value="0">
+    <!-- <?php echo(__LINE__); ?> -->
+    <input id="L" name="L" type="hidden" value="<?php echo ($_SESSION['language'] === 'de' ? '0' : '1' ) ?>"/>
     <div class="powermail_field">
-        <input id="logout" name="logout" class="powermail_submit btn btn-primary" value="Abmelden / Logout" type="submit">
+        <input id="logout" name="logout" class="powermail_submit btn btn-primary" value="<?php echo __('Abmelden' ?>" type="submit">
+        <!-- <?php echo(__LINE__); ?> -->
     </div>
 </div>
     <?php
@@ -579,8 +630,8 @@ if ($master && $task == 'dump') {
             $usertext .= "<br/>$key: $value";
         }
     }
-    print("<p>Sie sind angemeldet als $usertext</p>");
-    print("<h3>Meine Sitzplatzbuchungen / My seat bookings</h3>");
+    print("<p>" . __('Sie sind angemeldet als') . " $usertext</p>");
+    print("<h3>" . __('Meine Sitzplatzbuchungen') . "</h3>");
     // Show all bookings.
     show_database($uid, $lastuid, $user['is_member']);
     if ($email != '') {
@@ -589,9 +640,9 @@ if ($master && $task == 'dump') {
     }
 } elseif ($uid != '') {
     if ($password == '') {
-        print('<p>Bitte ergänzen Sie Ihre Anmeldedaten um Ihr Passwort.</p>');
+        print('<p>' . __('Bitte ergaenzen Sie Ihre Anmeldedaten um Ihr Passwort') . '.</p>');
     } else {
-        print('<p>Die Anmeldedaten sind ungültig. Bitte prüfen Sie Uni-ID und Passwort.</p>');
+        print('<p>' . __('Die Anmeldedaten sind ungueltig. Bitte pruefen Sie Uni-ID und Passwort') . '.</p>');
     }
 } else {
     ?>
@@ -599,9 +650,11 @@ if ($master && $task == 'dump') {
     <div class="powermail_field ">
         <div class="powermail_field">
         <div id="conditional-display-1218" class="conditional-display" data-cond-field="" data-cond-value="">
-            <p>Die <a href="https://www.uni-mannheim.de/datenschutzerklaerung/universitaetsbibliothek-hinweise/" target="_blank">Informationen zum Datenschutz</a> wurden mir zur Verfügung gestellt.<br/>
-            The <a href="https://www.uni-mannheim.de/en/privacy-policy/" target="_blank">privacy information</a> was provided to me.
-            </p>
+<?php if ($_SESSION['language'] === 'de') { ?>
+            <p>Die <a href="https://www.uni-mannheim.de/datenschutzerklaerung/universitaetsbibliothek-hinweise/" target="_blank">Informationen zum Datenschutz</a> wurden mir zur Verfügung gestellt.</p>
+<?php } else { ?>
+            <p>The <a href="https://www.uni-mannheim.de/en/privacy-policy/" target="_blank">privacy information</a> was provided to me.</p>
+<?php } ?>
         </div>
     </div>
 </div>
@@ -614,13 +667,13 @@ if ($uid == '' || $task == '') {
         // <button class="submit" type="submit">Eingaben absenden</button>
         ?>
 <input type="checkbox" name="email" id="email" value="checked" <?=$email?>/>
-<label for="email">Informieren Sie mich bitte per E-Mail über meine aktuellen Sitzplatzbuchungen.
-Please inform me by e-mail about my current bookings.</label>
+<label for="email"><?php echo __('Informieren Sie mich bitte per E-Mail ueber meine aktuellen Sitzplatzbuchungen') ?>.</label>
 
 <div class="powermail_fieldwrap powermail_fieldwrap_type_submit powermail_fieldwrap_absenden nolabel">
     <label for="absenden" class="powermail_label leer"></label>
     <div class="powermail_field">
-        <input id="submit" name="submit" class="powermail_submit btn btn-primary" value="Eingaben absenden" type="submit">
+        <input id="submit" name="submit" class="powermail_submit btn btn-primary" value="<?php echo __('Eingaben absenden') ?>" type="submit">
+        <!-- <?php echo(__LINE__); ?> -->
     </div>
 </div>
         <?php
@@ -629,8 +682,9 @@ Please inform me by e-mail about my current bookings.</label>
         ?>
 <div class="powermail_fieldwrap powermail_fieldwrap_type_submit powermail_fieldwrap_anmelden">
     <div class="powermail_field">
-        <input name="L" type="hidden" value="0">
-        <input id="login" name="login" class="powermail_submit" type="submit" value="Anmelden">
+        <input id="L" name="L" type="hidden" value="<?php echo ($_SESSION['language'] === 'de' ? '0' : '1' ) ?>"/>
+        <input id="login" name="login" class="powermail_submit" type="submit" value="<?php echo __('Anmelden') ?>">
+        <!-- <?php echo(__LINE__); ?> -->
     </div>
 </div>
         <?php
