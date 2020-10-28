@@ -218,6 +218,9 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
 // Show stored bookings in a web form which allows modifications.
 function show_database($uid, $lastuid, $is_member)
 {
+    $weekdays = array('So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa');
+    //$weekdays = array('Sun', 'Mon', 'Tue', 'Med', 'Thu', 'Fri', 'Sat');
+
     global $url_tstamp;
     $db = get_database();
     $table = DB_TABLE;
@@ -252,6 +255,16 @@ function show_database($uid, $lastuid, $is_member)
 
     print('<fieldset>');
     print('<legend>Buchungen / bookings</legend>');
+    print('<table>');
+    // Print Headline for table
+    print('<tr><th></th>');
+    $nNrLongnames = 0;
+    foreach (AREAS as $area => $values) {
+        print('<th>' . $values['name'] . '</th>');
+        $nNrLongnames++;
+    }
+    $nNrLongnames++;
+    print('<th>&nbsp;</th></tr>');
 
     // Get the first reserved day from the booking list.
     $i = 0;
@@ -318,18 +331,28 @@ function show_database($uid, $lastuid, $is_member)
         foreach (AREAS as $area => $values) {
             $id = "$area-$day";
             $checked = ($text == $area) ? ' checked' : '';
-            $line .= "<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"$area\"$checked$disabled/>" .
-                "<label class=\"$area\" for=\"$id\">" . $values['name'] . "</label>";
+            $cTitle = $values['name'];
+            if ($disabled) {
+                $cTitle = 'Keine Änderung mehr möglich';
+            }
+            $line .= '<td class="dateradio ' . $value . ' ' . $disabled . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
+                     '<input type="radio" name="' . $name . '" id="' . $id . '" value="' . $area . '"' . $checked$disabled . '/>' .
+                     '</td>';
+                // "<label class=\"$area\" for=\"$id\">" . $values['name'] . "</label>";
         }
         $id = "no-$day";
         $checked = ($text == 'no') ? ' checked' : '';
-        $line .= "<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"no\"$checked$disabled/>" .
-            "<label class=\"no\" for=\"$id\">Keine Buchung</label>";
+        $cTitle = 'Keine Buchung';
+        $line .= '<td class="dateradio ' . $value . ' ' . $disabled . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
+                 '<input type="radio" name="' . $name . '" id="' . $id . '" value="no"' . $checked$disabled . '/>' .
+                 '</td>';
+            // "<label class=\"no\" for=\"$id\">Keine Buchung</label>";
         if ($comment != '') {
             $comment = " $comment";
         }
-        print("<div class=\"open\">$label$line$comment</div>\n");
+        print('<tr class="open"><td class="buchbar">' . $label . '</td>'. $line . '<td>' . $comment . '</td></tr>' . "\n");
     }
+    print('</table>');
     print('</fieldset>');
 }
 
@@ -451,6 +474,7 @@ $user = array(
 <html lang="en">
 <head>
 <title>UB Sitzplatzbuchung</title>
+<meta charset="utf-8">
 <link rel="stylesheet" type="text/css" href="mars.css" media="all">
 </head>
 <body>
@@ -461,22 +485,54 @@ if ($uid != '') {
 
 if ($uid == '' || $task == '') {
     ?>
-<form id="reservation" method="post">
+<form id="reservation" method="post"  class="powermail_form powermail_form_reservation nolabel">
 
-<fieldset class="personaldata">
-<legend>Benutzerdaten / personal data</legend>
-<label class="uid" for="uid">Uni-ID:*</label>
-<input class="uid" id="uid" name="uid" placeholder="uni id" maxlength="8"
-  pattern="^([a-z_0-9]{0,8})$" required="required" value="<?=$uid?>"/>
-<label class="password" for="password">Passwort:*</label><input id="password" name="password" placeholder="********" required="required" type="password" value="<?=$password?>"/>
-<input id="lastuid" name="lastuid" type="hidden" value="<?=$authorized ? $uid : ''?>"/>
-</fieldset>
+<div class="powermail_fieldwrap powermail_fieldwrap_type_headline nolabel">
+    <div class="powermail_field">
+        <h4>Benutzerdaten / personal data</h4>
+    </div>
+</div>
+
+<div id="userid" class="powermail_fieldwrap powermail_fieldwrap_type_input">
+    <label for="uid" class="uid powermail_label" title="Universitätskennung">Uni-ID<span class="mandatory">*</span></label>
+    <div class="powermail_field">
+        <input id="uid"
+            class="uid powermail_input"
+            name="uid"
+            placeholder="Pflichtfeld / Mandatory field"
+            maxlength="8"
+            pattern="^([a-z_0-9]{0,8})$"
+            required="required"
+            type="text"
+            value="<?=$uid?>"/>
+    </div>
+</div>
+
+<div id="userpw" class="powermail_fieldwrap powermail_fieldwrap_type_input">
+    <label for="password" class="password powermail_label">Passwort<span class="mandatory">*</span></label>
+    <div class="powermail_field">
+        <input id="password"
+            name="password"
+            placeholder="Pflichtfeld / Mandatory field"
+            required="required"
+            type="password"
+            value="<?=$password?>"/>
+    </div>
+</div>
+
     <?php
 }
 
 if ($authorized && $task == '') {
+    // <button class="logout" type="button"><a class="logout" href=".">Abmelden / Logout</a></button>
     ?>
-<button class="logout" type="button"><a class="logout" href=".">Abmelden / Logout</a></button>
+<div class="powermail_fieldwrap powermail_fieldwrap_type_submit powermail_fieldwrap_logout nolabel">
+    <label for="logout" class="powermail_label leer"></label>
+    <input name="L" type="hidden" value="0">
+    <div class="powermail_field">
+        <input id="logout" name="logout" class="powermail_submit btn btn-primary" value="Abmelden / Logout" type="submit">
+    </div>
+</div>
     <?php
 }
 
@@ -523,7 +579,7 @@ if ($master && $task == 'dump') {
             $usertext .= "<br/>$key: $value";
         }
     }
-    print("<p>$usertext</p>");
+    print("<p>Sie sind angemeldet als $usertext</p>");
     print("<h3>Meine Sitzplatzbuchungen / My seat bookings</h3>");
     // Show all bookings.
     show_database($uid, $lastuid, $user['is_member']);
@@ -539,24 +595,44 @@ if ($master && $task == 'dump') {
     }
 } else {
     ?>
-    <p>Die <a href="/datenschutzerklaerung/" target="_blank">Informationen zum Datenschutz</a> wurden mir zur Verfügung gestellt.<br/>
-    The <a href="/en/privacy-policy/" target="_blank">privacy information</a> was provided to me.</p>
+<div class="powermail_fieldwrap powermail_fieldwrap_type_html powermail_fieldwrap_datenschutz">
+    <div class="powermail_field ">
+        <div class="powermail_field">
+        <div id="conditional-display-1218" class="conditional-display" data-cond-field="" data-cond-value="">
+            <p>Die <a href="https://www.uni-mannheim.de/datenschutzerklaerung/universitaetsbibliothek-hinweise/" target="_blank">Informationen zum Datenschutz</a> wurden mir zur Verfügung gestellt.<br/>
+            The <a href="https://www.uni-mannheim.de/en/privacy-policy/" target="_blank">privacy information</a> was provided to me.
+            </p>
+        </div>
+    </div>
+</div>
     <?php
 }
 //<button type="reset">Eingaben zurücksetzen</button>
 
 if ($uid == '' || $task == '') {
     if ($authorized) {
+        // <button class="submit" type="submit">Eingaben absenden</button>
         ?>
-<button class="submit" type="submit">Eingaben absenden</button>
-<br/>
 <input type="checkbox" name="email" id="email" value="checked" <?=$email?>/>
 <label for="email">Informieren Sie mich bitte per E-Mail über meine aktuellen Sitzplatzbuchungen.
 Please inform me by e-mail about my current bookings.</label>
+
+<div class="powermail_fieldwrap powermail_fieldwrap_type_submit powermail_fieldwrap_absenden nolabel">
+    <label for="absenden" class="powermail_label leer"></label>
+    <div class="powermail_field">
+        <input id="submit" name="submit" class="powermail_submit btn btn-primary" value="Eingaben absenden" type="submit">
+    </div>
+</div>
         <?php
     } else {
+        // <button class="submit" type="submit">Anmelden</button>
         ?>
-<button class="submit" type="submit">Anmelden</button>
+<div class="powermail_fieldwrap powermail_fieldwrap_type_submit powermail_fieldwrap_anmelden">
+    <div class="powermail_field">
+        <input name="L" type="hidden" value="0">
+        <input id="login" name="login" class="powermail_submit" type="submit" value="Anmelden">
+    </div>
+</div>
         <?php
     }
     ?>
