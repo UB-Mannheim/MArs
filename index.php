@@ -382,13 +382,18 @@ function day_report($location = false)
 
     print("<tr><td>members</td></tr>");
 
-    // Get all full names from LDAP and sort them.
+    // Get all full names and sort them.
     $names = array();
     foreach ($reservations as $booking) {
         if (!$booking['member']) continue;
         $name = $booking['name'];
         $visitor = get_user_info($name);
-        $fullname = $visitor['surname'] . ", " . $visitor['givenname'];
+        if (!$visitor) {
+            // user does not seem to exist
+            $fullname = "[Unbekannter Nutzer]";
+        } else {
+            $fullname = $visitor['surname'] . ", " . $visitor['givenname'];
+        }
         $names[$fullname] = $name;
     }
     ksort($names);
@@ -401,13 +406,18 @@ function day_report($location = false)
 
     print("<tr><td>external users</td></tr>");
 
-    // Get all full names from LDAP and sort them.
+    // Get all full names and sort them.
     $names = array();
     foreach ($reservations as $booking) {
         if ($booking['member']) continue;
         $name = $booking['name'];
         $visitor = get_user_info($name);
-        $fullname = $visitor['surname'] . ", " . $visitor['givenname'];
+        if (!$visitor) {
+            // user does not seem to exist
+            $fullname = "[Unbekannter Nutzer]";
+        } else {
+            $fullname = $visitor['surname'] . ", " . $visitor['givenname'];
+        }
         $names[$fullname] = $name;
     }
     ksort($names);

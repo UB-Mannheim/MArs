@@ -62,7 +62,12 @@ function send_staff_mail() {
             $names = array();
             foreach ($reservations as $row) {
                 $visitor = get_user_info($row[0]);
-                $fullname = $visitor['surname'] . ", " . $visitor['givenname'];
+                if (!$visitor) {
+                    // ldap does not know this uid anymore
+                    $fullname = "[Unknown user]";
+                } else {
+                    $fullname = $visitor['surname'] . ", " . $visitor['givenname'];
+                }
                 $names[] = $fullname;
             }
             sort($names);

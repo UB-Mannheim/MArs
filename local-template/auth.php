@@ -10,6 +10,7 @@ function get_user_info($uid) {
     $user['givenname'] = "Jane";
     $user['gender'] = "W";
     $user['is_member'] = True;
+    // return false on some condition indicating the user does not exists
     return $user;
 }
 
@@ -23,9 +24,12 @@ function get_authorization($uid, $password) {
     //     return false;
     // }
 
-    $authorized = false;
     $user = get_user_info($uid);
+    if (!$user) {
+        return false;
+    }
 
+    $authorized = false;
     // Do some checks with your user data here
     // For the demo we just allow any uid with a matching password...
     $authorized = $uid == $password;
