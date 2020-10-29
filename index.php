@@ -382,7 +382,7 @@ function show_database($uid, $lastuid, $is_member)
                 $cTitle = __('Keine Aenderung mehr moeglich');
             }
             $line .= '<td class="dateradio ' . $value . ' ' . $disabled . ' open-day-' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
-                     '<input type="checkbox" name="' . $name . '" id="' . $id . '" value="' . $area . '"' . $checked$disabled . ' onclick="onlyOne(this, ' . "'" . $name . "')" . '" />' .
+                     '<input type="checkbox" name="' . $name . '" id="' . $id . '" value="' . $area . '"' . $checked . $disabled . ' onclick="onlyOne(this, ' . "'" . $name . "')" . '" />' .
                      '</td>';
                 // "<label class=\"$area\" for=\"$id\">" . $values['name'] . "</label>";
         }
@@ -390,7 +390,7 @@ function show_database($uid, $lastuid, $is_member)
         $checked = ($text == 'no') ? ' checked' : '';
         $cTitle = 'Keine Buchung';
         $line .= '<td class="dateradio ' . $value . ' ' . $disabled . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
-                 '<input type="radio" name="' . $name . '" id="' . $id . '" value="no"' . $checked$disabled . '/>' .
+                 '<input type="radio" name="' . $name . '" id="' . $id . '" value="no"' . $checked . $disabled . '/>' .
                  '</td>';
             // "<label class=\"no\" for=\"$id\">Keine Buchung</label>";
         if ($comment != '') {
@@ -580,7 +580,7 @@ if ($authorized && $task == '') {
     <!-- <?php echo(__LINE__); ?> -->
     <input id="L" name="L" type="hidden" value="<?php echo ($_SESSION['language'] === 'de' ? '0' : '1' ) ?>"/>
     <div class="powermail_field">
-        <input id="logout" name="logout" class="powermail_submit btn btn-primary" value="<?php echo __('Abmelden' ?>" type="submit">
+        <input id="logout" name="logout" class="powermail_submit btn btn-primary" value="<?php echo __('Abmelden') ?>" type="submit">
         <!-- <?php echo(__LINE__); ?> -->
     </div>
 </div>
