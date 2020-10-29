@@ -227,14 +227,13 @@ function show_database($uid, $lastuid, $is_member)
         $weekdays = array('Sun', 'Mon', 'Tue', 'Med', 'Thu', 'Fri', 'Sat');
     }
 
-    global $url_tstamp;
+    global $url_tstamp, $user;
     $db = get_database();
     $table = DB_TABLE;
     $result = $db->query("SELECT date, text FROM $table WHERE name = '$uid' ORDER BY date");
     $reservations = $result->fetch_all(MYSQLI_ASSOC);
     $result->free();
     //echo 'row=' . htmlentities($row);
-    $db->close();
 
     // Get current time.
     $now = time();
@@ -401,6 +400,18 @@ function show_database($uid, $lastuid, $is_member)
     }
     print('</table>');
     print('</fieldset>');
+
+    $today = date('Y-m-d', $now);
+    $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>'$today' AND name='$uid'");
+    $personal_bookings = $result ? $result->fetch_row()[0] : 999;
+    $db->close();
+    $group = $user['is_member'] ? "member" : "extern";
+    $open_bookings = PERSONAL_LIMIT[$group] - $personal_bookings;
+    if ($open_bookings < 0) {
+        $open_bookings = 0;
+    }
+    print("<p>Noch $open_bookings von " . PERSONAL_LIMIT[$group] . " Buchungen möglich.</p>");
+
 }
 
 // Daily report for a location.
