@@ -373,6 +373,11 @@ function show_database($uid, $lastuid, $is_member)
             $text = $requested;
         }
 
+        $languageClass = 'de';
+        if ($_SESSION['language'] === 'en') {
+            $languageClass = 'en';
+        }
+
         $line = '';
         foreach (AREAS as $area => $values) {
             $id = "$area-$day";
