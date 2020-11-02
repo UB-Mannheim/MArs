@@ -234,6 +234,7 @@ function show_database($uid, $lastuid, $is_member)
     $reservations = $result->fetch_all(MYSQLI_ASSOC);
     $result->free();
     //echo 'row=' . htmlentities($row);
+    $db->close();
 
     // Get current time.
     $now = time();
