@@ -25,9 +25,11 @@ require_once 'i12n.php';
 
 // Read configuration
 $scriptdir = dirname(__FILE__);
-$confdir = $scriptdir . '/local';
+$localdir = '/local';
+$confdir = $scriptdir . $localdir;
 if (!is_dir($confdir)) {
-    $confdir = $scriptdir . '/local-template';
+    $localdir = '/local-template';
+    $confdir = $scriptdir . $localdir;
 }
 require_once "$confdir/config.php";
 
@@ -739,7 +741,7 @@ foreach (AREAS as $key => $values) {
 
 // Include JS
 if (file_exists("$confdir/local.js")) {
-    print("<script type='text/javascript' src='$confdir/local.js'></script>");
+    print("<script type='text/javascript' src='.$localdir/local.js'></script>");
 }
 ?>
 
