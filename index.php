@@ -411,7 +411,7 @@ function show_database($uid, $lastuid, $is_member)
     if ($open_bookings < 0) {
         $open_bookings = 0;
     }
-    print("<p>Noch $open_bookings von " . PERSONAL_LIMIT[$group] . " Buchungen möglich.</p>");
+    print('<p>' . sprintf(__("Noch %s von %s Buchungen moeglich"), $open_bookings, PERSONAL_LIMIT[$group]) . '.</p>');
 
 }
 
