@@ -386,22 +386,13 @@ function show_database($uid, $lastuid, $is_member)
             if ($disabled) {
                 $cTitle = __('Keine Aenderung mehr moeglich');
             }
-            #print $area;
-            #print $disabled;
-            #print $languageClass;
-            #print $cTitle;
-            #print $time;
-            #print $name;
-            #print $id;
-            #print $area;
-            #print $checked;
-            #print $disabled;
-            
+
             $line .= '<td class="dateradio ' . $area . ' ' . $disabled . ' open-day-' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
                      '<input type="checkbox" name="' . $name . '" id="' . $id . '" value="' . $area . '"' . $checked . $disabled . ' onclick="onlyOne(this, ' . "'" . $name . "')" . '" />' .
                      '</td>';
                 // "<label class=\"$area\" for=\"$id\">" . $values['name'] . "</label>";
         }
+        /*
         $id = "no-$day";
         $checked = ($text == 'no') ? ' checked' : '';
         $cTitle = 'Keine Buchung';
@@ -409,6 +400,7 @@ function show_database($uid, $lastuid, $is_member)
                  '<input type="checkbox" name="' . $name . '" id="' . $id . '" value="no"' . $checked . $disabled . '/>' .
                  '</td>';
             // "<label class=\"no\" for=\"$id\">Keine Buchung</label>";
+        */
         if ($comment != '') {
             $comment = " $comment";
             $CommentClass = 'comment';
@@ -419,6 +411,7 @@ function show_database($uid, $lastuid, $is_member)
     print('</fieldset>');
 
     $today = date('Y-m-d', $now);
+    print "t: " $table . " today: " . $today . " uid: " . $uid . "<br>";
     $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>'$today' AND name='$uid'");
     $personal_bookings = $result ? $result->fetch_row()[0] : 999;
     $db->close();
