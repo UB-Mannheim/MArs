@@ -4,7 +4,6 @@
 ../local-template/config.php
 ../local-template/mail.php
 ../local/auth.php
-../local/auth-ldap.php
 ../local/config.php
 ../local/mail.php
 

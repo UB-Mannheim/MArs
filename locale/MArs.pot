@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-28 15:58+0100\n"
+"POT-Creation-Date: 2020-11-02 14:01+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -61,52 +61,123 @@ msgstr ""
 msgid "Keine Aenderung mehr moeglich"
 msgstr ""
 
-#: ../index.php:523
+#: ../index.php:414
+#, php-format
+msgid "Noch %s von %s Buchungen moeglich"
+msgstr ""
+
+#: ../index.php:535
 msgid "UB Sitzplatzbuchung"
 msgstr ""
 
-#: ../index.php:541
+#: ../index.php:553
 msgid "Benutzerdaten"
 msgstr ""
 
-#: ../index.php:551 ../index.php:565
+#: ../index.php:563 ../index.php:577
 msgid "Pflichtfeld"
 msgstr ""
 
-#: ../index.php:561
+#: ../index.php:573
 msgid "Passwort"
 msgstr ""
 
-#: ../index.php:633
-msgid "Sie sind angemeldet als"
-msgstr ""
-
-#: ../index.php:634
-msgid "Meine Sitzplatzbuchungen"
-msgstr ""
-
-#: ../index.php:643
-msgid "Bitte ergaenzen Sie Ihre Anmeldedaten um Ihr Passwort"
+#: ../index.php:595
+msgid "Abmelden"
 msgstr ""
 
 #: ../index.php:645
+msgid "Sie sind angemeldet als"
+msgstr ""
+
+#: ../index.php:646
+msgid "Meine Sitzplatzbuchungen"
+msgstr ""
+
+#: ../index.php:655
+msgid "Bitte ergaenzen Sie Ihre Anmeldedaten um Ihr Passwort"
+msgstr ""
+
+#: ../index.php:657
 msgid "Die Anmeldedaten sind ungueltig. Bitte pruefen Sie Uni-ID und Passwort"
 msgstr ""
 
-#: ../index.php:670
+#: ../index.php:682
 msgid ""
 "Informieren Sie mich bitte per E-Mail ueber meine aktuellen "
 "Sitzplatzbuchungen"
 msgstr ""
 
-#: ../index.php:675
+#: ../index.php:687
 msgid "Eingaben absenden"
 msgstr ""
 
-#: ../index.php:686
+#: ../index.php:698
 msgid "Anmelden"
 msgstr ""
 
-#: ../index.php:583
-msgid "Abmelden"
+#: ../local/auth.php:70
+msgid "Ungueltige Uni-ID"
+msgstr ""
+
+#: ../local/mail.php:11
+#, php-format
+msgid "Keine E-Mail-Adresse fuer %s gefunden"
+msgstr ""
+
+#: ../local/mail.php:17
+msgid "UB Mannheim - Keine Sitzplatzbuchungen"
+msgstr ""
+
+#: ../local/mail.php:18
+msgid ""
+"fuer Ihre Uni-ID sind keine Sitzplatzbuchungen in den Bibliotheksbereichen "
+"der UB Mannheim angelegt"
+msgstr ""
+
+#: ../local/mail.php:20
+msgid "UB Mannheim - Sitzplatzbuchungen"
+msgstr ""
+
+#: ../local/mail.php:21
+#, php-format
+msgid "fuer Ihre Uni-ID %s bestehen folgende Sitzplatzbuchungen"
+msgstr ""
+
+#: ../local/mail.php:21
+msgid "Datum"
+msgstr ""
+
+#: ../local/mail.php:21
+msgid "Bibliotheksbereich"
+msgstr ""
+
+#: ../local/mail.php:22
+msgid ""
+"Informieren Sie sich vor Ihrem Besuch bitte ueber die Hygieneregeln in den "
+"Bibliotheksbereichen"
+msgstr ""
+
+#: ../local/mail.php:30
+msgid "Verwalten Sie Ihre Sitzplatzbuchungen hier"
+msgstr ""
+
+#: ../local/mail.php:36
+msgid "Mit freundlichen Gruessen"
+msgstr ""
+
+#: ../local/mail.php:36
+msgid "Ihre Universitaetsbibliothek"
+msgstr ""
+
+#: ../local/mail.php:41
+msgid "Sehr geehrter Herr"
+msgstr ""
+
+#: ../local/mail.php:43
+msgid "Sehr geehrte Frau"
+msgstr ""
+
+#: ../local/mail.php:45
+msgid "Sehr geehrte/r"
 msgstr ""
