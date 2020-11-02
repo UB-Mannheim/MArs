@@ -386,7 +386,18 @@ function show_database($uid, $lastuid, $is_member)
             if ($disabled) {
                 $cTitle = __('Keine Aenderung mehr moeglich');
             }
-            $line .= '<td class="dateradio ' . $value . ' ' . $disabled . ' open-day-' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
+            #print $area;
+            #print $disabled;
+            #print $languageClass;
+            #print $cTitle;
+            #print $time;
+            #print $name;
+            #print $id;
+            #print $area;
+            #print $checked;
+            #print $disabled;
+            
+            $line .= '<td class="dateradio ' . $area . ' ' . $disabled . ' open-day-' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
                      '<input type="checkbox" name="' . $name . '" id="' . $id . '" value="' . $area . '"' . $checked . $disabled . ' onclick="onlyOne(this, ' . "'" . $name . "')" . '" />' .
                      '</td>';
                 // "<label class=\"$area\" for=\"$id\">" . $values['name'] . "</label>";
@@ -394,8 +405,8 @@ function show_database($uid, $lastuid, $is_member)
         $id = "no-$day";
         $checked = ($text == 'no') ? ' checked' : '';
         $cTitle = 'Keine Buchung';
-        $line .= '<td class="dateradio ' . $value . ' ' . $disabled . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
-                 '<input type="radio" name="' . $name . '" id="' . $id . '" value="no"' . $checked . $disabled . '/>' .
+        $line .= '<td class="dateradio noBooking ' . $disabled . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
+                 '<input type="checkbox" name="' . $name . '" id="' . $id . '" value="no"' . $checked . $disabled . '/>' .
                  '</td>';
             // "<label class=\"no\" for=\"$id\">Keine Buchung</label>";
         if ($comment != '') {
