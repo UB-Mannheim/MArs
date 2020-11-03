@@ -412,12 +412,15 @@ function show_database($uid, $lastuid, $is_member)
     print('</table>');
     print('</fieldset>');
 
+    print_number_possible_bookings( $now, $user );
+
+}
+
+function print_number_possible_bookings( $now, $user )
+{
     $db = get_database();
     $table = DB_TABLE;
-    
     $today = date('Y-m-d', $now);
-    print "t: " . $table . " today: " . $today . " uid: " . $uid . "<br>";
-    print "SELECT COUNT(*) FROM $table WHERE date>'$today' AND name='$uid'";
     $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>'$today' AND name='$uid'");
     $personal_bookings = $result ? $result->fetch_row()[0] : 999;
     $db->close();
@@ -427,7 +430,6 @@ function show_database($uid, $lastuid, $is_member)
         $open_bookings = 0;
     }
     print('<p>' . sprintf(__("Noch %s von %s Buchungen moeglich"), $open_bookings, PERSONAL_LIMIT[$group]) . '.</p>');
-
 }
 
 // Daily report for a location.
