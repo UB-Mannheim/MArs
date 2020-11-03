@@ -309,7 +309,7 @@ function show_database($uid, $lastuid, $is_member)
         }
 
         // Skip days which cannot be booked.
-        $weekday = date('D', $time);
+        $weekday = $weekdays[date('w', $time)];
         $label = "<label><span class=\"weekday\">$weekday</span> $label</label>";
         $closed = false;
         foreach (CLOSED as $condition) {
