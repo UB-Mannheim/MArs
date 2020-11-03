@@ -229,6 +229,8 @@ function show_database($uid, $lastuid, $is_member)
         $weekdays = array('Sun', 'Mon', 'Tue', 'Med', 'Thu', 'Fri', 'Sat');
     }
 
+    print_number_possible_bookings( $uid );
+
     global $url_tstamp, $user;
     $db = get_database();
     $table = DB_TABLE;
@@ -411,13 +413,12 @@ function show_database($uid, $lastuid, $is_member)
     }
     print('</table>');
     print('</fieldset>');
-
-    print_number_possible_bookings( $now, $user, $uid );
-
 }
 
-function print_number_possible_bookings( $now, $user, $uid )
+function print_number_possible_bookings( $uid )
 {
+    global $user;
+    $now = time();
     $db = get_database();
     $table = DB_TABLE;
     $today = date('Y-m-d', $now);
@@ -661,6 +662,7 @@ if ($master && $task == 'dump') {
     }
     print("<p>" . __('Sie sind angemeldet als') . " $usertext</p>");
     print("<h3>" . __('Meine Sitzplatzbuchungen') . "</h3>");
+
     // Show all bookings.
     show_database($uid, $lastuid, $user['is_member']);
     if ($email != '') {
