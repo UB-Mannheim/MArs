@@ -410,8 +410,12 @@ function show_database($uid, $lastuid, $is_member)
     print('</table>');
     print('</fieldset>');
 
+    $db = get_database();
+    $table = DB_TABLE;
+    
     $today = date('Y-m-d', $now);
-    print "t: " $table . " today: " . $today . " uid: " . $uid . "<br>";
+    print "t: " . $table . " today: " . $today . " uid: " . $uid . "<br>";
+    print "SELECT COUNT(*) FROM $table WHERE date>'$today' AND name='$uid'";
     $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>'$today' AND name='$uid'");
     $personal_bookings = $result ? $result->fetch_row()[0] : 999;
     $db->close();
