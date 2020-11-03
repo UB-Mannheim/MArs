@@ -412,11 +412,11 @@ function show_database($uid, $lastuid, $is_member)
     print('</table>');
     print('</fieldset>');
 
-    print_number_possible_bookings( $now, $user );
+    print_number_possible_bookings( $now, $user, $uid );
 
 }
 
-function print_number_possible_bookings( $now, $user )
+function print_number_possible_bookings( $now, $user, $uid )
 {
     $db = get_database();
     $table = DB_TABLE;
