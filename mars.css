@@ -211,8 +211,16 @@ form.powermail_form div.powermail_fieldwrap_type_headline {
 
 .uma-global-content table tr td.dateradio {
     width: 100px;
-    padding-right: 5rem;
+    /*padding-right: 5rem;*/
 }
+
+.uma-global-content table tr td.dateradio div.checkbox-wrapper {
+    float: none;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: start;
+}
+
 .uma-global-content table tr td.feedback,
 .uma-global-content table tr td.buchbar,
 .uma-global-content table tr td.dateradio {
@@ -279,8 +287,6 @@ form#reservation table#reservations tr th {
 
 
 
-
-
 @media all and (max-width: 823px) {
     .uma-global-content table tr td,
     .uma-global-content table tr th {
@@ -325,7 +331,7 @@ form#reservation table#reservations tr th {
 
     .uma-global-content table tr td.dateradio {
         width: 60px;
-        padding-right: 3rem;
+        /*padding-right: 3rem;*/
     }
     .uma-global-content input[type="radio"] ~ .radio-dummy {
         width: 60px;
@@ -352,7 +358,7 @@ form#reservation table#reservations tr th {
 
     .uma-global-content table tr td.dateradio {
         width: 45px;
-        padding-right: 2rem;
+        /*padding-right: 2rem;*/
     }
     .uma-global-content input[type="radio"] ~ .radio-dummy {
         width: 45px;
@@ -377,10 +383,12 @@ form#reservation table#reservations tr th {
         /*background-color: hotpink;*/
     }
 
+    /*
     .uma-global-content table tr td.label,
     .uma-global-content table tr td.dateradio {
         padding-right: 1rem;
     }
+    */
     .uma-global-content input[type="radio"] ~ .radio-dummy {
         width: 45px;
         height: 22px;
