@@ -328,7 +328,7 @@ function show_database($uid, $lastuid, $is_member)
                 }
                 foreach (AREAS as $area => $values) {
                     $id = "$area-$day";
-                    $cTitle = $values['name'];
+                    $cTitle = __('geschlossen') . ': ' . $values['name'];
                     //print('<td><span class="closed-day ' . $languageClass . '">&nbsp;</span></td>');
                     $line .= '<td class="dateradio ' . $area . ' closed-day-CLOSED closed-day-' . $languageClass . '" title=' . "'" . $cTitle . ': ' . date('d.m.', $time) . "'>" .
                              "<input class=\"closed-day-input\" type=\"checkbox\" name=\"$name\" id=\"$id\" value=\"$area\" disabled />" .
@@ -349,7 +349,7 @@ function show_database($uid, $lastuid, $is_member)
                 }
                 foreach (AREAS as $area => $values) {
                     $id = "$area-$day";
-                    $cTitle = $values['name'];
+                    $cTitle = __('geschlossen') . ': ' . $values['name'];
                     //print('<td><span class="closed-day ' . $languageClass . '">&nbsp;</span></td>');
 
                     $line .= '<td class="dateradio ' . $area . ' closed-day-CLOSED closed-day' . $languageClass . '" title=' . "'" . $cTitle . ': ' . date('d.m.', $time) . "'>" .

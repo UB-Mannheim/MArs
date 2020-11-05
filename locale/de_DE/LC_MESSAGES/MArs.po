@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-02 14:01+0100\n"
+"POT-Creation-Date: 2020-11-05 12:12+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Bernd Fallert <bernd.fallert@bib.uni-mannheim.de>\n"
 "Language-Team: \n"
@@ -12,103 +12,107 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.1\n"
 
-#: ../index.php:174
+#: ../index.php:176
 msgid "Aktion erfolgreich"
 msgstr "Aktion erfolgreich"
 
-#: ../index.php:175
+#: ../index.php:177
 msgid "Aktion nicht erfolgreich"
 msgstr "Aktion nicht erfolgreich"
 
-#: ../index.php:180
+#: ../index.php:182
 msgid "geloescht"
 msgstr "gelöscht"
 
-#: ../index.php:195
+#: ../index.php:197
 msgid "Bibliotheksbereich ausgebucht"
 msgstr "Bibliotheksbereich ausgebucht"
 
-#: ../index.php:199 ../index.php:208
+#: ../index.php:201 ../index.php:210
 msgid "Persoenliches Buchungslimit erreicht"
 msgstr "Persönliches Buchungslimit erreicht"
 
-#: ../index.php:203
+#: ../index.php:205
 msgid "reserviert"
 msgstr "reserviert"
 
-#: ../index.php:213
+#: ../index.php:215
 msgid "aktualisiert"
 msgstr "aktualisiert"
 
-#: ../index.php:365
+#: ../index.php:331 ../index.php:352
+msgid "geschlossen"
+msgstr "geschlossen"
+
+#: ../index.php:371
 msgid "nicht aenderbar"
 msgstr "nicht änderbar"
 
-#: ../index.php:368
+#: ../index.php:374
 msgid "aenderbar"
 msgstr "änderbar"
 
-#: ../index.php:370
+#: ../index.php:376
 msgid "unveraendert"
 msgstr "unverändert"
 
-#: ../index.php:382
+#: ../index.php:393
 msgid "Keine Aenderung mehr moeglich"
 msgstr "Keine Änderung mehr möglich"
 
-#: ../index.php:414
+#: ../index.php:444
 #, php-format
 msgid "Noch %s von %s Buchungen moeglich"
 msgstr "Noch %s von %s Buchungen möglich"
 
-#: ../index.php:535
+#: ../index.php:564
 msgid "UB Sitzplatzbuchung"
 msgstr "UB Sitzplatzbuchung"
 
-#: ../index.php:553
+#: ../index.php:582
 msgid "Benutzerdaten"
 msgstr "Benutzerdaten"
 
-#: ../index.php:563 ../index.php:577
+#: ../index.php:592 ../index.php:606
 msgid "Pflichtfeld"
 msgstr "Pflichtfeld"
 
-#: ../index.php:573
+#: ../index.php:602
 msgid "Passwort"
 msgstr "Passwort"
 
-#: ../index.php:595
+#: ../index.php:625
 msgid "Abmelden"
 msgstr "Abmelden"
 
-#: ../index.php:645
+#: ../index.php:675
 msgid "Sie sind angemeldet als"
 msgstr "Sie sind angemeldet als"
 
-#: ../index.php:646
+#: ../index.php:676
 msgid "Meine Sitzplatzbuchungen"
 msgstr "Meine Sitzplatzbuchungen"
 
-#: ../index.php:655
+#: ../index.php:686
 msgid "Bitte ergaenzen Sie Ihre Anmeldedaten um Ihr Passwort"
 msgstr "Bitte ergänzen Sie Ihre Anmeldedaten um Ihr Passwort"
 
-#: ../index.php:657
+#: ../index.php:688
 msgid "Die Anmeldedaten sind ungueltig. Bitte pruefen Sie Uni-ID und Passwort"
 msgstr "Die Anmeldedaten sind ungültig. Bitte prüfen Sie Uni-ID und Passwort"
 
-#: ../index.php:682
+#: ../index.php:713
 msgid ""
 "Informieren Sie mich bitte per E-Mail ueber meine aktuellen "
 "Sitzplatzbuchungen"
 msgstr ""
 "Informieren Sie mich bitte per E-Mail über meine aktuellen Sitzplatzbuchungen"
 
-#: ../index.php:687
+#: ../index.php:718
 msgid "Eingaben absenden"
 msgstr "Eingaben absenden"
 
-#: ../index.php:698
+#: ../index.php:729
 msgid "Anmelden"
 msgstr "Anmelden"
 
