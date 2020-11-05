@@ -598,6 +598,7 @@ if ($uid == '' || $task == '') {
             value="<?=$password?>"/>
     </div>
 </div>
+<input id="lastuid" name="lastuid" type="hidden" value="<?=$authorized ? $uid : ''?>"/>
 
     <?php
 }
