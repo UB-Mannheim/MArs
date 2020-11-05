@@ -223,13 +223,15 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
 // Show stored bookings in a web form which allows modifications.
 function show_database($uid, $lastuid, $is_member)
 {
+    // Because of the output of the possible bookings at the beginning,
+    // no direct print but intermediate storage and output at the end
+    $aPrint = array();
+
     if ($_SESSION['language'] === 'de') {
         $weekdays = array('So', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa');
     } else {
         $weekdays = array('Sun', 'Mon', 'Tue', 'Med', 'Thu', 'Fri', 'Sat');
     }
-
-    print_number_possible_bookings( $uid );
 
     global $url_tstamp, $user;
     $db = get_database();
@@ -263,18 +265,18 @@ function show_database($uid, $lastuid, $is_member)
     // First day which will be shown.
     $first = $now;
 
-    print('<fieldset>');
+    $aPrint[] = '<fieldset>';
     //print('<legend>' . __('Buchungen') . '</legend>');
-    print('<table id="reservations">');
+    $aPrint[] = '<table id="reservations">';
     // Print Headline for table
-    print('<tr><th></th>');
+    $aPrint[] = '<tr><th></th>';
     $nNrLongnames = 0;
     foreach (AREAS as $area => $values) {
-        print('<th>' . $values['name'] . '</th>');
+        $aPrint[] = '<th>' . $values['name'] . '</th>';
         $nNrLongnames++;
     }
     $nNrLongnames++;
-    print('<th>&nbsp;</th></tr>');
+    $aPrint[] = '<th>&nbsp;</th></tr>';
 
     // Get the first reserved day from the booking list.
     $i = 0;
@@ -317,7 +319,7 @@ function show_database($uid, $lastuid, $is_member)
             $closed = ($weekday == $condition);
             if ($closed) {
                 //print("<div class=\"closed\">$label geschlossen / closed</div>");
-                print('<tr class="closed><td class="label">' . $label . '</td>');
+                $aPrint[] = '<tr class="closed><td class="label">' . $label . '</td>';
                 $name = "choise-$day";
                 $line = '';
                 $languageClass = 'closed-day-de';
@@ -328,17 +330,17 @@ function show_database($uid, $lastuid, $is_member)
                     $id = "$area-$day";
                     $cTitle = $values['name'];
                     //print('<td><span class="closed-day ' . $languageClass . '">&nbsp;</span></td>');
-                    $line .= '<td class="dateradio ' . $value . ' closed-day-CLOSED closed-day' . $languageClass . '" title=' . "'" . $cTitle . ': ' . date('d.m.', $time) . "'>" .
+                    $line .= '<td class="dateradio ' . $value . ' closed-day-CLOSED closed-day-' . $languageClass . '" title=' . "'" . $cTitle . ': ' . date('d.m.', $time) . "'>" .
                              "<input class=\"closed-day-input\" type=\"checkbox\" name=\"$name\" id=\"$id\" value=\"$value\" $disabled/>" .
                              "</td>";
                 };
-                print($line . '<td class="feedback"></td></tr>');
+                $aPrint[] = $line . '<td class="feedback"></td></tr>';
                 break;
             }
             $closed = ($day == $condition);
             if ($closed) {
                 //print("<div class=\"closed\">$label geschlossen / closed</div>");
-                print("<tr class=\"closed\"><td class=\"label\">$label</td>");
+                $aPrint[] = "<tr class=\"closed\"><td class=\"label\">$label</td>";
                 $name = "choice-$day";
                 $line = '';
                 $languageClass = 'closed-day-de';
@@ -354,7 +356,7 @@ function show_database($uid, $lastuid, $is_member)
                              "<input class=\"closed-day-input\" type=\"checkbox\" name=\"$name\" id=\"$id\" value=\"$value\" $disabled/>" .
                              "</td>";
                 };
-                print($line . '<td class="feedback"></td></tr>');
+                $aPrint[] = $line . '<td class="feedback"></td></tr>';
                 break;
             }
         }
@@ -409,10 +411,19 @@ function show_database($uid, $lastuid, $is_member)
             $comment = " $comment";
             $CommentClass = 'comment';
         }
-        print('<tr class="open"><td class="buchbar label' . $CommentClass . '">' . $label . '</td>'. $line . '<td class="feedback">' . $comment . '</td></tr>' . "\n");
+        $aPrint[] = '<tr class="open"><td class="buchbar label' . $CommentClass . '">' . $label . '</td>'. $line . '<td class="feedback">' . $comment . '</td></tr>' . "\n";
     }
-    print('</table>');
-    print('</fieldset>');
+    $aPrint[] = '</table>';
+    $aPrint[] = '</fieldset>';
+
+    // Print number of possible Bookings
+    print_number_possible_bookings( $uid );
+
+    // print Arrayelements
+    for($i=count($aPrint)-1; $i >= 0; $i--) {
+        echo $aPrint[$i] . "\n";
+    }
+
 }
 
 function print_number_possible_bookings( $uid )
