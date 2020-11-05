@@ -420,7 +420,7 @@ function show_database($uid, $lastuid, $is_member)
     print_number_possible_bookings( $uid );
 
     // print Arrayelements
-    for($i=count($aPrint)-1; $i >= 0; $i--) {
+    for($i=0; $i < count($aPrint); $i++) {
         echo $aPrint[$i] . "\n";
     }
 
