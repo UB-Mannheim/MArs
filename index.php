@@ -331,7 +331,7 @@ function show_database($uid, $lastuid, $is_member)
                     $cTitle = $values['name'];
                     //print('<td><span class="closed-day ' . $languageClass . '">&nbsp;</span></td>');
                     $line .= '<td class="dateradio ' . $area . ' closed-day-CLOSED closed-day-' . $languageClass . '" title=' . "'" . $cTitle . ': ' . date('d.m.', $time) . "'>" .
-                             "<input class=\"closed-day-input\" type=\"checkbox\" name=\"$name\" id=\"$id\" value=\"$area\" $disabled/>" .
+                             "<input class=\"closed-day-input\" type=\"checkbox\" name=\"$name\" id=\"$id\" value=\"$area\" disabled />" .
                              "</td>";
                 };
                 $aPrint[] = $line . '<td class="feedback"></td></tr>';
@@ -353,7 +353,7 @@ function show_database($uid, $lastuid, $is_member)
                     //print('<td><span class="closed-day ' . $languageClass . '">&nbsp;</span></td>');
 
                     $line .= '<td class="dateradio ' . $area . ' closed-day-CLOSED closed-day' . $languageClass . '" title=' . "'" . $cTitle . ': ' . date('d.m.', $time) . "'>" .
-                             "<input class=\"closed-day-input\" type=\"checkbox\" name=\"$name\" id=\"$id\" value=\"$area\" $disabled/>" .
+                             "<input class=\"closed-day-input\" type=\"checkbox\" name=\"$name\" id=\"$id\" value=\"$area\" disabled />" .
                              "</td>";
                 };
                 $aPrint[] = $line . '<td class="feedback"></td></tr>';
