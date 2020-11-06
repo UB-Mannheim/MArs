@@ -302,7 +302,7 @@ form#reservation table#reservations tr th {
     background-color: hotpink;
 }
 
-.uma-global-content td.dateradio.checked.disabled input[type="checkbox"]:checked ~ .checkbox-dummy {
+.uma-global-content table tr td.dateradio.checked.disabled input[type="checkbox"] ~ .checkbox-dummy {
     background-color: #eff1f5;;
 }
 
