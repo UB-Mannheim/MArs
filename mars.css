@@ -282,6 +282,20 @@ form#reservation table#reservations tr th {
     text-align: center;
 }
 
+.uma-global-content input[type="checkbox"]:checked ~ .checkbox-dummy {
+    color: #232e58;
+    border-color: #232e58;
+    font-size: 12px;
+}
+
+.uma-global-content td.dateradio.checked input[type="checkbox"]:checked ~ .checkbox-dummy {
+    color: #232e58;
+    border-color: #232e58;
+    font-size: 12px;
+    background-color: hotpink;
+}
+
+
 
 
 @media all and (max-width: 823px) {
