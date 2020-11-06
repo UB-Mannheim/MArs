@@ -330,7 +330,7 @@ function show_database($uid, $lastuid, $is_member)
                     $id = "$area-$day";
                     $cTitle = __('geschlossen') . ': ' . $values['name'];
                     //print('<td><span class="closed-day ' . $languageClass . '">&nbsp;</span></td>');
-                    $line .= '<td class="dateradio ' . $area . ' closed-day-CLOSED closed-day-' . $languageClass . '" title=' . "'" . $cTitle . ': ' . date('d.m.', $time) . "'>" .
+                    $line .= '<td class="dateradio ' . $area . ' closed-day ' . $languageClass . '" title=' . "'" . $cTitle . ': ' . date('d.m.', $time) . "'>" .
                              "<input class=\"closed-day-input\" type=\"checkbox\" name=\"$name\" id=\"$id\" value=\"$area\" disabled />" .
                              "</td>";
                 };
@@ -352,7 +352,7 @@ function show_database($uid, $lastuid, $is_member)
                     $cTitle = __('geschlossen') . ': ' . $values['name'];
                     //print('<td><span class="closed-day ' . $languageClass . '">&nbsp;</span></td>');
 
-                    $line .= '<td class="dateradio ' . $area . ' closed-day-CLOSED closed-day' . $languageClass . '" title=' . "'" . $cTitle . ': ' . date('d.m.', $time) . "'>" .
+                    $line .= '<td class="dateradio ' . $area . ' closed-day ' . $languageClass . '" title=' . "'" . $cTitle . ': ' . date('d.m.', $time) . "'>" .
                              "<input class=\"closed-day-input\" type=\"checkbox\" name=\"$name\" id=\"$id\" value=\"$area\" disabled />" .
                              "</td>";
                 };
@@ -379,21 +379,22 @@ function show_database($uid, $lastuid, $is_member)
             $text = $requested;
         }
 
-        $languageClass = 'de';
+        $languageClass = 'open-day-de';
         if ($_SESSION['language'] === 'en') {
-            $languageClass = 'en';
+            $languageClass = 'open-day-en';
         }
 
         $line = '';
         foreach (AREAS as $area => $values) {
             $id = "$area-$day";
             $checked = ($text == $area) ? ' checked' : '';
+            $checkedClass = ($text == $area) ? ' checked ' : ' ';
             $cTitle = $values['name'];
             if ($disabled) {
                 $cTitle = __('Keine Aenderung mehr moeglich');
             }
 
-            $line .= '<td class="dateradio ' . $area . ' ' . $disabled . ' open-day-' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
+            $line .= '<td class="dateradio ' . $area . $checkedClass . $disabled . ' ' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
                      '<input type="checkbox" name="' . $name . '" id="' . $id . '" value="' . $area . '"' . $checked . $disabled . ' onclick="onlyOne(this, ' . "'" . $name . "')" . '" />' .
                      '</td>';
                 // "<label class=\"$area\" for=\"$id\">" . $values['name'] . "</label>";
