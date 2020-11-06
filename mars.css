@@ -288,11 +288,22 @@ form#reservation table#reservations tr th {
     font-size: 12px;
 }
 
+.uma-global-content td.dateradio.checked input[type="checkbox"] ~ .checkbox-dummy {
+    color: #232e58;
+    border-color: #232e58;
+    font-size: 12px;
+    background-color: green;
+}
+
 .uma-global-content td.dateradio.checked input[type="checkbox"]:checked ~ .checkbox-dummy {
     color: #232e58;
     border-color: #232e58;
     font-size: 12px;
     background-color: hotpink;
+}
+
+.uma-global-content td.dateradio.checked.disabled input[type="checkbox"]:checked ~ .checkbox-dummy {
+    background-color: #eff1f5;;
 }
 
 
