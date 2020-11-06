@@ -89,12 +89,8 @@ form.powermail_form div.powermail_fieldwrap_type_headline {
     margin-bottom: 0;
 }
 
-
+/*
 .closed-day {
-    /*
-    border: 1px solid #f1f1f1;
-    background-color: #f1f1f1;
-    */
     border: 1px solid #fff;
     background-color: #fff;
     padding: 7px;
@@ -104,6 +100,7 @@ form.powermail_form div.powermail_fieldwrap_type_headline {
     border-radius: 10px;
     height: 22px;
 }
+*/
 
 .uma-global-content tr.closed td.dateradio.closed-day-de input[type="radio"] ~ .radio-dummy::after {
     content: '---------';
