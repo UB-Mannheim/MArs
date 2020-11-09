@@ -445,7 +445,7 @@ function print_number_possible_bookings( $uid )
     if ($open_bookings > 0) {
         print('<p>' . sprintf(__("Noch %s von %s Buchungen moeglich"), $open_bookings, PERSONAL_LIMIT[$group]) . '.</p>');
     } else {
-        print('<p>' . __("Keine Buchungen mehr moeglich"), $open_bookings, PERSONAL_LIMIT[$group]) . '.</p>');
+        print('<p>' . __("Keine Buchungen mehr moeglich") . '.</p>');
     };
 }
 
