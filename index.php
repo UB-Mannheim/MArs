@@ -632,6 +632,7 @@ if ($uid == '' || $task == '') {
 if ($authorized && $task == '') {
     // <button class="logout" type="button"><a class="logout" href=".">Abmelden / Logout</a></button>
     ?>
+<button class="logout" type="button"><a class="logout" href=".">Abmelden / Logout</a></button>
 <div class="powermail_fieldwrap powermail_fieldwrap_type_submit powermail_fieldwrap_logout nolabel">
     <label for="logout" class="powermail_label leer"></label>
     <!-- <?php echo(__LINE__); ?> -->
