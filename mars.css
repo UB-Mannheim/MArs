@@ -298,6 +298,7 @@ form#reservation table#reservations tr th {
     /*background-color: green;*/
     background-color: transparent;
     background-image: url('images/unchecked.png');
+    background-image: url('images/unchecked-hell.png');
     background-size: 100%;
     border: none;
 }
