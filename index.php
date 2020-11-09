@@ -637,8 +637,8 @@ if ($authorized && $task == '') {
     <!-- <?php echo(__LINE__); ?> -->
     <!--<input id="L" name="L" type="hidden" value="<?php echo ($_SESSION['language'] === 'de' ? '0' : '1' ) ?>"/>-->
     <div class="powermail_field">
-        <button class="logout" type="button"><a class="logout powermail_submit btn btn-primary" href=".">Abmelden / Logout</a></button>
-        <input id="logout" name="logout" class="powermail_submit btn btn-primary" value="<?php echo __('Abmelden') ?>" type="submit">
+        <button class="logout" type="button"><a class="button powermail_submit btn btn-primary" href="."><?php echo __('Abmelden') ?></a></button>
+        <!--<input id="logout" name="logout" class="powermail_submit btn btn-primary" value="<?php echo __('Abmelden') ?>" type="submit">-->
         <!-- <?php echo(__LINE__); ?> -->
     </div>
 </div>
