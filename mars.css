@@ -325,7 +325,7 @@ form#reservation table#reservations tr th {
 table tr:first-child th {
     padding-top: 28px;
 }
-table tr:last-child th {
+table tr:last-child td {
     padding-bottom: 28px;
 }
 
