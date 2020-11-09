@@ -372,10 +372,10 @@ table tr:last-child td {
         border-radius: 7px;
         margin-bottom: 12px;
     }
-    .uma-global-content table tbody tr:first-child td{
+    .uma-global-content table tbody tr:first-child th {
         padding-top: 20px;
     }
-    .uma-global-content table tbody tr:last-child td{
+    .uma-global-content table tbody tr:last-child td {
         padding-bottom: 20px;
     }
 }
@@ -401,7 +401,7 @@ table tr:last-child td {
         margin-bottom: 12px;
     }
 
-    .uma-global-content table tbody tr:first-child td{
+    .uma-global-content table tbody tr:first-child th {
         padding-top: 20px;
     }
     .uma-global-content table tbody tr:last-child td{
@@ -431,10 +431,10 @@ table tr:last-child td {
         margin-bottom: 12px;
     }
 
-    .uma-global-content table tbody tr:first-child td{
+    .uma-global-content table tbody tr:first-child th {
         padding-top: 20px;
     }
-    .uma-global-content table tbody tr:last-child td{
+    .uma-global-content table tbody tr:last-child td {
         padding-bottom: 20px;
     }
 }
@@ -463,10 +463,10 @@ table tr:last-child td {
         margin-bottom: 12px;
     }
 
-    .uma-global-content table tbody tr:first-child td{
+    .uma-global-content table tbody tr:first-child th {
         padding-top: 20px;
     }
-    .uma-global-content table tbody tr:last-child td{
+    .uma-global-content table tbody tr:last-child td {
         padding-bottom: 20px;
     }
 
