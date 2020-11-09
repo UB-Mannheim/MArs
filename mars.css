@@ -313,7 +313,7 @@ form#reservation table#reservations tr th {
     /*background-color: hotpink;*/
     background-color: transparent;
     background-image: url('images/checked-filled-and-white.png');
-    background-image: url('images/checked.png');
+    /*background-image: url('images/checked.png');*/
     background-size: 100%;
     border: none;
 }
