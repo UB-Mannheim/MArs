@@ -349,17 +349,12 @@ table tr:last-child td {
         /* Debuging */
         /*background-color: yellow;*/
     }
-    .uma-global-content table tbody tr:last-child td{
-        padding-bottom: 15px;
-    }
-
-    .uma-global-content table tr:first-child th {
+    .uma-global-content table tbody tr:first-child th {
         padding-top: 33px;
     }
-    .uma-global-content table tr:last-child td {
+    .uma-global-content table tbody tr:last-child td {
         padding-bottom: 33px;
     }
-
 }
 
 
@@ -377,8 +372,11 @@ table tr:last-child td {
         border-radius: 7px;
         margin-bottom: 12px;
     }
+    .uma-global-content table tbody tr:first-child td{
+        padding-top: 20px;
+    }
     .uma-global-content table tbody tr:last-child td{
-        padding-bottom: 15px;
+        padding-bottom: 20px;
     }
 }
 
@@ -403,8 +401,11 @@ table tr:last-child td {
         margin-bottom: 12px;
     }
 
+    .uma-global-content table tbody tr:first-child td{
+        padding-top: 20px;
+    }
     .uma-global-content table tbody tr:last-child td{
-        padding-bottom: 15px;
+        padding-bottom: 20px;
     }
 }
 
@@ -430,8 +431,11 @@ table tr:last-child td {
         margin-bottom: 12px;
     }
 
+    .uma-global-content table tbody tr:first-child td{
+        padding-top: 20px;
+    }
     .uma-global-content table tbody tr:last-child td{
-        padding-bottom: 15px;
+        padding-bottom: 20px;
     }
 }
 
@@ -459,8 +463,11 @@ table tr:last-child td {
         margin-bottom: 12px;
     }
 
+    .uma-global-content table tbody tr:first-child td{
+        padding-top: 20px;
+    }
     .uma-global-content table tbody tr:last-child td{
-        padding-bottom: 15px;
+        padding-bottom: 20px;
     }
 
     .uma-global-content table tr td.label label{
