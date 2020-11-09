@@ -293,6 +293,7 @@ form#reservation table#reservations tr th {
     border-color: #232e58;
     font-size: 12px;
     background-color: green;
+    background-image: url('images/unchecked.png');
 }
 
 .uma-global-content td.dateradio.checked input[type="checkbox"]:checked ~ .checkbox-dummy {
@@ -307,6 +308,16 @@ form#reservation table#reservations tr th {
     border-color: #abb8ca;
 }
 
+table tr:first-child th {
+    padding-top: 28px;
+}
+table tr:last-child th {
+    padding-bottom: 28px;
+}
+
+.powermail_fieldwrap_type_submit.powermail_fieldwrap_absenden {
+    margin-top: 17px;
+}
 
 
 
