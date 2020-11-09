@@ -317,6 +317,12 @@ form#reservation table#reservations tr th {
     border: none;
 }
 
+.uma-global-content td.dateradio.checked.disabled input[type="checkbox"]:checked ~ .checkbox-dummy {
+    background-image: url('images/checked-filled-and-white.png');
+    background-image: url('images/checked-deaktive-filled-and-white.png');
+    background-image: url('images/checked-deaktive-filled.png');
+}
+
 .uma-global-content table tr td.dateradio.checked.disabled input[type="checkbox"] ~ .checkbox-dummy {
     background-color: #abb8ca;
     border-color: #abb8ca;
