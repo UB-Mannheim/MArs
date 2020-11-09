@@ -333,6 +333,12 @@ table tr:last-child td {
     margin-top: 17px;
 }
 
+.uma-global-content button.logout a.logout {
+    border: .1875rem solid #232e58;
+    box-sizing: border-box;
+    transition: none;
+}
+
 
 
 @media all and (max-width: 823px) {
