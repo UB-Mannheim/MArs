@@ -8,7 +8,7 @@
                 if (item.className == 'checked-input') {
                     // Unicode-Zeichen "U+2718" (|&#x2718;|
                     // Anstatt ✔︎
-                    item.parentElement.lastChild.innerText = '×';
+                    item.parentElement.lastChild.innerText = '✘';
                 }
             } else {
                 if (item.className == 'checked-input') {
@@ -17,7 +17,7 @@
                     } else {
                         // Unicode-Zeichen "U+2718" (|&#x2718;|
                         // Anstatt ✔︎
-                        item.parentElement.lastChild.innerText = '×';
+                        item.parentElement.lastChild.innerText = '✘';
                     };
                 };
             }
