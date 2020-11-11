@@ -7,12 +7,17 @@
                 item.checked = false;
                 if (item.className == 'checked-input') {
                     // Unicode-Zeichen "U+2718" (|&#x2718;|
+                    // Anstatt ✔︎
                     item.parentElement.lastChild.innerText = '×';
                 }
             } else {
                 if (item.className == 'checked-input') {
-                    // Unicode-Zeichen "U+2718" (|&#x2718;|
-                    item.parentElement.lastChild.innerText = '×';
+                    if (item.checked) {
+                        item.parentElement.lastChild.innerText = '︎✔︎';
+                    } else {
+                        // Unicode-Zeichen "U+2718" (|&#x2718;|
+                        item.parentElement.lastChild.innerText = '×';
+                    };
                 };
             }
         });

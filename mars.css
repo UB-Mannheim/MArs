@@ -290,32 +290,33 @@ form#reservation table#reservations tr th {
 
 .uma-global-content td.dateradio.checked input[type="checkbox"] ~ .checkbox-dummy {
     /*color: #232e58;*/
-    color: none;
+    color: #990000;
     /*border-color: #232e58;*/
-    border-color: none;
+    /*border-color: none;*/
     /*font-size: 12px;*/
-    font-size: 0;
+    /*font-size: 0;*/
     /*background-color: green;*/
-    background-color: transparent;
-    background-image: url('images/unchecked.png');
+    /*background-color: transparent;*/
+    /*background-image: url('images/unchecked.png');
     background-image: url('images/unchecked-hell.png');
     background-size: 100%;
-    border: none;
+    border: none;*/
 }
 
 .uma-global-content td.dateradio.checked input[type="checkbox"]:checked ~ .checkbox-dummy {
     /*color: #232e58;*/
-    color: none;
+    color: #fff;
+    /*color: none;*/
     /*border-color: #232e58;*/
-    border-color: none;
+    /*border-color: none;*/
     /*font-size: 12px;*/
-    font-size: 0;
+    /*font-size: 0;*/
     /*background-color: hotpink;*/
-    background-color: transparent;
-    background-image: url('images/checked-filled-and-white.png');
-    /*background-image: url('images/checked.png');*/
+    /*background-color: transparent;*/
+    background-color: #232e58;
+    /*background-image: url('images/checked-filled-and-white.png');
     background-size: 100%;
-    border: none;
+    border: none;*/
 }
 
 .uma-global-content td.dateradio.checked.disabled input[type="checkbox"]:checked ~ .checkbox-dummy {
