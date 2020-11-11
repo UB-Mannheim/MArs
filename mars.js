@@ -1,10 +1,14 @@
 // mars.js
 (function () {
-    function onlyOne(checkbox,cname) {
+    function onlyOne(checkboxId,cname,cClass) {
         var checkboxes = document.getElementsByName(cname);
         checkboxes.forEach((item) => {
-            if (item.id !== checkbox) {
+            if (item.id !== checkboxId) {
                 item.checked = false;
+                if (item.ClassName == 'checked-input') {
+                    // Unicode-Zeichen "U+2718" (|&#x2718;|
+                    item.parentElement.lastChild.innerText = '×';
+                }
             };
         });
     };
@@ -17,9 +21,10 @@
             if (checkboxList[i].type == "checkbox") {
 
                 checkboxList[i].onclick = function (thisObject) {
-                    var cName = thisObject.currentTarget.name;
-                    var cId   = thisObject.currentTarget.id;
-                    onlyOne(cId,cName);
+                    var cName   = thisObject.currentTarget.name;
+                    var cId     = thisObject.currentTarget.id;
+                    var cClass  = thisObject.currentTarget.ClassName;
+                    onlyOne(cId,cName,cClass);
                 };
             };
         };
