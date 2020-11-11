@@ -401,7 +401,7 @@ function show_database($uid, $lastuid, $is_member)
             if (($commentType != 3) and ($commentType != 2)) {
                 $checkedClass = ($text == $area) ? ' checked ' : ' ';
             } else {
-                $checkedClass = ($text == $area) ? ' checked error-type-' . $commentType . ' ' : ' ';
+                $checkedClass = ($text == $area) ? ' checkedError errorType-' . $commentType . ' ' : ' ';
             }
             $checkedClassInput = ($text == $area) ? ' class="checked-input" ' : ' ';
 
