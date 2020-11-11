@@ -5,11 +5,16 @@
         checkboxes.forEach((item) => {
             if (item.id !== checkboxId) {
                 item.checked = false;
-                if (item.ClassName == 'checked-input') {
+                if (item.className == 'checked-input') {
                     // Unicode-Zeichen "U+2718" (|&#x2718;|
                     item.parentElement.lastChild.innerText = '×';
                 }
-            };
+            } else {
+                if (item.className == 'checked-input') {
+                    // Unicode-Zeichen "U+2718" (|&#x2718;|
+                    item.parentElement.lastChild.innerText = '×';
+                };
+            }
         });
     };
 
