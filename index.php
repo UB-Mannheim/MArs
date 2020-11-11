@@ -389,13 +389,14 @@ function show_database($uid, $lastuid, $is_member)
             $id = "$area-$day";
             $checked = ($text == $area) ? ' checked' : '';
             $checkedClass = ($text == $area) ? ' checked ' : ' ';
+            $checkedClassInput = ($text == $area) ? ' class="checked-input" ' : ' ';
             $cTitle = $values['name'];
             if ($disabled) {
                 $cTitle = __('Keine Aenderung mehr moeglich');
             }
 
             $line .= '<td class="dateradio ' . $area . $checkedClass . $disabled . ' ' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
-                     '<input type="checkbox" name="' . $name . '" id="' . $id . '" value="' . $area . '"' . $checked . $disabled . ' onclick="onlyOne(this, ' . "'" . $name . "')" . '" />' .
+                     '<input type="checkbox" name="' . $name . '" id="' . $id . '" value="' . $area . '"' . $checked . $disabled . ' onclick="onlyOne(this, ' . "'" . $name . "')" . '" ' . $checkedClassInput . '/>' .
                      '</td>';
                 // "<label class=\"$area\" for=\"$id\">" . $values['name'] . "</label>";
         }
