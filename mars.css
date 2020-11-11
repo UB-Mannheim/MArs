@@ -289,8 +289,10 @@ form#reservation table#reservations tr th {
 }
 
 .uma-global-content td.dateradio.checked input[type="checkbox"] ~ .checkbox-dummy {
-    color: #990000;
+    /*color: #990000;*/
+    color: red;
     font-size: 12px;
+    font-weight: bolder;
     /*background-color: green;*/
 }
 
