@@ -16,6 +16,7 @@
                         item.parentElement.lastChild.innerText = '︎✔︎';
                     } else {
                         // Unicode-Zeichen "U+2718" (|&#x2718;|
+                        // Anstatt ✔︎
                         item.parentElement.lastChild.innerText = '×';
                     };
                 };
