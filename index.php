@@ -172,6 +172,7 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
     $db = get_database();
     $table = DB_TABLE;
     $comment = "";
+    $commentType = 0;
     $no_reservation = 'no';
     $success_text = '<span class="success">' . __('Aktion erfolgreich') . '</span>';
     $failure_text = '<span class="failure">' . __('Aktion nicht erfolgreich') . '</span>';
@@ -180,6 +181,7 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
         $result = $db->query("DELETE FROM $table WHERE name='$uid' AND date='$date'");
         $success = $result ? $success_text : $failure_text;
         $comment = DEBUG ? __('geloescht') . ": $oldvalue, $success" : $success;
+        $commentType = 1;
     } else {
         // Limit bookings.
         $member = $is_member ? 1 : 0;
@@ -195,29 +197,34 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
         $personal_bookings = $result ? $result->fetch_row()[0] : 999;
         if ($count >= $limit) {
             $comment = '<span class="failure">' . __('Bibliotheksbereich ausgebucht') . '</span>';
+            $commentType = 2;
         } elseif ($oldvalue == $no_reservation) {
             // New bookings.
             if ($personal_bookings >= PERSONAL_LIMIT[$group]) {
                 $comment = '<span class="failure">' . __('Persoenliches Buchungslimit erreicht') . '</span>';
+                $commentType = 3;
             } else {
                 $result = $db->query("INSERT INTO $table (name, member, text, date) VALUES ('$uid',$member,'$value','$date')");
                 $success = $result ? $success_text : $failure_text;
                 $comment = DEBUG ? __('reserviert') . ": $value, $success" : $success;
+                $commentType = 4;
             }
         } else {
             // Modified booking.
             if ($personal_bookings > PERSONAL_LIMIT[$group]) {
                 $comment = '<span class="failure">' . __('Persoenliches Buchungslimit erreicht') . '</span>';
+                $commentType = 3;
             } else {
                 $result = $db->query("DELETE FROM $table WHERE name='$uid' AND date='$date'");
                 $result = $db->query("INSERT INTO $table (name, member, text, date) VALUES ('$uid',$member,'$value','$date')");
                 $success = $result ? $success_text : $failure_text;
                 $comment = DEBUG ? __('aktualisiert') . ": $oldvalue -> $value, $success" : $success;
+                $commentType = 0;
             }
         }
     }
     $db->close();
-    return $comment;
+    return array($comment,$commentType);
 }
 
 // Show stored bookings in a web form which allows modifications.
@@ -367,6 +374,7 @@ function show_database($uid, $lastuid, $is_member)
         $name = "choice-$day";
         $requested = get_parameter($name, 'no');
         $comment = '';
+        $commentType = 0;
         if ($time < $start) {
             $comment = DEBUG ? __('nicht aenderbar') : '';
         } elseif ($uid != $lastuid) {
@@ -375,7 +383,9 @@ function show_database($uid, $lastuid, $is_member)
         } elseif ($text == $requested) {
             $comment = DEBUG ? __('unveraendert') : '';
         } else {
-            $comment = update_database($uid, $is_member, $day, $text, $requested);
+            $aComment = update_database($uid, $is_member, $day, $text, $requested);
+            $comment = $aComment[0];
+            $commentType = $aComment[1];
             $text = $requested;
         }
 
@@ -388,8 +398,13 @@ function show_database($uid, $lastuid, $is_member)
         foreach (AREAS as $area => $values) {
             $id = "$area-$day";
             $checked = ($text == $area) ? ' checked' : '';
-            $checkedClass = ($text == $area) ? ' checked ' : ' ';
+            if (($commentType != 3) and ($commentType != 2)) {
+                $checkedClass = ($text == $area) ? ' checked ' : ' ';
+            } else {
+                $checkedClass = ($text == $area) ? ' checked error-type-' . $commentType . ' ' : ' ';
+            }
             $checkedClassInput = ($text == $area) ? ' class="checked-input" ' : ' ';
+
             $cTitle = $values['name'];
             if ($disabled) {
                 $cTitle = __('Keine Aenderung mehr moeglich');
