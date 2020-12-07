@@ -486,7 +486,7 @@ function day_report($location = false)
         $db->close();
 
         print("<h2>MARS Buchungsübersicht</h2>\n");
-        print("<table><tr><th>Datum</th><th>Bibliotheksbereich</th><th>Gesamt</th><th>Mitglieder</th><th>Externe</th></tr>");
+        print("<table class="buchungsuebersicht"><tr><th>Datum</th><th>Bibliotheksbereich</th><th>Gesamt</th><th>Mitglieder</th><th>Externe</th></tr>");
         foreach ($reservations as $booking) {
             $date = $booking['date'];
             $location = $booking['text'];

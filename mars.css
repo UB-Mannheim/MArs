@@ -324,12 +324,36 @@ form#reservation table#reservations tr th {
     border-color: #abb8ca;
 }
 
+
 table tr:first-child th {
     padding-top: 33px;
 }
 table tr:last-child td {
     padding-bottom: 33px;
 }
+
+
+/* Buchunsuebersicht Tabelle */
+table.buchungsuebersicht {
+    border-spacing: 0;
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+    margin-top: 33px;
+    margin-bottom: 33px;
+}
+table.buchungsuebersicht tr td, table tr th {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+}
+table.buchungsuebersicht tr:first-child th {
+    padding-top: 0;
+}
+table.buchungsuebersicht tr:last-child td {
+    padding-bottom: 0;
+}
+/* Ende Buchungsuebersicht */
+
 
 .powermail_fieldwrap_type_submit.powermail_fieldwrap_absenden {
     margin-top: 17px;
