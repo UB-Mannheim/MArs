@@ -35,7 +35,7 @@ require_once "$confdir/config.php";
 
 // Command line parameter for staff mail (e.g. via cron)
 global $argv;
-if ($argv[1] == "mail-staff") {
+if (isset($argv[1]) && $argv[1] == "mail-staff") {
     send_staff_mail();
     exit;
 }
