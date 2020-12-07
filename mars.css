@@ -349,9 +349,6 @@ table.buchungsuebersicht tr td, table tr th {
 table.buchungsuebersicht tr:first-child th {
     padding-top: 0;
 }
-table.buchungsuebersicht tr:last-child td {
-    padding-bottom: 0;
-}
 /* Ende Buchungsuebersicht */
 
 
