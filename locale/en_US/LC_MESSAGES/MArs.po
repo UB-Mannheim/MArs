@@ -75,7 +75,7 @@ msgstr "UL Seat Booking"
 
 #: ../index.php:613
 msgid "Benutzerdaten"
-msgstr "personal data"
+msgstr "Personal data"
 
 #: ../index.php:623 ../index.php:637
 msgid "Pflichtfeld"
