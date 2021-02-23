@@ -726,9 +726,9 @@ if ($master && $task == 'dump') {
         <div class="powermail_field">
         <div id="conditional-display-1218" class="conditional-display" data-cond-field="" data-cond-value="">
 <?php if ($_SESSION['language'] === 'de') { ?>
-            <p>Die <a href="https://www.uni-mannheim.de/datenschutzerklaerung/datenschutzinformationen-der-universitaetsbibliothek/" target="_blank" class="ft">Informationen zum Datenschutz</a> wurden mir zur Verfügung gestellt.</p>
+            <p>Die <a href="https://www.uni-mannheim.de/datenschutzerklaerung/datenschutzinformationen-der-universitaetsbibliothek/" target="_blank">Informationen zum Datenschutz</a> wurden mir zur Verfügung gestellt.</p>
 <?php } else { ?>
-            <p>The <a href="https://www.uni-mannheim.de/en/data-protection-declaration/datenschutzinformationen-der-universitaetsbibliothek/" target="_blank" class="ft">privacy information</a> was provided to me.</p>
+            <p>The <a href="https://www.uni-mannheim.de/en/data-protection-declaration/data-protection-declaration-of-the-university-library/" target="_blank">privacy information</a> was provided to me.</p>
 <?php } ?>
         </div>
     </div>
