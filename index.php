@@ -100,7 +100,7 @@ function mail_database($user)
     }
     $db = get_database();
     $table = DB_TABLE;
-    $result = $db->query("SELECT date,text FROM $table where name='" . $user['id'] . "' ORDER BY date");
+    $result = $db->query("SELECT date,text FROM $table where name='" . $user['id'] . "' and used='0' ORDER BY date");
     $mailtext = "";
     $today = date('Y-m-d', time());
     if ($url_tstamp) {
@@ -135,6 +135,7 @@ function init_database()
         `member` BOOLEAN DEFAULT 1 NOT NULL,
         `text` VARCHAR(8) NOT NULL,
         `date` DATE NOT NULL,
+        'used' TINYINT DEFAULT 0 NOT NULL,
         CONSTRAINT unique_reservation UNIQUE (date, name),
         PRIMARY KEY(`id`)
     )");
@@ -177,6 +178,11 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
         $result = $db->query("DELETE FROM $table WHERE name='$uid' AND date='$date'");
         $success = $result ? $success_text : $failure_text;
         $comment = DEBUG ? "gelöscht: $oldvalue, $success" : $success;
+    } elseif ($value == "cancel") {
+        // Delete booking.
+        $result = $db->query("UPDATE $table SET USED='2' WHERE name='$uid' AND date='$date'");
+        $success = $result ? $success_text : $failure_text;
+        $comment = DEBUG ? "storniert: $oldvalue, $success" : $success;
     } else {
         // Limit bookings.
         $member = $is_member ? 1 : 0;
@@ -223,7 +229,7 @@ function show_database($uid, $lastuid, $is_member)
     global $url_tstamp, $user;
     $db = get_database();
     $table = DB_TABLE;
-    $result = $db->query("SELECT date, text FROM $table WHERE name = '$uid' ORDER BY date");
+    $result = $db->query("SELECT date, text, used FROM $table WHERE name = '$uid' ORDER BY date");
     $reservations = $result->fetch_all(MYSQLI_ASSOC);
     $result->free();
     //echo 'row=' . htmlentities($row);
@@ -258,11 +264,12 @@ function show_database($uid, $lastuid, $is_member)
     $i = 0;
 
     for ($time = $first; $time < $last; $time = strtotime("+1 day", $time)) {
-        $disabled = '';
+        $disabled = false;
         $day = date('Y-m-d', $time);
         $text = 'no';
+        $used = '';
         if ($time < $start) {
-            $disabled = ' disabled';
+            $disabled = true;
         }
 
         $label = date('d.m.', $time);
@@ -272,9 +279,9 @@ function show_database($uid, $lastuid, $is_member)
         while ($i < count($reservations) && ($resday = $reservations[$i]['date']) < $day) {
             $i++;
         }
-
         if ($i < count($reservations)) {
             $text = $reservations[$i]['text'];
+            $used = $reservations[$i]['used'];
         }
         if ($resday != $day) {
             $text = 'no';
@@ -303,31 +310,49 @@ function show_database($uid, $lastuid, $is_member)
         $name = "choice-$day";
         $requested = get_parameter($name, 'no');
         $comment = '';
-        if ($time < $start) {
-            $comment = DEBUG ? 'nicht änderbar' : '';
-        } elseif ($uid != $lastuid) {
+        if ($uid != $lastuid) {
             // Initial call with the current user id.
             $comment = DEBUG ? 'änderbar' : '';
         } elseif ($text == $requested) {
             $comment = DEBUG ? 'unverändert' : '';
+        } elseif ($used == '2' && $requested == 'cancel') {
+            $comment = DEBUG ? 'unverändert' : '';
         } else {
             $comment = update_database($uid, $is_member, $day, $text, $requested);
-            $text = $requested;
+            $text = $requested == 'cancel' ? $text : $requested;
         }
 
         $line = '';
-        foreach (AREAS as $area => $values) {
-            $id = "$area-$day";
-            $checked = ($text == $area) ? ' checked' : '';
-            $line .= "<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"$area\"$checked$disabled/>" .
-                "<label class=\"$area\" for=\"$id\">" . $values['name'] . "</label>";
-        }
-        $id = "no-$day";
-        $checked = ($text == 'no') ? ' checked' : '';
-        $line .= "<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"no\"$checked$disabled/>" .
-            "<label class=\"no\" for=\"$id\">Keine Buchung</label>";
-        if ($comment != '') {
-            $comment = " $comment";
+        if ($used == '1') {
+            $line = AREAS[$text]['name'].': Buchung wahrgenommen';
+            $line .= "<input type=\"hidden\" name=\"$name\" id=\"$text-$day\" value=\"$text\" checked/>";
+        } elseif ($requested == 'cancel' || $used == '2') {
+            $line = '<del class="cancelled">'.AREAS[$text]['name'].'</del> <ins class="cancelled">Buchung storniert</ins>';
+            $line .= "<input type=\"hidden\" name=\"$name\" id=\"cancel-$day\" value=\"cancel\"/>";
+        } elseif ($disabled) {
+            if ($used == '0') {
+                $area = AREAS[$text];
+                $line = "<input type=\"radio\" name=\"$name\" id=\"$text-$day\" value=\"$text\" checked/>" .
+                        "<label class=\"$text\" for=\"$text-$day\">" . $area['name'] . "</label>";
+                $line .= "<input type=\"radio\" name=\"$name\" id=\"cancel-$day\" value=\"cancel\"/>" .
+                        "<label class=\"cancel\" for=\"cancel-$day\">Buchung stornieren</label>";
+            } else {
+                $line = "Keine Reservierungen für den laufenden Tag möglich.";
+            }
+        } else {
+            foreach (AREAS as $area => $values) {
+                $id = "$area-$day";
+                $checked = ($text == $area) ? ' checked' : '';
+                $line .= "<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"$area\"$checked/>" .
+                    "<label class=\"$area\" for=\"$id\">" . $values['name'] . "</label>";
+            }
+            $id = "no-$day";
+            $checked = ($text == 'no') ? ' checked' : '';
+            $line .= "<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"no\"$checked/>" .
+                "<label class=\"no\" for=\"$id\">Keine Buchung</label>";
+            if ($comment != '') {
+                $comment = " $comment";
+            }
         }
         print("<div class=\"open\">$label$line$comment</div>\n");
     }
