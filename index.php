@@ -449,6 +449,7 @@ function show_database($uid, $lastuid, $is_member)
 
                 $line .= '<td class="dateradio ' . $area . $checkedClass . $disabled_html . ' ' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
                          '<input type="checkbox" name="' . $name . '" id="' . $id . '" value="' . $value . '"' . $checked . $disabled_html . ' onclick="onlyOne(this, ' . "'" . $name . "')" . '" ' . $checkedClassInput . '/>' .
+                         $lineHide .
                          '</td>';
             }
             // Anpassung Ende
@@ -497,6 +498,7 @@ function show_database($uid, $lastuid, $is_member)
 
                 $line .= '<td class="dateradio ' . $area . $checkedClass . $disabled_html . ' ' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
                          '<input type="checkbox" name="' . $name . '" id="' . $id . '" value="' . $value . '"' . $checked . $disabled_html . ' onclick="onlyOne(this, ' . "'" . $name . "')" . '" ' . $checkedClassInput . '/>' .
+                         $lineHide .
                          '</td>';
             }
             // Anpassung Ende
