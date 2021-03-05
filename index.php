@@ -440,7 +440,7 @@ function show_database($uid, $lastuid, $is_member)
                     $checkedClassInput = ($text == $area) ? ' class="checked-input" ' : ' ';
 
                     $cTitle = $values['name'];
-                    $cTitle = __("Keine Reservierungen fuer den laufenden Tag moeglich");
+                    $cTitle = __("Keine Reservierungen fuer den laufenden Tag moeglich1");
 
                     // unterscheiden ob ein normaler Eintrag oder ein aktiver Eintrag der gecanceld werden soll
                     $value=$area;
@@ -461,6 +461,7 @@ function show_database($uid, $lastuid, $is_member)
                     //$line = "Keine Reservierungen für den laufenden Tag möglich.";
 
                     $id = "$area-$day";
+                    $checked = ($text == $area) ? ' checked' : '';
                     $checkedClass = '';
                     if ($disabled) {
                         $disabled_html = ' disabled';
@@ -475,7 +476,7 @@ function show_database($uid, $lastuid, $is_member)
                     $checkedClassInput = ($text == $area) ? ' class="checked-input" ' : ' ';
 
                     $cTitle = $values['name'];
-                    $cTitle = __("Keine Reservierungen fuer den laufenden Tag moeglich");
+                    $cTitle = __("Keine Reservierungen fuer den laufenden Tag moeglich2");
 
                     $line .= '<td class="dateradio ' . $area . $checkedClass . $disabled_html . ' ' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
                              '<input type="checkbox" name="' . $name . '" id="' . $id . '" value="' . $area . '"' . $checked . $disabled_html . ' onclick="onlyOne(this, ' . "'" . $name . "')" . '" ' . $checkedClassInput . '/>' .
