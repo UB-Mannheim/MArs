@@ -178,14 +178,14 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
     $success_text = '<span class="success">' . __('Aktion erfolgreich') . '</span>';
     $failure_text = '<span class="failure">' . __('Aktion nicht erfolgreich') . '</span>';
     if ($value == $no_reservation) {
-        echo("update in no_reservation");
+        //echo("update in no_reservation<br />");
         // Delete booking.
         $result = $db->query("DELETE FROM $table WHERE name='$uid' AND date='$date'");
         $success = $result ? $success_text : $failure_text;
         $comment = DEBUG ? __('geloescht') . ": $oldvalue, $success" : $success;
         $commentType = 1;
     } elseif ($value == "cancel") {
-        echo("update in cancel");
+        //echo("update in cancel<br />");
         // Delete booking.
         $result = $db->query("UPDATE $table SET USED='2' WHERE name='$uid' AND date='$date'");
         $success = $result ? $success_text : $failure_text;
@@ -382,9 +382,9 @@ function show_database($uid, $lastuid, $is_member)
         }
 
         $name = "choice-$day";
-        echo($name);
+        //echo($name);
         $requested = get_parameter($name, 'no');
-        echo(": " . $requested . "<br />");
+        //echo(": " . $requested . "<br />");
         $comment = '';
         $commentType = 0;
         // klären wann dieser Teil eingefügt wurde! BERND
@@ -400,7 +400,7 @@ function show_database($uid, $lastuid, $is_member)
         } elseif ($used == '2' && $requested == 'cancel') {
             $comment = DEBUG ? __('unveraendert') : '';
         } else {
-            echo("update_database(" . $uid . ', '. $is_member . ', '. $day . ', '. $text . ', '. $requested . ")");
+            //echo("update_database(" . $uid . ', '. $is_member . ', '. $day . ', '. $text . ', '. $requested . ")<br />");
             $aComment = update_database($uid, $is_member, $day, $text, $requested);
             $comment = $aComment[0];
             $commentType = $aComment[1];
@@ -415,9 +415,10 @@ function show_database($uid, $lastuid, $is_member)
         $line = '';
         // klären wie umbauen! BERND
         if ($used == '1') {
+            /*
             $line = AREAS[$text]['name'].': Buchung wahrgenommen';
             $line .= "<input type=\"hidden\" name=\"$name\" id=\"$text-$day\" value=\"$text\" checked/>";
-
+            */
             // für wahrgenommene Buchung am aktuellen Tag
             foreach (AREAS as $area => $values) {
                 $id = "$area-$day";
