@@ -431,7 +431,7 @@ function show_database($uid, $lastuid, $is_member)
                 $checkedClassInput = ($text == $area) ? ' class="checked-input" ' : ' ';
 
                 $cTitle = $values['name'];
-                $cTitle = __("Keine Reservierungen fuer den laufenden Tag moeglich1");
+                $cTitle = __("Keine Reservierungen fuer den laufenden Tag moeglich");
 
                 $lineHide = '';
                 // unterscheiden ob ein normaler Eintrag oder ein aktiver Eintrag der gecanceld werden soll
@@ -531,7 +531,7 @@ function show_database($uid, $lastuid, $is_member)
                     $checkedClassInput = ($text == $area) ? ' class="checked-input" ' : ' ';
 
                     $cTitle = $values['name'];
-                    $cTitle = __("Keine Reservierungen fuer den laufenden Tag moeglich1");
+                    $cTitle = __("Keine Reservierungen fuer den laufenden Tag moeglich");
 
                     // unterscheiden ob ein normaler Eintrag oder ein aktiver Eintrag der gecanceld werden soll
                     $value=$area;

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-12 10:46+0100\n"
+"POT-Creation-Date: 2021-03-05 17:57+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Bernd Fallert <bernd.fallert@bib.uni-mannheim.de>\n"
 "Language-Team: \n"
@@ -12,110 +12,126 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.4.2\n"
 
-#: ../index.php:177
+#: ../index.php:178
 msgid "Aktion erfolgreich"
 msgstr "Action successful"
 
-#: ../index.php:178
+#: ../index.php:179
 msgid "Aktion nicht erfolgreich"
 msgstr "Action unsuccessful"
 
-#: ../index.php:183
+#: ../index.php:185
 msgid "geloescht"
 msgstr "deleted"
 
-#: ../index.php:199
+#: ../index.php:192
+msgid "storniert"
+msgstr "canceled"
+
+#: ../index.php:208
 msgid "Bibliotheksbereich ausgebucht"
 msgstr "Library area fully booked"
 
-#: ../index.php:204 ../index.php:215
+#: ../index.php:213 ../index.php:224
 msgid "Persoenliches Buchungslimit erreicht"
 msgstr "Personal booking limit reached"
 
-#: ../index.php:209
+#: ../index.php:218
 msgid "reserviert"
 msgstr "reserved"
 
-#: ../index.php:221
+#: ../index.php:230
 msgid "aktualisiert"
 msgstr "updated"
 
-#: ../index.php:338 ../index.php:359
+#: ../index.php:348 ../index.php:369
 msgid "geschlossen"
 msgstr "closed"
 
-#: ../index.php:379
-msgid "nicht aenderbar"
-msgstr "not changeable"
-
-#: ../index.php:382
+#: ../index.php:391
 msgid "aenderbar"
 msgstr "changeable"
 
-#: ../index.php:384
+#: ../index.php:393 ../index.php:395
 msgid "unveraendert"
 msgstr "unchanged"
 
-#: ../index.php:410
+#: ../index.php:434 ../index.php:483 ../index.php:534 ../index.php:574
+msgid "Keine Reservierungen fuer den laufenden Tag moeglich"
+msgstr "No reservations possible for the current day"
+
+#: ../index.php:442
+msgid "Buchung wahrgenommen"
+msgstr "booking used"
+
+#: ../index.php:491
+msgid "Buchung storniert"
+msgstr "booking cancelled"
+
+#: ../index.php:541
+msgid "Buchung stornieren"
+msgstr "cancel booking"
+
+#: ../index.php:599
 msgid "Keine Aenderung mehr moeglich"
 msgstr "No more changes possible"
 
-#: ../index.php:462
+#: ../index.php:655
 #, php-format
 msgid "Noch %s von %s Buchungen moeglich"
 msgstr "Still %s of %s bookings possible"
 
-#: ../index.php:464
+#: ../index.php:657
 msgid "Keine Buchungen mehr moeglich"
 msgstr "No more bookings possible"
 
-#: ../index.php:595
+#: ../index.php:788
 msgid "UB Sitzplatzbuchung"
 msgstr "UL Seat Booking"
 
-#: ../index.php:613
+#: ../index.php:806
 msgid "Benutzerdaten"
 msgstr "Personal data"
 
-#: ../index.php:623 ../index.php:637
+#: ../index.php:816 ../index.php:830
 msgid "Pflichtfeld"
 msgstr "Mandatory field"
 
-#: ../index.php:633
+#: ../index.php:826
 msgid "Passwort"
 msgstr "Password"
 
-#: ../index.php:656 ../index.php:657
+#: ../index.php:849 ../index.php:850
 msgid "Abmelden"
 msgstr "Logout"
 
-#: ../index.php:707
+#: ../index.php:900
 msgid "Sie sind angemeldet als"
 msgstr "You are logged in as"
 
-#: ../index.php:708
+#: ../index.php:901
 msgid "Meine Sitzplatzbuchungen"
 msgstr "My seat bookings"
 
-#: ../index.php:718
+#: ../index.php:911
 msgid "Bitte ergaenzen Sie Ihre Anmeldedaten um Ihr Passwort"
 msgstr "Please add your password to your login data"
 
-#: ../index.php:720
+#: ../index.php:913
 msgid "Die Anmeldedaten sind ungueltig. Bitte pruefen Sie Uni-ID und Passwort"
 msgstr "The login details are invalid. Please check your Uni-ID and password"
 
-#: ../index.php:745
+#: ../index.php:938
 msgid ""
 "Informieren Sie mich bitte per E-Mail ueber meine aktuellen "
 "Sitzplatzbuchungen"
 msgstr "Please inform me by e-mail about my current bookings"
 
-#: ../index.php:750
+#: ../index.php:943
 msgid "Eingaben absenden"
 msgstr "Submit entries"
 
-#: ../index.php:761
+#: ../index.php:954
 msgid "Anmelden"
 msgstr "Login"
 
@@ -164,26 +180,29 @@ msgid ""
 msgstr ""
 "Please inform yourself about the hygiene regulations before your visit."
 
-#: ../local/mail.php:30
+#: ../local/mail.php:32
 msgid "Verwalten Sie Ihre Sitzplatzbuchungen hier"
 msgstr "Manage your seat bookings here"
 
-#: ../local/mail.php:36
+#: ../local/mail.php:38
 msgid "Mit freundlichen Gruessen"
 msgstr "Sincerely your"
 
-#: ../local/mail.php:36
+#: ../local/mail.php:38
 msgid "Ihre Universitaetsbibliothek"
 msgstr "your university library"
 
-#: ../local/mail.php:41
+#: ../local/mail.php:43
 msgid "Sehr geehrter Herr"
 msgstr "Dear sir"
 
-#: ../local/mail.php:43
+#: ../local/mail.php:45
 msgid "Sehr geehrte Frau"
 msgstr "Dear Mrs"
 
-#: ../local/mail.php:45
+#: ../local/mail.php:47
 msgid "Sehr geehrte/r"
 msgstr "Dear"
+
+#~ msgid "nicht aenderbar"
+#~ msgstr "not changeable"
