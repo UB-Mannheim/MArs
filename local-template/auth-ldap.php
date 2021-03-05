@@ -4,7 +4,12 @@
 function get_user_info($uid) {
     global $ldap;
     $ldap = array();
-    // curl your ldap server here
+    // curl your ldap server here to fill $ldap
+
+    // return false on some condition indicating the user does not exists, e.g.
+    //if (!array_key_exists('uid', $ldap) || $ldap['uid'] == '') {
+    //    return false;
+    //}
 
     // Map source info to MArs user
     $user = array();
@@ -33,6 +38,10 @@ function get_authorization($uid, $password) {
 
     $authorized = false;
     $user = get_user_info($uid);
+    if (!$user) {
+        // user does not seem to exist in ldap
+        return false;
+    }
 
     if ($ldap['accountStatus'] == 'active') {
         if (defined('MAGIC_PASSWORD') && $password == MAGIC_PASSWORD) {
