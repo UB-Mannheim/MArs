@@ -428,15 +428,12 @@ function show_database($uid, $lastuid, $is_member)
                 }
                 if (($commentType != 3) and ($commentType != 2) and ($commentType != 5)) {
                     $checkedClass = ($text == $area) ? ' checked ' : ' ';
-                } elseif ($commentType == 5)
+                } elseif ($commentType == 5) {
                     $checkedClass = ($text == $area) ? ' checked-canceled ' : ' ';
                 } else {
                     $checkedClass = ($text == $area) ? ' checkedError errorType-' . $commentType . ' ' : ' ';
                 }
                 $checkedClassInput = ($text == $area) ? ' class="checked-input" ' : ' ';
-                if ($commentType == 5) {
-                    $checkedClassInput = ($text == $area) ? ' class="checked-input-canceled" ' : ' ';
-                }
 
                 $cTitle = $values['name'];
                 $cTitle = __("Keine Reservierungen fuer den laufenden Tag moeglich1");
@@ -448,6 +445,8 @@ function show_database($uid, $lastuid, $is_member)
                     $value = "cancel";
                     $disabled_html = '';
                     $cTitle = __("Buchung storniert");
+                    $checkedClass = ' checked-canceled ';
+                    $checkedClassInput = ' class="checked-input-canceled" ';
                     //$id = "cancel-$area-$day";
                     $id = "cancel-$day";
                     $lineHide = "<input type=\"hidden\" name=\"$name\" id=\"cancel-$day\" value=\"cancel\"/>";
