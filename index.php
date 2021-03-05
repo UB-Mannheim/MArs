@@ -423,8 +423,7 @@ function show_database($uid, $lastuid, $is_member)
                 $line .= "<input type=\"radio\" name=\"$name\" id=\"cancel-$day\" value=\"cancel\"/>" .
                         "<label class=\"cancel\" for=\"cancel-$day\">Buchung stornieren</label>";
                 // Anpassung Beginn
-                // für Buchung stornieren
-
+                // für Buchung stornieren am aktuellen Tag
                 foreach (AREAS as $area => $values) {
                     $id = "$area-$day";
                     $checkedClass = '';
@@ -447,6 +446,8 @@ function show_database($uid, $lastuid, $is_member)
                     $value=$area;
                     if ($area == $text) {
                         $value = "cancel";
+                        $disabled_html = '';
+                        $cTitle = __("Nur cancel fuer den laufenden Tag moeglich");
                     };
 
                     $line .= '<td class="dateradio ' . $area . $checkedClass . $disabled_html . ' ' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
