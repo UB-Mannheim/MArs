@@ -103,7 +103,7 @@ function mail_database($user)
     }
     $db = get_database();
     $table = DB_TABLE;
-    $result = $db->query("SELECT date,text FROM $table where name='" . $user['id'] . "' ORDER BY date");
+    $result = $db->query("SELECT date,text FROM $table where name='" . $user['id'] . "' and used='0' ORDER BY date");
     $mailtext = "";
     $today = date('Y-m-d', time());
     if ($url_tstamp) {
@@ -138,6 +138,7 @@ function init_database()
         `member` BOOLEAN DEFAULT 1 NOT NULL,
         `text` VARCHAR(8) NOT NULL,
         `date` DATE NOT NULL,
+        'used' TINYINT DEFAULT 0 NOT NULL,
         CONSTRAINT unique_reservation UNIQUE (date, name),
         PRIMARY KEY(`id`)
     )");
@@ -182,6 +183,12 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
         $success = $result ? $success_text : $failure_text;
         $comment = DEBUG ? __('geloescht') . ": $oldvalue, $success" : $success;
         $commentType = 1;
+    } elseif ($value == "cancel") {
+        // Delete booking.
+        $result = $db->query("UPDATE $table SET USED='2' WHERE name='$uid' AND date='$date'");
+        $success = $result ? $success_text : $failure_text;
+        $comment = DEBUG ? __('storniert') . ": $oldvalue, $success" : $success;
+        $commentType = 5;
     } else {
         // Limit bookings.
         $member = $is_member ? 1 : 0;
@@ -243,7 +250,7 @@ function show_database($uid, $lastuid, $is_member)
     global $url_tstamp, $user;
     $db = get_database();
     $table = DB_TABLE;
-    $result = $db->query("SELECT date, text FROM $table WHERE name = '$uid' ORDER BY date");
+    $result = $db->query("SELECT date, text, used FROM $table WHERE name = '$uid' ORDER BY date");
     $reservations = $result->fetch_all(MYSQLI_ASSOC);
     $result->free();
     //echo 'row=' . htmlentities($row);
@@ -289,12 +296,13 @@ function show_database($uid, $lastuid, $is_member)
     $i = 0;
 
     for ($time = $first; $time < $last; $time = strtotime("+1 day", $time)) {
-        $disabled = '';
+        $disabled = false;
         $CommentClass= '';
         $day = date('Y-m-d', $time);
         $text = 'no';
+        $used = '';
         if ($time < $start) {
-            $disabled = ' disabled';
+            $disabled = true;
         }
 
         $label = date('d.m.', $time);
@@ -307,6 +315,7 @@ function show_database($uid, $lastuid, $is_member)
 
         if ($i < count($reservations)) {
             $text = $reservations[$i]['text'];
+            $used = $reservations[$i]['used'];
         }
         if ($resday != $day) {
             $text = 'no';
@@ -375,18 +384,23 @@ function show_database($uid, $lastuid, $is_member)
         $requested = get_parameter($name, 'no');
         $comment = '';
         $commentType = 0;
-        if ($time < $start) {
-            $comment = DEBUG ? __('nicht aenderbar') : '';
-        } elseif ($uid != $lastuid) {
+        // klären wann dieser Teil eingefügt wurde! BERND
+        // bei DM beginnt es mit der if ($uid != $lastuid) {
+        #if ($time < $start) {
+        #    $comment = DEBUG ? __('nicht aenderbar') : '';
+        #} elseif ($uid != $lastuid) {
+        if ($uid != $lastuid) {
             // Initial call with the current user id.
             $comment = DEBUG ? __('aenderbar') : '';
         } elseif ($text == $requested) {
+            $comment = DEBUG ? __('unveraendert') : '';
+        } elseif ($used == '2' && $requested == 'cancel') {
             $comment = DEBUG ? __('unveraendert') : '';
         } else {
             $aComment = update_database($uid, $is_member, $day, $text, $requested);
             $comment = $aComment[0];
             $commentType = $aComment[1];
-            $text = $requested;
+            $text = $requested == 'cancel' ? $text : $requested;
         }
 
         $languageClass = 'open-day-de';
@@ -395,38 +409,119 @@ function show_database($uid, $lastuid, $is_member)
         }
 
         $line = '';
-        foreach (AREAS as $area => $values) {
-            $id = "$area-$day";
-            $checked = ($text == $area) ? ' checked' : '';
-            if (($commentType != 3) and ($commentType != 2)) {
-                $checkedClass = ($text == $area) ? ' checked ' : ' ';
+        // klären wie umbauen! BERND
+        if ($used == '1') {
+            $line = AREAS[$text]['name'].': Buchung wahrgenommen';
+            $line .= "<input type=\"hidden\" name=\"$name\" id=\"$text-$day\" value=\"$text\" checked/>";
+        } elseif ($requested == 'cancel' || $used == '2') {
+            $line = '<del class="cancelled">'.AREAS[$text]['name'].'</del> <ins class="cancelled">Buchung storniert</ins>';
+            $line .= "<input type=\"hidden\" name=\"$name\" id=\"cancel-$day\" value=\"cancel\"/>";
+        } elseif ($disabled) {
+            if ($used == '0') {
+                $area = AREAS[$text];
+                $line = "<input type=\"radio\" name=\"$name\" id=\"$text-$day\" value=\"$text\" checked/>" .
+                        "<label class=\"$text\" for=\"$text-$day\">" . $area['name'] . "</label>";
+                $line .= "<input type=\"radio\" name=\"$name\" id=\"cancel-$day\" value=\"cancel\"/>" .
+                        "<label class=\"cancel\" for=\"cancel-$day\">Buchung stornieren</label>";
+                // Anpassung Beginn
+                // für Buchung stornieren
+
+                foreach (AREAS as $area => $values) {
+                    $id = "$area-$day";
+                    $checkedClass = '';
+                    if ($disabled) {
+                        $disabled_html = ' disabled';
+                    } else {
+                        $disabled_html = '';
+                    }
+                    if (($commentType != 3) and ($commentType != 2)) {
+                        $checkedClass = ($text == $area) ? ' checked ' : ' ';
+                    } else {
+                        $checkedClass = ($text == $area) ? ' checkedError errorType-' . $commentType . ' ' : ' ';
+                    }
+                    $checkedClassInput = ($text == $area) ? ' class="checked-input" ' : ' ';
+
+                    $cTitle = $values['name'];
+                    $cTitle = __("Keine Reservierungen fuer den laufenden Tag moeglich");
+
+                    // unterscheiden ob ein normaler Eintrag oder ein aktiver Eintrag der gecanceld werden soll
+                    $value=$area;
+                    if ($area == $text) {
+                        $value = "cancel";
+                    };
+
+                    $line .= '<td class="dateradio ' . $area . $checkedClass . $disabled_html . ' ' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
+                             '<input type="checkbox" name="' . $name . '" id="' . $id . '" value="' . $value . '"' . $checked . $disabled_html . ' onclick="onlyOne(this, ' . "'" . $name . "')" . '" ' . $checkedClassInput . '/>' .
+                             '</td>';
+                }
+                // Anpassung Ende
+
             } else {
-                $checkedClass = ($text == $area) ? ' checkedError errorType-' . $commentType . ' ' : ' ';
-            }
-            $checkedClassInput = ($text == $area) ? ' class="checked-input" ' : ' ';
+                foreach (AREAS as $area => $values) {
+                    //$line = "Keine Reservierungen für den laufenden Tag möglich.";
 
-            $cTitle = $values['name'];
-            if ($disabled) {
-                $cTitle = __('Keine Aenderung mehr moeglich');
+                    $id = "$area-$day";
+                    $checkedClass = '';
+                    if ($disabled) {
+                        $disabled_html = ' disabled';
+                    } else {
+                        $disabled_html = '';
+                    }
+                    if (($commentType != 3) and ($commentType != 2)) {
+                        $checkedClass = ($text == $area) ? ' checked ' : ' ';
+                    } else {
+                        $checkedClass = ($text == $area) ? ' checkedError errorType-' . $commentType . ' ' : ' ';
+                    }
+                    $checkedClassInput = ($text == $area) ? ' class="checked-input" ' : ' ';
+
+                    $cTitle = $values['name'];
+                    $cTitle = __("Keine Reservierungen fuer den laufenden Tag moeglich");
+
+                    $line .= '<td class="dateradio ' . $area . $checkedClass . $disabled_html . ' ' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
+                             '<input type="checkbox" name="' . $name . '" id="' . $id . '" value="' . $area . '"' . $checked . $disabled_html . ' onclick="onlyOne(this, ' . "'" . $name . "')" . '" ' . $checkedClassInput . '/>' .
+                             '</td>';
+                }
+            }
+        } else {
+
+
+            // bisheriges Verhalten
+            foreach (AREAS as $area => $values) {
+                $id = "$area-$day";
+                $checked = ($text == $area) ? ' checked' : '';
+                if (($commentType != 3) and ($commentType != 2)) {
+                    $checkedClass = ($text == $area) ? ' checked ' : ' ';
+                } else {
+                    $checkedClass = ($text == $area) ? ' checkedError errorType-' . $commentType . ' ' : ' ';
+                }
+                $checkedClassInput = ($text == $area) ? ' class="checked-input" ' : ' ';
+
+                $cTitle = $values['name'];
+                if ($disabled) {
+                    $cTitle = __('Keine Aenderung mehr moeglich');
+                    $disabled_html = ' disabled';
+                } else {
+                    $disabled_html = '';
+                }
+
+                $line .= '<td class="dateradio ' . $area . $checkedClass . $disabled_html . ' ' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
+                         '<input type="checkbox" name="' . $name . '" id="' . $id . '" value="' . $area . '"' . $checked . $disabled_html . ' onclick="onlyOne(this, ' . "'" . $name . "')" . '" ' . $checkedClassInput . '/>' .
+                         '</td>';
             }
 
-            $line .= '<td class="dateradio ' . $area . $checkedClass . $disabled . ' ' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
-                     '<input type="checkbox" name="' . $name . '" id="' . $id . '" value="' . $area . '"' . $checked . $disabled . ' onclick="onlyOne(this, ' . "'" . $name . "')" . '" ' . $checkedClassInput . '/>' .
+            /*
+            $id = "no-$day";
+            $checked = ($text == 'no') ? ' checked' : '';
+            $cTitle = 'Keine Buchung';
+            $line .= '<td class="dateradio noBooking ' . $disabled . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
+                     '<input type="checkbox" name="' . $name . '" id="' . $id . '" value="no"' . $checked . '/>' .
                      '</td>';
-                // "<label class=\"$area\" for=\"$id\">" . $values['name'] . "</label>";
-        }
-        /*
-        $id = "no-$day";
-        $checked = ($text == 'no') ? ' checked' : '';
-        $cTitle = 'Keine Buchung';
-        $line .= '<td class="dateradio noBooking ' . $disabled . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
-                 '<input type="checkbox" name="' . $name . '" id="' . $id . '" value="no"' . $checked . $disabled . '/>' .
-                 '</td>';
-            // "<label class=\"no\" for=\"$id\">Keine Buchung</label>";
-        */
-        if ($comment != '') {
-            $comment = " $comment";
-            $CommentClass = 'comment';
+                // "<label class=\"no\" for=\"$id\">Keine Buchung</label>";
+            */
+            if ($comment != '') {
+                $comment = " $comment";
+                $CommentClass = 'comment';
+            }
         }
         $aPrint[] = '<tr class="open"><td class="buchbar label' . $CommentClass . '">' . $label . '</td>'. $line . '<td class="feedback">' . $comment . '</td></tr>' . "\n";
     }
