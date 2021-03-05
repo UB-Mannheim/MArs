@@ -417,15 +417,17 @@ function show_database($uid, $lastuid, $is_member)
             $line .= "<input type=\"hidden\" name=\"$name\" id=\"cancel-$day\" value=\"cancel\"/>";
         } elseif ($disabled) {
             if ($used == '0') {
+                /*
                 $area = AREAS[$text];
                 $line = "<input type=\"radio\" name=\"$name\" id=\"$text-$day\" value=\"$text\" checked/>" .
                         "<label class=\"$text\" for=\"$text-$day\">" . $area['name'] . "</label>";
                 $line .= "<input type=\"radio\" name=\"$name\" id=\"cancel-$day\" value=\"cancel\"/>" .
                         "<label class=\"cancel\" for=\"cancel-$day\">Buchung stornieren</label>";
-                // Anpassung Beginn
+                */
                 // für Buchung stornieren am aktuellen Tag
                 foreach (AREAS as $area => $values) {
                     $id = "$area-$day";
+                    $checked = ($text == $area) ? ' checked' : '';
                     $checkedClass = '';
                     if ($disabled) {
                         $disabled_html = ' disabled';
@@ -447,7 +449,7 @@ function show_database($uid, $lastuid, $is_member)
                     if ($area == $text) {
                         $value = "cancel";
                         $disabled_html = '';
-                        $cTitle = __("Nur cancel fuer den laufenden Tag moeglich");
+                        $cTitle = __("Buchung stornieren");
                     };
 
                     $line .= '<td class="dateradio ' . $area . $checkedClass . $disabled_html . ' ' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
