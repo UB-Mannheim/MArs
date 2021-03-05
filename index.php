@@ -493,7 +493,7 @@ function show_database($uid, $lastuid, $is_member)
                 $value=$area;
                 if ($area == $text) {
                     $value = "cancel";
-                    $disabled_html = '';
+                    $disabled_html = ' disabled ';
                     $cTitle = __("Buchung storniert");
                     $checkedClass = ' checked-canceled ';
                     $checkedClassInput = ' class="checked-input-canceled" ';
