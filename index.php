@@ -189,11 +189,6 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
         $success = $result ? $success_text : $failure_text;
         $comment = DEBUG ? __('storniert') . ": $oldvalue, $success" : $success;
         $commentType = 5;
-    } elseif ($value == "cancel") {
-        // Delete booking.
-        $result = $db->query("UPDATE $table SET USED='2' WHERE name='$uid' AND date='$date'");
-        $success = $result ? $success_text : $failure_text;
-        $comment = DEBUG ? "storniert: $oldvalue, $success" : $success;
     } else {
         // Limit bookings.
         $member = $is_member ? 1 : 0;
@@ -259,6 +254,7 @@ function show_database($uid, $lastuid, $is_member)
     $reservations = $result->fetch_all(MYSQLI_ASSOC);
     $result->free();
     //echo 'row=' . htmlentities($row);
+    $db->close();
 
     // Get current time.
     $now = time();
@@ -399,8 +395,6 @@ function show_database($uid, $lastuid, $is_member)
             $comment = DEBUG ? __('unveraendert') : '';
         } elseif ($used == '2' && $requested == 'cancel') {
             $comment = DEBUG ? __('unveraendert') : '';
-        } elseif ($used == '2' && $requested == 'cancel') {
-            $comment = DEBUG ? 'unverändert' : '';
         } else {
             $aComment = update_database($uid, $is_member, $day, $text, $requested);
             $comment = $aComment[0];
@@ -529,15 +523,6 @@ function show_database($uid, $lastuid, $is_member)
             }
         }
         $aPrint[] = '<tr class="open"><td class="buchbar label' . $CommentClass . '">' . $label . '</td>'. $line . '<td class="feedback">' . $comment . '</td></tr>' . "\n";
-
-    $today = date('Y-m-d', $now);
-    $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>'$today' AND name='$uid'");
-    $personal_bookings = $result ? $result->fetch_row()[0] : 999;
-    $db->close();
-    $group = $user['is_member'] ? "member" : "extern";
-    $open_bookings = PERSONAL_LIMIT[$group] - $personal_bookings;
-    if ($open_bookings < 0) {
-        $open_bookings = 0;
     }
     $aPrint[] = '</table>';
     $aPrint[] = '</fieldset>';
