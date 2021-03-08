@@ -434,7 +434,7 @@ function show_database($uid, $lastuid, $is_member)
                 } else {
                     $checkedClass = ($text == $area) ? ' checkedError errorType-' . $commentType . ' ' : ' ';
                 }
-                $checkedClassInput = ($text == $area) ? ' class="checked-input" ' : ' ';
+                $checkedClassInput = ($text == $area) ? ' class="checked-input ' . __LINE__ . '" ' : ' ';
 
                 $cTitle = $values['name'];
                 $cTitle = __("Keine Reservierungen fuer den laufenden Tag moeglich");
@@ -488,7 +488,7 @@ function show_database($uid, $lastuid, $is_member)
                 } else {
                     $checkedClass = ($text == $area) ? ' checkedError errorType-' . $commentType . ' ' : ' ';
                 }
-                $checkedClassInput = ($text == $area) ? ' class="checked-input" ' : ' ';
+                $checkedClassInput = ($text == $area) ? ' class="checked-input' . __LINE__ . '" ' : ' ';
 
                 $cTitle = $values['name'];
                 //$cTitle = __("Keine Reservierungen fuer den laufenden Tag moeglich");
@@ -540,7 +540,7 @@ function show_database($uid, $lastuid, $is_member)
                     } else {
                         $checkedClass = ($text == $area) ? ' checkedError errorType-' . $commentType . ' ' : ' ';
                     }
-                    $checkedClassInput = ($text == $area) ? ' class="checked-input used-' . $used . '" ' : ' ';
+                    $checkedClassInput = ($text == $area) ? ' class="checked-input' . __LINE__ . ' used-' . $used . '" ' : ' ';
 
                     $cTitle = $values['name'];
                     //$cTitle = __("Keine Reservierungen fuer den laufenden Tag moeglich");
@@ -605,7 +605,7 @@ function show_database($uid, $lastuid, $is_member)
                 } else {
                     $checkedClass = ($text == $area) ? ' checkedError errorType-' . $commentType . ' ' : ' ';
                 }
-                $checkedClassInput = ($text == $area) ? ' class="checked-input" ' : ' ';
+                $checkedClassInput = ($text == $area) ? ' class="checked-input' . __LINE__ . '" ' : ' ';
 
                 $cTitle = $values['name'];
                 if ($disabled) {
