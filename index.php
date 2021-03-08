@@ -528,6 +528,7 @@ function show_database($uid, $lastuid, $is_member)
                 foreach (AREAS as $area => $values) {
                     $id = "$area-$day";
                     $checked = ($text == $area && $used != '2') ? ' checked' : '';
+                    $disabled_html = '';
                     $checkedClass = '';
                     //if ($disabled) {
                     //    $disabled_html = ' disabled';
@@ -539,7 +540,7 @@ function show_database($uid, $lastuid, $is_member)
                     } else {
                         $checkedClass = ($text == $area) ? ' checkedError errorType-' . $commentType . ' ' : ' ';
                     }
-                    $checkedClassInput = ($text == $area) ? ' class="checked-input" ' : ' ';
+                    $checkedClassInput = ($text == $area) ? ' class="checked-input used-' . $used . '" ' : ' ';
 
                     $cTitle = $values['name'];
                     //$cTitle = __("Keine Reservierungen fuer den laufenden Tag moeglich");
@@ -549,7 +550,7 @@ function show_database($uid, $lastuid, $is_member)
                     if ($area == $text) {
                         $value = "cancel";
                         //$disabled_html = '';
-                        //$cTitle = __("Buchung stornieren");
+                        $cTitle = __("Buchung stornieren");
                         $id = "cancel-$area-$day";
                         //$id = "cancel-$day";
                     };
