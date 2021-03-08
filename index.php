@@ -187,7 +187,7 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
     } elseif ($value == "cancel") {
         //echo("update in cancel<br />");
         // Delete booking.
-        $result = $db->query("UPDATE $table SET USED='2' WHERE name='$uid' AND date='$date'");
+        $result = $db->query("UPDATE $table SET used='2' WHERE name='$uid' AND date='$date'");
         $success = $result ? $success_text : $failure_text;
         $comment = DEBUG ? __('storniert') . ": $oldvalue, $success" : $success;
         $commentType = 5;
@@ -224,8 +224,9 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
                 $comment = '<span class="failure">' . __('Persoenliches Buchungslimit erreicht') . '</span>';
                 $commentType = 3;
             } else {
-                $result = $db->query("DELETE FROM $table WHERE name='$uid' AND date='$date'");
-                $result = $db->query("INSERT INTO $table (name, member, text, date) VALUES ('$uid',$member,'$value','$date')");
+                //$result = $db->query("DELETE FROM $table WHERE name='$uid' AND date='$date'");
+                //$result = $db->query("INSERT INTO $table (name, member, text, date) VALUES ('$uid',$member,'$value','$date')");
+                $result = $db->query("UPDATE $table set text='$value', used='0' WHERE name='$uid' AND date='$date')");
                 $success = $result ? $success_text : $failure_text;
                 $comment = DEBUG ? __('aktualisiert') . ": $oldvalue -> $value, $success" : $success;
                 $commentType = 0;
@@ -298,13 +299,16 @@ function show_database($uid, $lastuid, $is_member)
     $i = 0;
 
     for ($time = $first; $time < $last; $time = strtotime("+1 day", $time)) {
-        $disabled = false;
+        //$disabled = false;
+        $is_today = $false;
         $CommentClass= '';
         $day = date('Y-m-d', $time);
         $text = 'no';
         $used = '';
+        // am gleichen Tag kein Reservieren mehr möglich
         if ($time < $start) {
-            $disabled = true;
+            //$disabled = true;
+            $is_today = $true;
         }
 
         $label = date('d.m.', $time);
@@ -382,7 +386,7 @@ function show_database($uid, $lastuid, $is_member)
         }
 
         $name = "choice-$day";
-        $requested = get_parameter($name, 'no');
+        $requested = get_parameter($name, '');
         $comment = '';
         $commentType = 0;
 
@@ -394,10 +398,12 @@ function show_database($uid, $lastuid, $is_member)
         } elseif ($used == '2' && $requested == 'cancel') {
             $comment = DEBUG ? __('unveraendert') : '';
         } else {
+            // TODO: get new DB values here or do it in some other way, where displaying and updating the db are independent from each other...
             $aComment = update_database($uid, $is_member, $day, $text, $requested);
             $comment = $aComment[0];
             $commentType = $aComment[1];
             $text = $requested == 'cancel' ? $text : $requested;
+            $used = $requested == 'cancel' ? '2' : '0';
         }
 
         $languageClass = 'open-day-de';
@@ -462,15 +468,20 @@ function show_database($uid, $lastuid, $is_member)
             */
 
             // für stornierte Buchung am aktuellen Tag
+            // Die sind schon storniert und können nicht nochmal storniert werden
+            // Was kann mit ihnen getan werden
+            // Was soll gezeigt werden
+            // bei Dennis wird nichts angezeigt
+            // Wozu speichere ich es dann?
             foreach (AREAS as $area => $values) {
                 $id = "$area-$day";
                 $checked = ($text == $area) ? ' checked' : '';
                 $checkedClass = '';
-                if ($disabled) {
-                    $disabled_html = ' disabled';
-                } else {
-                    $disabled_html = '';
-                }
+                //if ($disabled) {
+                //    $disabled_html = ' disabled';
+                //} else {
+                //    $disabled_html = '';
+                //}
 
                 if (($commentType != 3) and ($commentType != 2)) {
                     $checkedClass = ($text == $area) ? ' checked ' : ' ';
@@ -479,21 +490,21 @@ function show_database($uid, $lastuid, $is_member)
                 }
                 $checkedClassInput = ($text == $area) ? ' class="checked-input" ' : ' ';
 
-                //$cTitle = $values['name'];
-                $cTitle = __("Keine Reservierungen fuer den laufenden Tag moeglich");
+                $cTitle = $values['name'];
+                //$cTitle = __("Keine Reservierungen fuer den laufenden Tag moeglich");
 
                 $lineHide = '';
                 // unterscheiden ob ein normaler Eintrag oder ein aktiver Eintrag der gecanceld werden soll
                 $value=$area;
                 if ($area == $text) {
                     $value = "cancel";
-                    $disabled_html = ' disabled ';
-                    $cTitle = __("Buchung storniert");
+                    //$disabled_html = ' disabled ';
+                    //$cTitle = __("Buchung storniert");
                     $checkedClass = ' checked-canceled ';
                     $checkedClassInput = ' class="checked-input-canceled" ';
                     //$id = "cancel-$area-$day";
-                    $id = "cancel-$day";
-                    $lineHide = "<input type=\"hidden\" name=\"$name\" id=\"cancel-$day\" value=\"cancel\"/>";
+                    //$id = "cancel-$day";
+                    //$lineHide = "<input type=\"hidden\" name=\"$name\" id=\"cancel-$day\" value=\"cancel\"/>";
                 };
 
                 $line .= '<td class="dateradio ' . $area . $checkedClass . $disabled_html . ' ' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
@@ -504,8 +515,8 @@ function show_database($uid, $lastuid, $is_member)
             // für stornierte Buchung am aktuellen Tag Ende
 
 
-        } elseif ($disabled) {
-            if ($used == '0') {
+        } elseif ($is_today && $used != '' && $requested != 'no') {
+            //if ($used == '0') {
                 /*
                 $area = AREAS[$text];
                 $line = "<input type=\"radio\" name=\"$name\" id=\"$text-$day\" value=\"$text\" checked/>" .
@@ -516,13 +527,13 @@ function show_database($uid, $lastuid, $is_member)
                 // Option um Buchung am aktuellen Tag stornieren zu können
                 foreach (AREAS as $area => $values) {
                     $id = "$area-$day";
-                    $checked = ($text == $area) ? ' checked' : '';
+                    $checked = ($text == $area && $used != '2') ? ' checked' : '';
                     $checkedClass = '';
-                    if ($disabled) {
-                        $disabled_html = ' disabled';
-                    } else {
-                        $disabled_html = '';
-                    }
+                    //if ($disabled) {
+                    //    $disabled_html = ' disabled';
+                    //} else {
+                    //    $disabled_html = '';
+                    //}
                     if (($commentType != 3) and ($commentType != 2)) {
                         $checkedClass = ($text == $area) ? ' checked ' : ' ';
                     } else {
@@ -531,16 +542,16 @@ function show_database($uid, $lastuid, $is_member)
                     $checkedClassInput = ($text == $area) ? ' class="checked-input" ' : ' ';
 
                     $cTitle = $values['name'];
-                    $cTitle = __("Keine Reservierungen fuer den laufenden Tag moeglich");
+                    //$cTitle = __("Keine Reservierungen fuer den laufenden Tag moeglich");
 
                     // unterscheiden ob ein normaler Eintrag oder ein aktiver Eintrag der gecanceld werden soll
                     $value=$area;
                     if ($area == $text) {
                         $value = "cancel";
-                        $disabled_html = '';
-                        $cTitle = __("Buchung stornieren");
-                        //$id = "cancel-$area-$day";
-                        $id = "cancel-$day";
+                        //$disabled_html = '';
+                        //$cTitle = __("Buchung stornieren");
+                        $id = "cancel-$area-$day";
+                        //$id = "cancel-$day";
                     };
 
                     $line .= '<td class="dateradio ' . $area . $checkedClass . $disabled_html . ' ' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
@@ -549,7 +560,8 @@ function show_database($uid, $lastuid, $is_member)
                 }
                 // Option um Buchung am aktuellen Tag stornieren zu können Ende
 
-            } else {
+            //} else {
+            /*
                 // Keine Reservierungen für den laufenden Tag möglich.
                 // wenn kein eintrag in Datenbank vorhanden ist
                 foreach (AREAS as $area => $values) {
@@ -577,7 +589,7 @@ function show_database($uid, $lastuid, $is_member)
                              '<input type="checkbox" name="' . $name . '" id="' . $id . '" value="' . $area . '"' . $checked . $disabled_html . ' onclick="onlyOne(this, ' . "'" . $name . "')" . '" ' . $checkedClassInput . '/>' .
                              '</td>';
                 }
-            }
+            } */
 
 
         } else {
