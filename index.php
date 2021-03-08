@@ -180,7 +180,7 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
         $comment = DEBUG ? "gelöscht: $oldvalue, $success" : $success;
     } elseif ($value == "cancel") {
         // Delete booking.
-        $result = $db->query("UPDATE $table SET USED='2' WHERE name='$uid' AND date='$date'");
+        $result = $db->query("UPDATE $table SET used='2' WHERE name='$uid' AND date='$date'");
         $success = $result ? $success_text : $failure_text;
         $comment = DEBUG ? "storniert: $oldvalue, $success" : $success;
     } else {
@@ -212,8 +212,7 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
             if ($personal_bookings > PERSONAL_LIMIT[$group]) {
                 $comment = '<span class="failure">Persönliches Buchungslimit erreicht</span>';
             } else {
-                $result = $db->query("DELETE FROM $table WHERE name='$uid' AND date='$date'");
-                $result = $db->query("INSERT INTO $table (name, member, text, date) VALUES ('$uid',$member,'$value','$date')");
+                $result = $db->query("UPDATE $table SET text='$value', used='0' WHERE name='$uid' AND date='$date'");
                 $success = $result ? $success_text : $failure_text;
                 $comment = DEBUG ? "aktualisiert: $oldvalue -> $value, $success" : $success;
             }
@@ -264,12 +263,12 @@ function show_database($uid, $lastuid, $is_member)
     $i = 0;
 
     for ($time = $first; $time < $last; $time = strtotime("+1 day", $time)) {
-        $disabled = false;
+        $is_today = false;
         $day = date('Y-m-d', $time);
         $text = 'no';
         $used = '';
         if ($time < $start) {
-            $disabled = true;
+            $is_today = true;
         }
 
         $label = date('d.m.', $time);
@@ -308,7 +307,7 @@ function show_database($uid, $lastuid, $is_member)
         }
 
         $name = "choice-$day";
-        $requested = get_parameter($name, 'no');
+        $requested = get_parameter($name, '');
         $comment = '';
         if ($uid != $lastuid) {
             // Initial call with the current user id.
@@ -318,8 +317,10 @@ function show_database($uid, $lastuid, $is_member)
         } elseif ($used == '2' && $requested == 'cancel') {
             $comment = DEBUG ? 'unverändert' : '';
         } else {
+            // TODO: get new DB values here or do it in some other way, where displaying and updating the db are independent from each other...
             $comment = update_database($uid, $is_member, $day, $text, $requested);
             $text = $requested == 'cancel' ? $text : $requested;
+            $used = $requested == 'cancel' ? '2' : '0';
         }
 
         $line = '';
@@ -327,17 +328,29 @@ function show_database($uid, $lastuid, $is_member)
             $line = AREAS[$text]['name'].': Buchung wahrgenommen';
             $line .= "<input type=\"hidden\" name=\"$name\" id=\"$text-$day\" value=\"$text\" checked/>";
         } elseif ($requested == 'cancel' || $used == '2') {
-            $line = '<del class="cancelled">'.AREAS[$text]['name'].'</del> <ins class="cancelled">Buchung storniert</ins>';
-            $line .= "<input type=\"hidden\" name=\"$name\" id=\"cancel-$day\" value=\"cancel\"/>";
-        } elseif ($disabled) {
-            if ($used == '0') {
-                $area = AREAS[$text];
-                $line = "<input type=\"radio\" name=\"$name\" id=\"$text-$day\" value=\"$text\" checked/>" .
-                        "<label class=\"$text\" for=\"$text-$day\">" . $area['name'] . "</label>";
-                $line .= "<input type=\"radio\" name=\"$name\" id=\"cancel-$day\" value=\"cancel\"/>" .
-                        "<label class=\"cancel\" for=\"cancel-$day\">Buchung stornieren</label>";
-            } else {
-                $line = "Keine Reservierungen für den laufenden Tag möglich.";
+            foreach (AREAS as $area => $values) {
+                $id = "$area-$day";
+                $line .= "<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"$area\"/>" .
+                    "<label class=\"$area\" for=\"$id\">" . $values['name'] . "</label>";
+            }
+            // booking already cancelled
+            $line .= "<input type=\"radio\" name=\"$name\" id=\"cancel-$day\" value=\"cancel\" checked/>" .
+                    "<label class=\"cancel\" for=\"cancel-$day\">Keine Buchung</label>";
+            if ($comment != '') {
+                $comment = " $comment";
+            }
+        } elseif ($is_today && $used != '' && $requested != 'no') {
+            foreach (AREAS as $area => $values) {
+                $id = "$area-$day";
+                $checked = ($text == $area && $used != '2') ? ' checked' : '';
+                $line .= "<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"$area\"$checked/>" .
+                    "<label class=\"$area\" for=\"$id\">" . $values['name'] . "</label>";
+            }
+            // booking can now be cancelled
+            $line .= "<input type=\"radio\" name=\"$name\" id=\"cancel-$day\" value=\"cancel\"/>" .
+                    "<label class=\"cancel\" for=\"cancel-$day\">Keine Buchung</label>";
+            if ($comment != '') {
+                $comment = " $comment";
             }
         } else {
             foreach (AREAS as $area => $values) {
