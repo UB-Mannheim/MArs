@@ -206,9 +206,11 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
         $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>'$today' AND name='$uid'");
         $personal_bookings = $result ? $result->fetch_row()[0] : 999;
         if ($count >= $limit) {
+            echo("<br />" . __LINE__ );
             $comment = '<span class="failure">' . __('Bibliotheksbereich ausgebucht') . '</span>';
             $commentType = 2;
         } elseif ($oldvalue == $no_reservation) {
+            echo("<br />" . __LINE__ );
             // New bookings.
             if ($personal_bookings >= PERSONAL_LIMIT[$group]) {
                 $comment = '<span class="failure">' . __('Persoenliches Buchungslimit erreicht') . '</span>';
@@ -221,6 +223,7 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
                 $commentType = 4;
             }
         } else {
+            echo("<br />" . __LINE__ );
             // Modified booking.
             echo("<br />" . __LINE__ );
             if ($personal_bookings > PERSONAL_LIMIT[$group]) {
@@ -313,6 +316,7 @@ function show_database($uid, $lastuid, $is_member)
         $text = 'no';
         $used = '';
         // am gleichen Tag kein Reservieren mehr möglich
+        echo("<br />time: " . $time . " start: " . $start );
         if ($time < $start) {
             //$disabled = true;
             $is_today = true;
@@ -507,7 +511,7 @@ function show_database($uid, $lastuid, $is_member)
                 } else {
                     $checkedClass = ($text == $area) ? ' checkedError errorType-' . $commentType . ' ' : ' ';
                 }
-                $checkedClassInput = ($text == $area) ? ' class="checked-input' . __LINE__ . '" ' : ' ';
+                $checkedClassInput = ($text == $area) ? ' class="checked-input ' . __LINE__ . '" ' : ' ';
 
                 $cTitle = $values['name'];
                 //$cTitle = __("Keine Reservierungen fuer den laufenden Tag moeglich");
@@ -520,10 +524,11 @@ function show_database($uid, $lastuid, $is_member)
                     //$disabled_html = ' disabled ';
                     //$cTitle = __("Buchung storniert");
                     $checkedClass = ' checked-canceled ';
-                    $checkedClassInput = ' class="checked-input-canceled" ';
+                    $checkedClassInput = ' class="checked-input-canceled ' . __LINE__ . '" ';
                     //$id = "cancel-$area-$day";
                     //$id = "cancel-$day";
                     //$lineHide = "<input type=\"hidden\" name=\"$name\" id=\"cancel-$day\" value=\"cancel\"/>";
+                    $checked = '';
                 };
 
                 $line .= '<td class="dateradio ' . $area . $checkedClass . $disabled_html . ' ' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
