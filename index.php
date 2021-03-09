@@ -557,7 +557,7 @@ function show_database($uid, $lastuid, $is_member)
                 // unterscheiden ob ein normaler Eintrag oder ein aktiver Eintrag ist
                 $value=$area;
                 if ($area == $text) {
-                    $value = "cancel";
+                    //$value = "cancel";
                     $checkedClass = ' checked-canceled ';
                     $checkedClassInput = ' class="checked-input-canceled ' . __LINE__ . '" ';
                     $lineHide = "<input type=\"hidden\" name=\"$name\" id=\"left-$day\" value=\"left\"/>";
