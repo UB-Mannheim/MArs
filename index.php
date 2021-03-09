@@ -404,12 +404,12 @@ function show_database($uid, $lastuid, $is_member)
         }
 
         $name = "choice-$day";
-        echo("<br />name: '" . $name . "'");
+        if (DEBUG) {echo("<br />name: '" . $name . "'");};
         $requested = get_parameter($name, '');
-        echo("<br />'". $requested . '"');
+        if (DEBUG) {echo("<br />'". $requested . '"');};
         if ($requested == '') {
-            echo("<br />" . __LINE__ );
-            $requested = get_parameter("cancel-choice-$day", '');
+            if (DEBUG) {echo("<br />" . __LINE__ );};
+            $requested = get_parameter("cancel-$day", '');
             if ($requested == '') {
                $requested = get_parameter("no-$day", '');
             }
@@ -639,7 +639,7 @@ function show_database($uid, $lastuid, $is_member)
                         $id = "cancel-$area-$day";
                         //$id = "cancel-$day";
                         //choise-cancel-$day
-                        $lineHide = "<input type=\"hidden\" name=\"cancel-$name\" id=\"cancel-$day\" value=\"cancel\"/>";
+                        $lineHide = "<input type=\"hidden\" name=\"cancel-$day\" id=\"cancel-$day\" value=\"cancel\"/>";
                     };
 
                     $line .= '<td class="dateradio ' . $area . $checkedClass . $disabled_html . ' ' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
