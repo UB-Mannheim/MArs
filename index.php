@@ -79,13 +79,14 @@ function dump_database()
 {
     $db = get_database();
     $table = DB_TABLE;
-    $result = $db->query("SELECT date,text,name FROM $table ORDER BY date,name");
-    print("<table><tr><th>date</th><th>pl</th><th>uid</th></tr>");
+    $result = $db->query("SELECT date,text,name,used FROM $table ORDER BY date,name");
+    print("<table><tr><th>date</th><th>pl</th><th>uid</th><th>used</th></tr>");
     while ($reservation = $result->fetch_assoc()) {
         $date = $reservation['date'];
         $text = $reservation['text'];
         $uid = $reservation['name'];
-        print("<tr><td>$date</td><td>$text</td><td>$uid</td></tr>");
+        $used = $reservation['used'];
+        print("<tr><td>$date</td><td>$text</td><td>$uid</td><td>$used</td></tr>");
     }
     print("</table>");
     $result->free();
@@ -330,7 +331,7 @@ function show_database($uid, $lastuid, $is_member)
 
         $line = '';
         if ($used == '1') {
-            $line = AREAS[$text]['name'].': Buchung wahrgenommen';
+            $line = 'Buchung wahrgenommen';
             $line .= "<input type=\"hidden\" name=\"$name\" id=\"$text-$day\" value=\"$text\" checked/>";
         } elseif ($requested == 'cancel' || $used == '3') {
             foreach (AREAS as $area => $values) {
@@ -345,14 +346,9 @@ function show_database($uid, $lastuid, $is_member)
                 $comment = " $comment";
             }
         } elseif ($requested == 'left' || $used == '2') {
-            foreach (AREAS as $area => $values) {
-                $id = "$area-$day";
-                $line .= "<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"$area\"/>" .
-                    "<label class=\"$area\" for=\"$id\">" . $values['name'] . "</label>";
-            }
             // user used this booking and already left the library
-            $line .= "<input type=\"radio\" name=\"$name\" id=\"left-$day\" value=\"left\" checked/>" .
-                    "<label class=\"left\" for=\"left-$day\">Keine Buchung</label>";
+            $line = 'Buchung wahrgenommen';
+            $line .= "<input type=\"hidden\" name=\"$name\" id=\"left-$day\" value=\"left\" checked/>";
             if ($comment != '') {
                 $comment = " $comment";
             }
@@ -416,7 +412,7 @@ function day_report($location = false)
 
     if (!$location) {
         // Summary of daily bookings per location.
-        $result = $db->query("SELECT date, text, SUM(member) AS internal, SUM(NOT member) AS external FROM seatbookings GROUP BY date, text");
+        $result = $db->query("SELECT date, text, SUM(member) AS internal, SUM(NOT member) AS external FROM seatbookings WHERE NOT used='3' GROUP BY date, text");
         $reservations = $result->fetch_all(MYSQLI_ASSOC);
         $result->free();
         $db->close();
