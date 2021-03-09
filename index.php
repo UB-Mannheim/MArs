@@ -515,13 +515,8 @@ function show_database($uid, $lastuid, $is_member)
                 // unterscheiden ob ein normaler Eintrag oder ein aktiver Eintrag der gecanceld werden soll
                 $value=$area;
                 if ($area == $text) {
-                    //$value = "cancel";
-                    //$disabled_html = ' disabled ';
-                    //$cTitle = __("Buchung storniert");
                     $checkedClass = ' checked-canceled ';
                     $checkedClassInput = ' class="checked-input-canceled ' . __LINE__ . '" ';
-                    //$id = "cancel-$area-$day";
-                    //$id = "cancel-$day";
                     $checked = '';
                 };
 
@@ -562,12 +557,8 @@ function show_database($uid, $lastuid, $is_member)
                 $value=$area;
                 if ($area == $text) {
                     $value = "cancel";
-                    //$disabled_html = ' disabled ';
-                    //$cTitle = __("Buchung storniert");
                     $checkedClass = ' checked-canceled ';
                     $checkedClassInput = ' class="checked-input-canceled ' . __LINE__ . '" ';
-                    //$id = "cancel-$area-$day";
-                    //$id = "cancel-$day";
                     $lineHide = "<input type=\"hidden\" name=\"$name\" id=\"left-$day\" value=\"left\"/>";
                     $checked = '';
                 };
@@ -595,11 +586,6 @@ function show_database($uid, $lastuid, $is_member)
                     $checked = ($text == $area && $used != '3') ? ' checked' : '';
                     $disabled_html = '';
                     $checkedClass = '';
-                    //if ($disabled) {
-                    //    $disabled_html = ' disabled';
-                    //} else {
-                    //    $disabled_html = '';
-                    //}
                     if (($commentType != 3) and ($commentType != 2)) {
                         $checkedClass = ($text == $area) ? ' checked ' : ' ';
                     } else {
@@ -614,12 +600,8 @@ function show_database($uid, $lastuid, $is_member)
                     // unterscheiden ob ein normaler Eintrag oder ein aktiver Eintrag der gecanceld werden soll
                     $value=$area;
                     if ($area == $text) {
-                        //$value = "cancel";
-                        //$disabled_html = '';
                         $cTitle = __("Buchung stornieren");
                         $id = "cancel-$area-$day";
-                        //$id = "cancel-$day";
-                        //choise-cancel-$day
                         $lineHide = "<input type=\"hidden\" name=\"cancel-$day\" id=\"cancel-$day\" value=\"cancel\"/>";
                     };
 
