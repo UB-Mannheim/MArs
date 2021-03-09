@@ -178,7 +178,7 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
     $success_text = '<span class="success">' . __('Aktion erfolgreich') . '</span>';
     $failure_text = '<span class="failure">' . __('Aktion nicht erfolgreich') . '</span>';
     if ($value == $no_reservation) {
-        echo("update in no_reservation<br />");
+        if (DEBUG) {echo("update in no_reservation<br />");};
         // Delete booking.
         $result = $db->query("DELETE FROM $table WHERE name='$uid' AND date='$date'");
         $success = $result ? $success_text : $failure_text;
@@ -403,7 +403,7 @@ function show_database($uid, $lastuid, $is_member)
         echo("<br />'". $requested . '"');
         if ($requested != '') {
         } else {
-            echo("<br />" . __LINE__ );
+            if (DEBUG) { echo("<br />" . __LINE__ ); };
             $requested = get_parameter("cancel-choice-$day", '');
         };
         $comment = '';
@@ -432,9 +432,9 @@ function show_database($uid, $lastuid, $is_member)
         }
 
         $line = '';
-        echo("<br /" . __LINE__ . " used: " . $used . "<br />");
-        echo(__LINE__ . " requested: " . $requested . "<br/>");
-        echo(__LINE__ . " is_today: " . ($is_today == True ? 'j' : 'n') . "<br />");
+        if (DEBUG) {echo("<br />" . __LINE__ . " used: " . $used . "<br />"); };
+        if (DEBUG) {echo(__LINE__ . " requested: " . $requested . "<br/>");};
+        if (DEBUG) {echo(__LINE__ . " is_today: " . ($is_today == True ? 'j' : 'n') . "<br />");};
 
         if ($used == '1') {
             /*
