@@ -677,7 +677,7 @@ function show_database($uid, $lastuid, $is_member)
                          '</td>';
             }
 
-            $line .= "<input type=\"hidden\" name=\"$name\" id=\"no-$day\" value=\"no\"/>";
+            $line .= "<input type=\"hidden\" name=\"no-$day\" id=\"no-$day\" value=\"no\"/>";
 
             /*
             $id = "no-$day";
