@@ -410,6 +410,9 @@ function show_database($uid, $lastuid, $is_member)
             if ($requested == '') {
                $requested = get_parameter("no-$day", '');
             }
+            if ($requested == '') {
+               $requested = get_parameter("left-$day", '');
+            }
         };
 
         $comment = '';
@@ -560,8 +563,6 @@ function show_database($uid, $lastuid, $is_member)
                     //$value = "cancel";
                     $checkedClass = ' checked-canceled ';
                     $checkedClassInput = ' class="checked-input-canceled ' . __LINE__ . '" ';
-                    $lineHide = "<input type=\"hidden\" name=\"$name\" id=\"left-$day\" value=\"left\"/>";
-                    //$lineHide = "<input type=\"hidden\" name=\"left-$day\" id=\"left-$day\" value=\"left\"/>";
                     $checked = '';
                 };
 
@@ -570,6 +571,7 @@ function show_database($uid, $lastuid, $is_member)
                          $lineHide .
                          '</td>';
             }
+            $line .= "<input type=\"hidden\" name=\"left-$day\" id=\"left-$day\" value=\"left\"/>";
             // für stornierte Buchung am aktuellen Tag Ende
 
 
