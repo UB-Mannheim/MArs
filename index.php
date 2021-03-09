@@ -100,7 +100,7 @@ function mail_database($user)
     }
     $db = get_database();
     $table = DB_TABLE;
-    $result = $db->query("SELECT date,text FROM $table where name='" . $user['id'] . "' and used='0' ORDER BY date");
+    $result = $db->query("SELECT date,text FROM $table where name='" . $user['id'] . "' and used IN ('0','1') ORDER BY date");
     $mailtext = "";
     $today = date('Y-m-d', time());
     if ($url_tstamp) {
@@ -180,9 +180,14 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
         $comment = DEBUG ? "gelöscht: $oldvalue, $success" : $success;
     } elseif ($value == "cancel") {
         // Delete booking.
-        $result = $db->query("UPDATE $table SET used='2' WHERE name='$uid' AND date='$date'");
+        $result = $db->query("UPDATE $table SET used='3' WHERE name='$uid' AND date='$date'");
         $success = $result ? $success_text : $failure_text;
         $comment = DEBUG ? "storniert: $oldvalue, $success" : $success;
+    } elseif ($value == "left") {
+        // used booking, user already left library
+        #$result = $db->query("UPDATE $table SET used='2' WHERE name='$uid' AND date='$date'");
+        #$success = $result ? $success_text : $failure_text;
+        $comment = DEBUG ? "verlassen: $oldvalue, $success" : $success;
     } else {
         // Limit bookings.
         $member = $is_member ? 1 : 0;
@@ -314,20 +319,20 @@ function show_database($uid, $lastuid, $is_member)
             $comment = DEBUG ? 'änderbar' : '';
         } elseif ($text == $requested) {
             $comment = DEBUG ? 'unverändert' : '';
-        } elseif ($used == '2' && $requested == 'cancel') {
+        } elseif ($used == '3' && $requested == 'cancel') {
             $comment = DEBUG ? 'unverändert' : '';
         } else {
             // TODO: get new DB values here or do it in some other way, where displaying and updating the db are independent from each other...
             $comment = update_database($uid, $is_member, $day, $text, $requested);
             $text = $requested == 'cancel' ? $text : $requested;
-            $used = $requested == 'cancel' ? '2' : '0';
+            $used = $requested == 'cancel' ? '3' : '0';
         }
 
         $line = '';
         if ($used == '1') {
             $line = AREAS[$text]['name'].': Buchung wahrgenommen';
             $line .= "<input type=\"hidden\" name=\"$name\" id=\"$text-$day\" value=\"$text\" checked/>";
-        } elseif ($requested == 'cancel' || $used == '2') {
+        } elseif ($requested == 'cancel' || $used == '3') {
             foreach (AREAS as $area => $values) {
                 $id = "$area-$day";
                 $line .= "<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"$area\"/>" .
@@ -339,10 +344,22 @@ function show_database($uid, $lastuid, $is_member)
             if ($comment != '') {
                 $comment = " $comment";
             }
+        } elseif ($requested == 'left' || $used == '2') {
+            foreach (AREAS as $area => $values) {
+                $id = "$area-$day";
+                $line .= "<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"$area\"/>" .
+                    "<label class=\"$area\" for=\"$id\">" . $values['name'] . "</label>";
+            }
+            // user used this booking and already left the library
+            $line .= "<input type=\"radio\" name=\"$name\" id=\"left-$day\" value=\"left\" checked/>" .
+                    "<label class=\"left\" for=\"left-$day\">Keine Buchung</label>";
+            if ($comment != '') {
+                $comment = " $comment";
+            }
         } elseif ($is_today && $used != '' && $requested != 'no') {
             foreach (AREAS as $area => $values) {
                 $id = "$area-$day";
-                $checked = ($text == $area && $used != '2') ? ' checked' : '';
+                $checked = ($text == $area && $used != '3') ? ' checked' : '';
                 $line .= "<input type=\"radio\" name=\"$name\" id=\"$id\" value=\"$area\"$checked/>" .
                     "<label class=\"$area\" for=\"$id\">" . $values['name'] . "</label>";
             }
