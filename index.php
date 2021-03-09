@@ -1004,9 +1004,11 @@ if ($uid == '' || $task == '') {
 <li><a href="./?task=dump" target="_blank">Alle Buchungen ausgeben</a>
 <li><a href="./?task=day-report" target="_blank">Buchungsübersicht</a>
 <?php
+/*
 foreach (AREAS as $key => $values) {
     print("<li><a href='./?task=$key-report' target='_blank'>Tagesplanung " . $values['name'] . "</a>");
 }
+*/
 ?>
 </ul>
 </p>
