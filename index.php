@@ -478,7 +478,8 @@ function show_database($uid, $lastuid, $is_member)
                     $checkedClass = ' wahrgenommen ';
                     $checkedClassInput = ' class="wahrgenommen" ';
                     $id = "wahrgenommen-$area-$day";
-                    $lineHide = "<input type=\"hidden\" name=\"$name\" id=\"$text-$day\" value=\"$text\" checked/>";
+                    // Nicht notwendig weil kein anderes Feld
+                    //$lineHide = "<input type=\"hidden\" name=\"$name\" id=\"$text-$day\" value=\"$text\" checked/>";
                 };
 
                 $line .= '<td class="dateradio ' . $area . $checkedClass . $disabled_html . ' ' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
