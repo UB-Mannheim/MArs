@@ -408,7 +408,7 @@ function show_database($uid, $lastuid, $is_member)
         $requested = get_parameter($name, '');
         echo("<br />'". $requested . '"');
         if ($requested == '') {
-            if (DEBUG) { echo("<br />" . __LINE__ ); };
+            echo("<br />" . __LINE__ );
             $requested = get_parameter("cancel-choice-$day", '');
             if ($requested == '') {
                $requested = get_parameter("no-$day", '');
@@ -549,7 +549,7 @@ function show_database($uid, $lastuid, $is_member)
                          '<input type="checkbox" name="' . $name . '" id="' . $id . '" value="' . $value . '"' . $checked . $disabled_html . ' onclick="onlyOne(this, ' . "'" . $name . "')" . '" ' . $checkedClassInput . '/>' .
                          '</td>';
             }
-            $line .= "<input type=\"hidden\" name=\"$name\" id=\"cancel-$day\" value=\"cancel\"/>";
+            $line .= "<input type=\"hidden\" name=\"cancel-$day\" id=\"cancel-$day\" value=\"cancel\"/>";
             // für stornierte Buchung am aktuellen Tag Ende
 
 
