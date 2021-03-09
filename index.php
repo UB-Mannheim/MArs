@@ -411,7 +411,7 @@ function show_database($uid, $lastuid, $is_member)
             if (DEBUG) { echo("<br />" . __LINE__ ); };
             $requested = get_parameter("cancel-choice-$day", '');
             if ($requested == '') {
-               $requested = get_parameter("no-$day", '');  
+               $requested = get_parameter("no-$day", '');
             }
         };
 
@@ -475,7 +475,7 @@ function show_database($uid, $lastuid, $is_member)
                 $value=$area;
                 $name = 'used' . '-' . $day;
                 $nameHide ='';
-                
+
                 if ($area == $text) {
                     //$value = "wahrgenommen";
                     //$disabled_html = ' disabled';
@@ -484,7 +484,7 @@ function show_database($uid, $lastuid, $is_member)
                     $checkedClass = ' wahrgenommen ';
                     $checkedClassInput = ' class="wahrgenommen" ';
                     $nameHide = "choice-$day";
-                    
+
                     //$id = "wahrgenommen-$area-$day";
                     // Nicht notwendig weil kein anderes Feld
                     $lineHide = "<input type=\"hidden\" name=\"$nameHide\" id=\"$text-$day\" value=\"$text\" checked/>";
@@ -543,6 +543,7 @@ function show_database($uid, $lastuid, $is_member)
                     //$id = "cancel-$area-$day";
                     //$id = "cancel-$day";
                     //$lineHide = "<input type=\"hidden\" name=\"$name\" id=\"cancel-$day\" value=\"cancel\"/>";
+                    $lineHide = "<input type=\"hidden\" name=\"$name\" id=\"left-$day\" value=\"left\"/>";
                     $checked = '';
                 };
 
