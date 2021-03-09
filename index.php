@@ -178,20 +178,21 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
     $success_text = '<span class="success">' . __('Aktion erfolgreich') . '</span>';
     $failure_text = '<span class="failure">' . __('Aktion nicht erfolgreich') . '</span>';
     if ($value == $no_reservation) {
-        //echo("update in no_reservation<br />");
+        echo("update in no_reservation<br />");
         // Delete booking.
         $result = $db->query("DELETE FROM $table WHERE name='$uid' AND date='$date'");
         $success = $result ? $success_text : $failure_text;
         $comment = DEBUG ? __('geloescht') . ": $oldvalue, $success" : $success;
         $commentType = 1;
     } elseif ($value == "cancel") {
-        //echo("update in cancel<br />");
+        echo("update in cancel<br />");
         // Delete booking.
         $result = $db->query("UPDATE $table SET used='2' WHERE name='$uid' AND date='$date'");
         $success = $result ? $success_text : $failure_text;
         $comment = DEBUG ? __('storniert') . ": $oldvalue, $success" : $success;
         $commentType = 5;
     } else {
+        echo("<br />" . __LINE__);
         // Limit bookings.
         $member = $is_member ? 1 : 0;
         $result = $db->query("SELECT COUNT(*) FROM $table WHERE date='$date' AND text='$value' AND member=$member");
@@ -213,6 +214,7 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
                 $comment = '<span class="failure">' . __('Persoenliches Buchungslimit erreicht') . '</span>';
                 $commentType = 3;
             } else {
+                echo("<br />" . __LINE__ );
                 $result = $db->query("INSERT INTO $table (name, member, text, date) VALUES ('$uid',$member,'$value','$date')");
                 $success = $result ? $success_text : $failure_text;
                 $comment = DEBUG ? __('reserviert') . ": $value, $success" : $success;
@@ -220,16 +222,21 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
             }
         } else {
             // Modified booking.
+            echo("<br />" . __LINE__ );
             if ($personal_bookings > PERSONAL_LIMIT[$group]) {
+                echo("<br />" . __LINE__ );
                 $comment = '<span class="failure">' . __('Persoenliches Buchungslimit erreicht') . '</span>';
                 $commentType = 3;
             } else {
+                echo("<br />" . __LINE__ );
                 //$result = $db->query("DELETE FROM $table WHERE name='$uid' AND date='$date'");
                 //$result = $db->query("INSERT INTO $table (name, member, text, date) VALUES ('$uid',$member,'$value','$date')");
-                $result = $db->query("UPDATE $table set text='$value', used='0' WHERE name='$uid' AND date='$date')");
+                echo("update $table set text='$value', used='0' where name='$uid' and date='$date'");
+                $result = $db->query("UPDATE $table set text='$value', used='0' WHERE name='$uid' AND date='$date'");
                 $success = $result ? $success_text : $failure_text;
                 $comment = DEBUG ? __('aktualisiert') . ": $oldvalue -> $value, $success" : $success;
                 $commentType = 0;
+                echo($success);
             }
         }
     }
@@ -308,7 +315,7 @@ function show_database($uid, $lastuid, $is_member)
         // am gleichen Tag kein Reservieren mehr möglich
         if ($time < $start) {
             //$disabled = true;
-            $is_today = $true;
+            $is_today = true;
         }
 
         $label = date('d.m.', $time);
@@ -321,6 +328,7 @@ function show_database($uid, $lastuid, $is_member)
         if ($i < count($reservations)) {
             $text = $reservations[$i]['text'];
             $used = $reservations[$i]['used'];
+            //print_r($reservations);
         }
         if ($resday != $day) {
             $text = 'no';
@@ -386,7 +394,14 @@ function show_database($uid, $lastuid, $is_member)
         }
 
         $name = "choice-$day";
+        echo("<br />" . $name );
         $requested = get_parameter($name, '');
+        echo("<br />'". $requested . '"');
+        if ($requested != '') {
+        } else {
+            echo("<br />" . __LINE__ );
+            $requested = get_parameter("cancel-choice-$day", '');
+        };
         $comment = '';
         $commentType = 0;
 
@@ -399,6 +414,7 @@ function show_database($uid, $lastuid, $is_member)
             $comment = DEBUG ? __('unveraendert') : '';
         } else {
             // TODO: get new DB values here or do it in some other way, where displaying and updating the db are independent from each other...
+            echo("<br />update_database(" . $uid . ", " . $is_member . ", " . $day . ", " . $text . ", " . $requested . ")<br/>");
             $aComment = update_database($uid, $is_member, $day, $text, $requested);
             $comment = $aComment[0];
             $commentType = $aComment[1];
@@ -412,6 +428,9 @@ function show_database($uid, $lastuid, $is_member)
         }
 
         $line = '';
+        echo("<br /" . __LINE__ . " used: " . $used . "<br />");
+        echo(__LINE__ . " requested: " . $requested . "<br/>");
+        echo(__LINE__ . " is_today: " . ($is_today == True ? 'j' : 'n') . "<br />");
 
         if ($used == '1') {
             /*
@@ -540,10 +559,11 @@ function show_database($uid, $lastuid, $is_member)
                     } else {
                         $checkedClass = ($text == $area) ? ' checkedError errorType-' . $commentType . ' ' : ' ';
                     }
-                    $checkedClassInput = ($text == $area) ? ' class="checked-input' . __LINE__ . ' used-' . $used . '" ' : ' ';
+                    $checkedClassInput = ($text == $area) ? ' class="checked-input ' . __LINE__ . ' used-' . $used . '" ' : ' ';
 
                     $cTitle = $values['name'];
                     //$cTitle = __("Keine Reservierungen fuer den laufenden Tag moeglich");
+                    $lineHide = '';
 
                     // unterscheiden ob ein normaler Eintrag oder ein aktiver Eintrag der gecanceld werden soll
                     $value=$area;
@@ -553,10 +573,13 @@ function show_database($uid, $lastuid, $is_member)
                         $cTitle = __("Buchung stornieren");
                         $id = "cancel-$area-$day";
                         //$id = "cancel-$day";
+                        //choise-cancel-$day
+                        $lineHide = "<input type=\"hidden\" name=\"cancel-$name\" id=\"cancel-$day\" value=\"cancel\"/>";
                     };
 
                     $line .= '<td class="dateradio ' . $area . $checkedClass . $disabled_html . ' ' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
                              '<input type="checkbox" name="' . $name . '" id="' . $id . '" value="' . $value . '"' . $checked . $disabled_html . ' onclick="onlyOne(this, ' . "'" . $name . "')" . '" ' . $checkedClassInput . '/>' .
+                             $lineHide .
                              '</td>';
                 }
                 // Option um Buchung am aktuellen Tag stornieren zu können Ende
@@ -605,7 +628,7 @@ function show_database($uid, $lastuid, $is_member)
                 } else {
                     $checkedClass = ($text == $area) ? ' checkedError errorType-' . $commentType . ' ' : ' ';
                 }
-                $checkedClassInput = ($text == $area) ? ' class="checked-input' . __LINE__ . '" ' : ' ';
+                $checkedClassInput = ($text == $area) ? ' class="checked-input ' . __LINE__ . '" ' : ' ';
 
                 $cTitle = $values['name'];
                 if ($disabled) {
