@@ -191,7 +191,7 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
     } else {
         // Limit bookings.
         $member = $is_member ? 1 : 0;
-        $result = $db->query("SELECT COUNT(*) FROM $table WHERE date='$date' AND text='$value' AND member=$member");
+        $result = $db->query("SELECT COUNT(*) FROM $table WHERE date='$date' AND text='$value' and used IN ('0','1') AND member=$member");
         $count = $result ? $result->fetch_row()[0] : 0;
         $group = $is_member ? "member" : "extern";
         $limit = AREAS[$value]['limit'][$group];
@@ -199,7 +199,7 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
         if ($url_tstamp) {
             $today = date('Y-m-d', $url_tstamp);
         }
-        $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>'$today' AND name='$uid'");
+        $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>'$today' and used IN ('0','1') AND name='$uid'");
         $personal_bookings = $result ? $result->fetch_row()[0] : 999;
         if ($count >= $limit) {
             $comment = '<span class="failure">Bibliotheksbereich ausgebucht</span>';
@@ -317,7 +317,7 @@ function show_database($uid, $lastuid, $is_member)
         if ($uid != $lastuid) {
             // Initial call with the current user id.
             $comment = DEBUG ? 'änderbar' : '';
-        } elseif ($text == $requested) {
+        } elseif ($text == $requested && !($used == '2' || $used == '3')) {
             $comment = DEBUG ? 'unverändert' : '';
         } elseif ($used == '3' && $requested == 'cancel') {
             $comment = DEBUG ? 'unverändert' : '';
@@ -389,7 +389,7 @@ function show_database($uid, $lastuid, $is_member)
     print('</fieldset>');
 
     $today = date('Y-m-d', $now);
-    $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>'$today' AND name='$uid'");
+    $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>'$today' and used IN ('0','1') AND name='$uid'");
     $personal_bookings = $result ? $result->fetch_row()[0] : 999;
     $db->close();
     $group = $user['is_member'] ? "member" : "extern";
