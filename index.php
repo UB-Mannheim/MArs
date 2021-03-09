@@ -560,8 +560,8 @@ function show_database($uid, $lastuid, $is_member)
                     $value = "cancel";
                     $checkedClass = ' checked-canceled ';
                     $checkedClassInput = ' class="checked-input-canceled ' . __LINE__ . '" ';
-                    //$lineHide = "<input type=\"hidden\" name=\"$name\" id=\"left-$day\" value=\"left\"/>";
-                    $lineHide = "<input type=\"hidden\" name=\"left-$day\" id=\"left-$day\" value=\"left\"/>";
+                    $lineHide = "<input type=\"hidden\" name=\"$name\" id=\"left-$day\" value=\"left\"/>";
+                    //$lineHide = "<input type=\"hidden\" name=\"left-$day\" id=\"left-$day\" value=\"left\"/>";
                     $checked = '';
                 };
 
