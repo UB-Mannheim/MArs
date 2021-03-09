@@ -187,7 +187,7 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
     } elseif ($value == "cancel") {
         if (DEBUG) {echo("<br />update in cancel");};
         // Delete booking.
-        $result = $db->query("UPDATE $table SET used='2' WHERE name='$uid' AND date='$date'");
+        $result = $db->query("UPDATE $table SET used='3' WHERE name='$uid' AND date='$date'");
         $success = $result ? $success_text : $failure_text;
         $comment = DEBUG ? __('storniert') . ": $oldvalue, $success" : $success;
         $commentType = 5;
@@ -414,7 +414,7 @@ function show_database($uid, $lastuid, $is_member)
             $comment = DEBUG ? __('aenderbar') : '';
         } elseif ($text == $requested) {
             $comment = DEBUG ? __('unveraendert') : '';
-        } elseif ($used == '2' && $requested == 'cancel') {
+        } elseif ($used == '3' && $requested == 'cancel') {
             $comment = DEBUG ? __('unveraendert') : '';
         } else {
             // TODO: get new DB values here or do it in some other way, where displaying and updating the db are independent from each other...
@@ -423,7 +423,7 @@ function show_database($uid, $lastuid, $is_member)
             $comment = $aComment[0];
             $commentType = $aComment[1];
             $text = $requested == 'cancel' ? $text : $requested;
-            $used = $requested == 'cancel' ? '2' : '0';
+            $used = $requested == 'cancel' ? '3' : '0';
         }
 
         $languageClass = 'open-day-de';
@@ -484,7 +484,7 @@ function show_database($uid, $lastuid, $is_member)
 
 
 
-        } elseif ($requested == 'cancel' || $used == '2') {
+        } elseif ($requested == 'cancel' || $used == '3') {
             /*
             $line = '<del class="cancelled">'.AREAS[$text]['name'].'</del> <ins class="cancelled">Buchung storniert</ins>';
             $line .= "<input type=\"hidden\" name=\"$name\" id=\"cancel-$day\" value=\"cancel\"/>";
@@ -551,7 +551,7 @@ function show_database($uid, $lastuid, $is_member)
                 // Option um Buchung am aktuellen Tag stornieren zu können
                 foreach (AREAS as $area => $values) {
                     $id = "$area-$day";
-                    $checked = ($text == $area && $used != '2') ? ' checked' : '';
+                    $checked = ($text == $area && $used != '3') ? ' checked' : '';
                     $disabled_html = '';
                     $checkedClass = '';
                     //if ($disabled) {
@@ -588,38 +588,6 @@ function show_database($uid, $lastuid, $is_member)
                              '</td>';
                 }
                 // Option um Buchung am aktuellen Tag stornieren zu können Ende
-
-            //} else {
-            /*
-                // Keine Reservierungen für den laufenden Tag möglich.
-                // wenn kein eintrag in Datenbank vorhanden ist
-                foreach (AREAS as $area => $values) {
-                    //$line = "Keine Reservierungen für den laufenden Tag möglich.";
-
-                    $id = "$area-$day";
-                    $checked = ($text == $area) ? ' checked' : '';
-                    $checkedClass = '';
-                    if ($disabled) {
-                        $disabled_html = ' disabled';
-                    } else {
-                        $disabled_html = '';
-                    }
-                    if (($commentType != 3) and ($commentType != 2)) {
-                        $checkedClass = ($text == $area) ? ' checked ' : ' ';
-                    } else {
-                        $checkedClass = ($text == $area) ? ' checkedError errorType-' . $commentType . ' ' : ' ';
-                    }
-                    $checkedClassInput = ($text == $area) ? ' class="checked-input" ' : ' ';
-
-                    $cTitle = $values['name'];
-                    $cTitle = __("Keine Reservierungen fuer den laufenden Tag moeglich");
-
-                    $line .= '<td class="dateradio ' . $area . $checkedClass . $disabled_html . ' ' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
-                             '<input type="checkbox" name="' . $name . '" id="' . $id . '" value="' . $area . '"' . $checked . $disabled_html . ' onclick="onlyOne(this, ' . "'" . $name . "')" . '" ' . $checkedClassInput . '/>' .
-                             '</td>';
-                }
-            } */
-
 
         } else {
 
