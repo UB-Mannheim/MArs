@@ -201,7 +201,7 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
         if (DEBUG) {echo("<br />" . __LINE__);};
         // Limit bookings.
         $member = $is_member ? 1 : 0;
-        $result = $db->query("SELECT COUNT(*) FROM $table WHERE date='$date' AND text='$value' AND member=$member");
+        $result = $db->query("SELECT COUNT(*) FROM $table WHERE date='$date' AND text='$value' and used IN ('0','1') AND member=$member");
         $count = $result ? $result->fetch_row()[0] : 0;
         $group = $is_member ? "member" : "extern";
         $limit = AREAS[$value]['limit'][$group];
@@ -209,7 +209,7 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
         if ($url_tstamp) {
             $today = date('Y-m-d', $url_tstamp);
         }
-        $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>'$today' AND name='$uid'");
+        $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>'$today' and used IN ('0','1') AND name='$uid'");
         $personal_bookings = $result ? $result->fetch_row()[0] : 999;
         if ($count >= $limit) {
             if (DEBUG) {echo("<br />" . __LINE__ );};
@@ -421,7 +421,7 @@ function show_database($uid, $lastuid, $is_member)
         if ($uid != $lastuid) {
             // Initial call with the current user id.
             $comment = DEBUG ? __('aenderbar') : '';
-        } elseif ($text == $requested) {
+        } elseif ($text == $requested && !($used == '2' || $used == '3')) {
             $comment = DEBUG ? __('unveraendert') : '';
         } elseif ($used == '3' && $requested == 'cancel') {
             $comment = DEBUG ? __('unveraendert') : '';
@@ -535,23 +535,21 @@ function show_database($uid, $lastuid, $is_member)
                 // unterscheiden ob ein normaler Eintrag oder ein aktiver Eintrag der gecanceld werden soll
                 $value=$area;
                 if ($area == $text) {
-                    $value = "cancel";
+                    //$value = "cancel";
                     //$disabled_html = ' disabled ';
                     //$cTitle = __("Buchung storniert");
                     $checkedClass = ' checked-canceled ';
                     $checkedClassInput = ' class="checked-input-canceled ' . __LINE__ . '" ';
                     //$id = "cancel-$area-$day";
                     //$id = "cancel-$day";
-                    //$lineHide = "<input type=\"hidden\" name=\"$name\" id=\"cancel-$day\" value=\"cancel\"/>";
-                    $lineHide = "<input type=\"hidden\" name=\"$name\" id=\"left-$day\" value=\"left\"/>";
                     $checked = '';
                 };
 
                 $line .= '<td class="dateradio ' . $area . $checkedClass . $disabled_html . ' ' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
                          '<input type="checkbox" name="' . $name . '" id="' . $id . '" value="' . $value . '"' . $checked . $disabled_html . ' onclick="onlyOne(this, ' . "'" . $name . "')" . '" ' . $checkedClassInput . '/>' .
-                         $lineHide .
                          '</td>';
             }
+            $line .= "<input type=\"hidden\" name=\"$name\" id=\"cancel-$day\" value=\"cancel\"/>";
             // für stornierte Buchung am aktuellen Tag Ende
 
 
@@ -716,7 +714,7 @@ function print_number_possible_bookings( $uid )
     $db = get_database();
     $table = DB_TABLE;
     $today = date('Y-m-d', $now);
-    $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>'$today' AND name='$uid'");
+    $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>'$today' and used IN ('0','1') AND name='$uid'");
     $personal_bookings = $result ? $result->fetch_row()[0] : 999;
     $db->close();
     $group = $user['is_member'] ? "member" : "extern";
