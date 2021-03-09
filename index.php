@@ -238,8 +238,6 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
                 $commentType = 3;
             } else {
                 if (DEBUG) {echo("<br />" . __LINE__ );};
-                //$result = $db->query("DELETE FROM $table WHERE name='$uid' AND date='$date'");
-                //$result = $db->query("INSERT INTO $table (name, member, text, date) VALUES ('$uid',$member,'$value','$date')");
                 if (DEBUG) {echo("<br />update $table set text='$value', used='0' where name='$uid' and date='$date'");};
                 $result = $db->query("UPDATE $table set text='$value', used='0' WHERE name='$uid' AND date='$date'");
                 $success = $result ? $success_text : $failure_text;
@@ -315,7 +313,6 @@ function show_database($uid, $lastuid, $is_member)
     $i = 0;
 
     for ($time = $first; $time < $last; $time = strtotime("+1 day", $time)) {
-        //$disabled = false;
         $is_today = $false;
         $CommentClass= '';
         $day = date('Y-m-d', $time);
@@ -338,7 +335,6 @@ function show_database($uid, $lastuid, $is_member)
         if ($i < count($reservations)) {
             $text = $reservations[$i]['text'];
             $used = $reservations[$i]['used'];
-            //print_r($reservations);
         }
         if ($resday != $day) {
             $text = 'no';
@@ -455,11 +451,8 @@ function show_database($uid, $lastuid, $is_member)
                 $id = "$area-$day";
                 $checked = ($text == $area) ? ' checked' : '';
                 $checkedClass = '';
-                //if ($disabled) {
-                    $disabled_html = ' disabled';
-                //} else {
-                //    $disabled_html = '';
-                //}
+
+                $disabled_html = ' disabled';
 
                 if (($commentType != 3) and ($commentType != 2)) {
                     $checkedClass = ($text == $area) ? ' checked ' : ' ';
@@ -477,15 +470,11 @@ function show_database($uid, $lastuid, $is_member)
                 $nameHide ='';
 
                 if ($area == $text) {
-                    //$value = "wahrgenommen";
-                    //$disabled_html = ' disabled';
-                    //$name = 'choice' . '-' . $day;
                     $cTitle = __("Buchung wahrgenommen");
                     $checkedClass = ' wahrgenommen ';
                     $checkedClassInput = ' class="wahrgenommen" ';
                     $nameHide = "choice-$day";
 
-                    //$id = "wahrgenommen-$area-$day";
                     // Nicht notwendig weil kein anderes Feld
                     $lineHide = "<input type=\"hidden\" name=\"$nameHide\" id=\"$text-$day\" value=\"$text\" checked/>";
                 };
@@ -507,19 +496,10 @@ function show_database($uid, $lastuid, $is_member)
 
             // für stornierte Buchung am aktuellen Tag
             // Die sind schon storniert und können nicht nochmal storniert werden
-            // Was kann mit ihnen getan werden
-            // Was soll gezeigt werden
-            // bei Dennis wird nichts angezeigt
-            // Wozu speichere ich es dann?
             foreach (AREAS as $area => $values) {
                 $id = "$area-$day";
                 $checked = ($text == $area) ? ' checked' : '';
                 $checkedClass = '';
-                //if ($disabled) {
-                //    $disabled_html = ' disabled';
-                //} else {
-                //    $disabled_html = '';
-                //}
 
                 if (($commentType != 3) and ($commentType != 2)) {
                     $checkedClass = ($text == $area) ? ' checked ' : ' ';
@@ -561,7 +541,8 @@ function show_database($uid, $lastuid, $is_member)
                 $checked = ($text == $area) ? ' checked' : '';
                 $checkedClass = '';
                 //if ($disabled) {
-                //    $disabled_html = ' disabled';
+                // keine weitere Buchung wenn vorher schon gebucht
+                $disabled_html = ' disabled';
                 //} else {
                 //    $disabled_html = '';
                 //}
@@ -574,7 +555,7 @@ function show_database($uid, $lastuid, $is_member)
                 $checkedClassInput = ($text == $area) ? ' class="checked-input ' . __LINE__ . '" ' : ' ';
 
                 $cTitle = $values['name'];
-                //$cTitle = __("Keine Reservierungen fuer den laufenden Tag moeglich");
+                $cTitle = __("Keine weiteren Reservierungen fuer den laufenden Tag moeglich");
 
                 $lineHide = '';
                 // unterscheiden ob ein normaler Eintrag oder ein aktiver Eintrag der gecanceld werden soll

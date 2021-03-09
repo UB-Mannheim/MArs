@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-05 17:57+0100\n"
+"POT-Creation-Date: 2021-03-09 18:12+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Bernd Fallert <bernd.fallert@bib.uni-mannheim.de>\n"
 "Language-Team: \n"
@@ -28,110 +28,110 @@ msgstr "deleted"
 msgid "storniert"
 msgstr "canceled"
 
-#: ../index.php:208
+#: ../index.php:216
 msgid "Bibliotheksbereich ausgebucht"
 msgstr "Library area fully booked"
 
-#: ../index.php:213 ../index.php:224
+#: ../index.php:222 ../index.php:237
 msgid "Persoenliches Buchungslimit erreicht"
 msgstr "Personal booking limit reached"
 
-#: ../index.php:218
+#: ../index.php:228
 msgid "reserviert"
 msgstr "reserved"
 
-#: ../index.php:230
+#: ../index.php:244
 msgid "aktualisiert"
 msgstr "updated"
 
-#: ../index.php:348 ../index.php:369
+#: ../index.php:366 ../index.php:387
 msgid "geschlossen"
 msgstr "closed"
 
-#: ../index.php:391
+#: ../index.php:419
 msgid "aenderbar"
 msgstr "changeable"
 
-#: ../index.php:393 ../index.php:395
+#: ../index.php:421 ../index.php:423
 msgid "unveraendert"
 msgstr "unchanged"
 
-#: ../index.php:434 ../index.php:483 ../index.php:534 ../index.php:574
+#: ../index.php:465
 msgid "Keine Reservierungen fuer den laufenden Tag moeglich"
 msgstr "No reservations possible for the current day"
 
-#: ../index.php:442
+#: ../index.php:473
 msgid "Buchung wahrgenommen"
 msgstr "booking used"
 
-#: ../index.php:491
-msgid "Buchung storniert"
-msgstr "booking cancelled"
+#: ../index.php:558
+msgid "Keine weiteren Reservierungen fuer den laufenden Tag moeglich"
+msgstr "No further reservations possible for the current day"
 
-#: ../index.php:541
+#: ../index.php:619
 msgid "Buchung stornieren"
 msgstr "cancel booking"
 
-#: ../index.php:599
+#: ../index.php:649
 msgid "Keine Aenderung mehr moeglich"
 msgstr "No more changes possible"
 
-#: ../index.php:655
+#: ../index.php:707
 #, php-format
 msgid "Noch %s von %s Buchungen moeglich"
 msgstr "Still %s of %s bookings possible"
 
-#: ../index.php:657
+#: ../index.php:709
 msgid "Keine Buchungen mehr moeglich"
 msgstr "No more bookings possible"
 
-#: ../index.php:788
+#: ../index.php:840
 msgid "UB Sitzplatzbuchung"
 msgstr "UL Seat Booking"
 
-#: ../index.php:806
+#: ../index.php:858
 msgid "Benutzerdaten"
 msgstr "Personal data"
 
-#: ../index.php:816 ../index.php:830
+#: ../index.php:868 ../index.php:882
 msgid "Pflichtfeld"
 msgstr "Mandatory field"
 
-#: ../index.php:826
+#: ../index.php:878
 msgid "Passwort"
 msgstr "Password"
 
-#: ../index.php:849 ../index.php:850
+#: ../index.php:901 ../index.php:902
 msgid "Abmelden"
 msgstr "Logout"
 
-#: ../index.php:900
+#: ../index.php:952
 msgid "Sie sind angemeldet als"
 msgstr "You are logged in as"
 
-#: ../index.php:901
+#: ../index.php:953
 msgid "Meine Sitzplatzbuchungen"
 msgstr "My seat bookings"
 
-#: ../index.php:911
+#: ../index.php:963
 msgid "Bitte ergaenzen Sie Ihre Anmeldedaten um Ihr Passwort"
 msgstr "Please add your password to your login data"
 
-#: ../index.php:913
+#: ../index.php:965
 msgid "Die Anmeldedaten sind ungueltig. Bitte pruefen Sie Uni-ID und Passwort"
 msgstr "The login details are invalid. Please check your Uni-ID and password"
 
-#: ../index.php:938
+#: ../index.php:990
 msgid ""
 "Informieren Sie mich bitte per E-Mail ueber meine aktuellen "
 "Sitzplatzbuchungen"
 msgstr "Please inform me by e-mail about my current bookings"
 
-#: ../index.php:943
+#: ../index.php:995
 msgid "Eingaben absenden"
 msgstr "Submit entries"
 
-#: ../index.php:954
+#: ../index.php:1006
 msgid "Anmelden"
 msgstr "Login"
 
@@ -203,6 +203,9 @@ msgstr "Dear Mrs"
 #: ../local/mail.php:47
 msgid "Sehr geehrte/r"
 msgstr "Dear"
+
+#~ msgid "Buchung storniert"
+#~ msgstr "booking cancelled"
 
 #~ msgid "nicht aenderbar"
 #~ msgstr "not changeable"
