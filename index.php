@@ -103,7 +103,7 @@ function mail_database($user)
     }
     $db = get_database();
     $table = DB_TABLE;
-    $result = $db->query("SELECT date,text FROM $table where name='" . $user['id'] . "' and used='0' ORDER BY date");
+    $result = $db->query("SELECT date,text FROM $table where name='" . $user['id'] . "' and used IN ('0','1') ORDER BY date");
     $mailtext = "";
     $today = date('Y-m-d', time());
     if ($url_tstamp) {
@@ -191,6 +191,12 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
         $success = $result ? $success_text : $failure_text;
         $comment = DEBUG ? __('storniert') . ": $oldvalue, $success" : $success;
         $commentType = 5;
+    } elseif ($value == "left") {
+        // used booking, user already left library
+        #$result = $db->query("UPDATE $table SET used='2' WHERE name='$uid' AND date='$date'");
+        #$success = $result ? $success_text : $failure_text;
+        $comment = DEBUG ? "verlassen: $oldvalue, $success" : $success;
+        $commentType = 6;
     } else {
         if (DEBUG) {echo("<br />" . __LINE__);};
         // Limit bookings.
@@ -446,11 +452,11 @@ function show_database($uid, $lastuid, $is_member)
                 $id = "$area-$day";
                 $checked = ($text == $area) ? ' checked' : '';
                 $checkedClass = '';
-                if ($disabled) {
+                //if ($disabled) {
                     $disabled_html = ' disabled';
-                } else {
-                    $disabled_html = '';
-                }
+                //} else {
+                //    $disabled_html = '';
+                //}
 
                 if (($commentType != 3) and ($commentType != 2)) {
                     $checkedClass = ($text == $area) ? ' checked ' : ' ';
@@ -467,7 +473,7 @@ function show_database($uid, $lastuid, $is_member)
                 $value=$area;
                 if ($area == $text) {
                     $value = "wahrgenommen";
-                    $disabled_html = ' disabled';
+                    //$disabled_html = ' disabled';
                     $cTitle = __("Buchung wahrgenommen");
                     $checkedClass = ' wahrgenommen ';
                     $checkedClassInput = ' class="wahrgenommen" ';
@@ -527,7 +533,53 @@ function show_database($uid, $lastuid, $is_member)
                     $checkedClassInput = ' class="checked-input-canceled ' . __LINE__ . '" ';
                     //$id = "cancel-$area-$day";
                     //$id = "cancel-$day";
-                    //$lineHide = "<input type=\"hidden\" name=\"$name\" id=\"cancel-$day\" value=\"cancel\"/>";
+                    $lineHide = "<input type=\"hidden\" name=\"$name\" id=\"cancel-$day\" value=\"cancel\"/>";
+                    $checked = '';
+                };
+
+                $line .= '<td class="dateradio ' . $area . $checkedClass . $disabled_html . ' ' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
+                         '<input type="checkbox" name="' . $name . '" id="' . $id . '" value="' . $value . '"' . $checked . $disabled_html . ' onclick="onlyOne(this, ' . "'" . $name . "')" . '" ' . $checkedClassInput . '/>' .
+                         $lineHide .
+                         '</td>';
+            }
+            // für stornierte Buchung am aktuellen Tag Ende
+
+
+        } elseif ($requested == 'left' || $used == '2') {
+            // für benutzte beendete Buchung am aktuellen Tag
+            // Die sind schon Status 2
+            foreach (AREAS as $area => $values) {
+                $id = "$area-$day";
+                $checked = ($text == $area) ? ' checked' : '';
+                $checkedClass = '';
+                //if ($disabled) {
+                //    $disabled_html = ' disabled';
+                //} else {
+                //    $disabled_html = '';
+                //}
+
+                if (($commentType != 3) and ($commentType != 2)) {
+                    $checkedClass = ($text == $area) ? ' checked ' : ' ';
+                } else {
+                    $checkedClass = ($text == $area) ? ' checkedError errorType-' . $commentType . ' ' : ' ';
+                }
+                $checkedClassInput = ($text == $area) ? ' class="checked-input ' . __LINE__ . '" ' : ' ';
+
+                $cTitle = $values['name'];
+                //$cTitle = __("Keine Reservierungen fuer den laufenden Tag moeglich");
+
+                $lineHide = '';
+                // unterscheiden ob ein normaler Eintrag oder ein aktiver Eintrag der gecanceld werden soll
+                $value=$area;
+                if ($area == $text) {
+                    $value = "cancel";
+                    //$disabled_html = ' disabled ';
+                    //$cTitle = __("Buchung storniert");
+                    $checkedClass = ' checked-canceled ';
+                    $checkedClassInput = ' class="checked-input-canceled ' . __LINE__ . '" ';
+                    //$id = "cancel-$area-$day";
+                    //$id = "cancel-$day";
+                    $lineHide = "<input type=\"hidden\" name=\"$name\" id=\"left-$day\" value=\"left\"/>";
                     $checked = '';
                 };
 
