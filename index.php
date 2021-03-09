@@ -82,13 +82,14 @@ function dump_database()
 {
     $db = get_database();
     $table = DB_TABLE;
-    $result = $db->query("SELECT date,text,name FROM $table ORDER BY date,name");
-    print("<table><tr><th>date</th><th>pl</th><th>uid</th></tr>");
+    $result = $db->query("SELECT date,text,name,used FROM $table ORDER BY date,name");
+    print("<table><tr><th>date</th><th>pl</th><th>uid</th><th>used</th></tr>");
     while ($reservation = $result->fetch_assoc()) {
         $date = $reservation['date'];
         $text = $reservation['text'];
         $uid = $reservation['name'];
-        print("<tr><td>$date</td><td>$text</td><td>$uid</td></tr>");
+        $used = $reservation['used'];
+        print("<tr><td>$date</td><td>$text</td><td>$uid</td><td>$used</td></tr>");
     }
     print("</table>");
     $result->free();
@@ -443,7 +444,7 @@ function show_database($uid, $lastuid, $is_member)
 
         if ($used == '1') {
             /*
-            $line = AREAS[$text]['name'].': Buchung wahrgenommen';
+            $line = 'Buchung wahrgenommen';
             $line .= "<input type=\"hidden\" name=\"$name\" id=\"$text-$day\" value=\"$text\" checked/>";
             */
             // für wahrgenommene Buchung am aktuellen Tag
@@ -553,13 +554,14 @@ function show_database($uid, $lastuid, $is_member)
                 $cTitle = __("Keine weiteren Reservierungen fuer den laufenden Tag moeglich");
 
                 $lineHide = '';
-                // unterscheiden ob ein normaler Eintrag oder ein aktiver Eintrag der gecanceld werden soll
+                // unterscheiden ob ein normaler Eintrag oder ein aktiver Eintrag ist
                 $value=$area;
                 if ($area == $text) {
                     $value = "cancel";
                     $checkedClass = ' checked-canceled ';
                     $checkedClassInput = ' class="checked-input-canceled ' . __LINE__ . '" ';
-                    $lineHide = "<input type=\"hidden\" name=\"$name\" id=\"left-$day\" value=\"left\"/>";
+                    //$lineHide = "<input type=\"hidden\" name=\"$name\" id=\"left-$day\" value=\"left\"/>";
+                    $lineHide = "<input type=\"hidden\" name=\"left-$day\" id=\"left-$day\" value=\"left\"/>";
                     $checked = '';
                 };
 
@@ -707,7 +709,7 @@ function day_report($location = false)
 
     if (!$location) {
         // Summary of daily bookings per location.
-        $result = $db->query("SELECT date, text, SUM(member) AS internal, SUM(NOT member) AS external FROM seatbookings GROUP BY date, text");
+        $result = $db->query("SELECT date, text, SUM(member) AS internal, SUM(NOT member) AS external FROM seatbookings WHERE NOT used='3' GROUP BY date, text");
         $reservations = $result->fetch_all(MYSQLI_ASSOC);
         $result->free();
         $db->close();
