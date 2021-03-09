@@ -178,21 +178,21 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
     $success_text = '<span class="success">' . __('Aktion erfolgreich') . '</span>';
     $failure_text = '<span class="failure">' . __('Aktion nicht erfolgreich') . '</span>';
     if ($value == $no_reservation) {
-        if (DEBUG) {echo("update in no_reservation<br />");};
+        if (DEBUG) {echo("<br />update in no_reservation");};
         // Delete booking.
         $result = $db->query("DELETE FROM $table WHERE name='$uid' AND date='$date'");
         $success = $result ? $success_text : $failure_text;
         $comment = DEBUG ? __('geloescht') . ": $oldvalue, $success" : $success;
         $commentType = 1;
     } elseif ($value == "cancel") {
-        echo("update in cancel<br />");
+        if (DEBUG) {echo("<br />update in cancel");};
         // Delete booking.
         $result = $db->query("UPDATE $table SET used='2' WHERE name='$uid' AND date='$date'");
         $success = $result ? $success_text : $failure_text;
         $comment = DEBUG ? __('storniert') . ": $oldvalue, $success" : $success;
         $commentType = 5;
     } else {
-        echo("<br />" . __LINE__);
+        if (DEBUG) {echo("<br />" . __LINE__);};
         // Limit bookings.
         $member = $is_member ? 1 : 0;
         $result = $db->query("SELECT COUNT(*) FROM $table WHERE date='$date' AND text='$value' AND member=$member");
@@ -206,40 +206,40 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
         $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>'$today' AND name='$uid'");
         $personal_bookings = $result ? $result->fetch_row()[0] : 999;
         if ($count >= $limit) {
-            echo("<br />" . __LINE__ );
+            if (DEBUG) {echo("<br />" . __LINE__ );};
             $comment = '<span class="failure">' . __('Bibliotheksbereich ausgebucht') . '</span>';
             $commentType = 2;
         } elseif ($oldvalue == $no_reservation) {
-            echo("<br />" . __LINE__ );
+            if (DEBUG) {echo("<br />" . __LINE__ );};
             // New bookings.
             if ($personal_bookings >= PERSONAL_LIMIT[$group]) {
                 $comment = '<span class="failure">' . __('Persoenliches Buchungslimit erreicht') . '</span>';
                 $commentType = 3;
             } else {
-                echo("<br />" . __LINE__ );
+                if (DEBUG) {echo("<br />" . __LINE__ );};
                 $result = $db->query("INSERT INTO $table (name, member, text, date) VALUES ('$uid',$member,'$value','$date')");
                 $success = $result ? $success_text : $failure_text;
                 $comment = DEBUG ? __('reserviert') . ": $value, $success" : $success;
                 $commentType = 4;
             }
         } else {
-            echo("<br />" . __LINE__ );
+            if (DEBUG) {echo("<br />" . __LINE__ );};
             // Modified booking.
-            echo("<br />" . __LINE__ );
+            if (DEBUG) {echo("<br />" . __LINE__ );};
             if ($personal_bookings > PERSONAL_LIMIT[$group]) {
-                echo("<br />" . __LINE__ );
+                if (DEBUG) {echo("<br />" . __LINE__ );};
                 $comment = '<span class="failure">' . __('Persoenliches Buchungslimit erreicht') . '</span>';
                 $commentType = 3;
             } else {
-                echo("<br />" . __LINE__ );
+                if (DEBUG) {echo("<br />" . __LINE__ );};
                 //$result = $db->query("DELETE FROM $table WHERE name='$uid' AND date='$date'");
                 //$result = $db->query("INSERT INTO $table (name, member, text, date) VALUES ('$uid',$member,'$value','$date')");
-                echo("update $table set text='$value', used='0' where name='$uid' and date='$date'");
+                if (DEBUG) {echo("<br />update $table set text='$value', used='0' where name='$uid' and date='$date'");};
                 $result = $db->query("UPDATE $table set text='$value', used='0' WHERE name='$uid' AND date='$date'");
                 $success = $result ? $success_text : $failure_text;
                 $comment = DEBUG ? __('aktualisiert') . ": $oldvalue -> $value, $success" : $success;
                 $commentType = 0;
-                echo($success);
+                if (DEBUG) {echo($success);};
             }
         }
     }
@@ -316,7 +316,7 @@ function show_database($uid, $lastuid, $is_member)
         $text = 'no';
         $used = '';
         // am gleichen Tag kein Reservieren mehr möglich
-        echo("<br />time: " . $time . " start: " . $start );
+        if (DEBUG) {echo("<br />time: " . $time . " start: " . $start );}
         if ($time < $start) {
             //$disabled = true;
             $is_today = true;
@@ -398,9 +398,9 @@ function show_database($uid, $lastuid, $is_member)
         }
 
         $name = "choice-$day";
-        echo("<br />" . $name );
+        if (DEBUG) {echo("<br />" . $name );};
         $requested = get_parameter($name, '');
-        echo("<br />'". $requested . '"');
+        if (DEBUG) {echo("<br />'". $requested . '"');};
         if ($requested != '') {
         } else {
             if (DEBUG) { echo("<br />" . __LINE__ ); };
@@ -418,7 +418,7 @@ function show_database($uid, $lastuid, $is_member)
             $comment = DEBUG ? __('unveraendert') : '';
         } else {
             // TODO: get new DB values here or do it in some other way, where displaying and updating the db are independent from each other...
-            echo("<br />update_database(" . $uid . ", " . $is_member . ", " . $day . ", " . $text . ", " . $requested . ")<br/>");
+            if (DEBUG) {echo("<br />update_database(" . $uid . ", " . $is_member . ", " . $day . ", " . $text . ", " . $requested . ")<br/>");};
             $aComment = update_database($uid, $is_member, $day, $text, $requested);
             $comment = $aComment[0];
             $commentType = $aComment[1];
