@@ -534,7 +534,7 @@ function show_database($uid, $lastuid, $is_member)
 
         } elseif ($requested == 'left' || $used == '2') {
             // für benutzte beendete Buchung am aktuellen Tag
-            // Die sind schon Status 2
+            // Status 2
             foreach (AREAS as $area => $values) {
                 $id = "$area-$day";
                 $checked = ($text == $area) ? ' checked' : '';
@@ -560,7 +560,6 @@ function show_database($uid, $lastuid, $is_member)
                 // unterscheiden ob ein normaler Eintrag oder ein aktiver Eintrag ist
                 $value=$area;
                 if ($area == $text) {
-                    //$value = "cancel";
                     $checkedClass = ' checked-canceled ';
                     $checkedClassInput = ' class="checked-input-canceled ' . __LINE__ . '" ';
                     $checked = '';
@@ -1003,7 +1002,7 @@ if ($uid == '' || $task == '') {
 <h3>Admin-Funktionen</h3>
 <p>
 <ul>
-<li><a href="./?task=dump" target="_blank">Alle Buchungen ausgeben</a>
+<li><a href="./?task=dump&<?php echo htmlspecialchars(SID); ?>" target="_blank">Alle Buchungen ausgeben</a>
 <li><a href="./?task=day-report" target="_blank">Buchungsübersicht</a>
 <?php
 /*
