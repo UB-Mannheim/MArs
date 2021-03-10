@@ -999,11 +999,37 @@ if ($uid == '' || $task == '') {
     <?php
     if ($master) {
         ?>
+</form>
 <h3>Admin-Funktionen</h3>
 <p>
 <ul>
-<li><a href="./?task=dump" target="_blank">Alle Buchungen ausgeben</a>
-<li><a href="./?task=day-report" target="_blank">Buchungsübersicht</a>
+<li>
+<?php //<a href="./?task=dump" target="_blank">Alle Buchungen ausgeben</a>  
+?>
+<div class="powermail_fieldwrap powermail_fieldwrap_type_submit powermail_fieldwrap_abschicken nolabel">
+            <label for="save" class="powermail_label leer"></label>
+<form id="reservation" method="post"  class="powermail_form powermail_form_reservation nolabel" action="./" target="_blank">
+    <input id="adminfuncAlleBuchungen" name="adminfuncAlleBuchungen" class="powermail_submit" type="submit" value="Alle Buchungen ausgeben">
+    <input id="uid" name="uid" type="hidden" value="<?php echo($uid); ?>" />
+    <input id="password" name="password" type="hidden" value="<?php echo($password); ?>" />
+    <input id="lastuid" name="lastuid" type="hidden" value="<?php echo($lastuid); ?>"/>
+    <input id="task" name="task" type="hidden" value="dump"/>
+</form>
+</div>
+</li>
+<li><?php //<a href="./?task=day-report" target="_blank">Buchungsübersicht</a> 
+?>
+<div class="powermail_fieldwrap powermail_fieldwrap_type_submit powermail_fieldwrap_abschicken nolabel">
+            <label for="save" class="powermail_label leer"></label>
+<form id="reservation" method="post"  class="powermail_form powermail_form_reservation nolabel" action="./" target="_blank">
+    <input id="adminfuncAlleBuchungen" name="adminfuncAlleBuchungen" class="powermail_submit" type="submit" value="Buchungsübersicht">
+    <input id="uid" name="uid" type="hidden" value="<?php echo($uid); ?>" />
+    <input id="password" name="password" type="hidden" value="<?php echo($password); ?>" />
+    <input id="lastuid" name="lastuid" type="hidden" value="<?php echo($lastuid); ?>"/>
+    <input id="task" name="task" type="hidden" value="day-report"/>
+</form>
+</div>
+</li>
 <?php
 /*
 foreach (AREAS as $key => $values) {
@@ -1014,13 +1040,14 @@ foreach (AREAS as $key => $values) {
 </ul>
 </p>
         <?php
-    }
+    } else {
     ?>
 
 </form>
 
     <?=HINTS?>
     <?php
+    }
 }
 
 // Include JS
