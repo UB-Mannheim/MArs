@@ -1002,7 +1002,7 @@ if ($uid == '' || $task == '') {
 <h3>Admin-Funktionen</h3>
 <p>
 <ul>
-<li><a href="./?task=dump&<?php echo htmlspecialchars(SID); ?>" target="_blank">Alle Buchungen ausgeben</a>
+<li><a href="./?task=dump" target="_blank">Alle Buchungen ausgeben</a>
 <li><a href="./?task=day-report" target="_blank">Buchungsübersicht</a>
 <?php
 /*
