@@ -466,7 +466,7 @@ function show_database($uid, $lastuid, $is_member)
                 $checkedClassInput = ($text == $area) ? ' class="checked-input ' . __LINE__ . '" ' : ' ';
 
                 $cTitle = $values['name'];
-                $cTitle = __("Keine Reservierungen fuer den laufenden Tag moeglich");
+                $cTitle = __("Keine weiteren Reservierungen fuer den laufenden Tag moeglich");
 
                 $lineHide = '';
                 $value=$area;
