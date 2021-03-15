@@ -631,12 +631,12 @@ function show_database($uid, $lastuid, $is_member)
                 $checkedClassInput = ($text == $area) ? ' class="checked-input ' . __LINE__ . '" ' : ' ';
 
                 $cTitle = $values['name'];
-                if ($disabled) {
-                    $cTitle = __('Keine Aenderung mehr moeglich');
-                    $disabled_html = ' disabled';
-                } else {
+                #if ($is_today) {
+                #    $cTitle = __('Keine Aenderung mehr moeglich');
+                #    $disabled_html = ' disabled';
+                #} else {
                     $disabled_html = '';
-                }
+                #}
 
                 $line .= '<td class="dateradio ' . $area . $checkedClass . $disabled_html . ' ' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
                          '<input type="checkbox" name="' . $name . '" id="' . $id . '" value="' . $area . '"' . $checked . $disabled_html . ' onclick="onlyOne(this, ' . "'" . $name . "')" . '" ' . $checkedClassInput . '/>' .
