@@ -524,8 +524,8 @@ function show_database($uid, $lastuid, $is_member)
                     $checked = '';
                 };
 
-                $line .= '<td class="dateradio ' . $area . $checkedClass . $disabled_html . ' ' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
-                         '<input type="checkbox" name="' . $name . '" id="' . $id . '" value="' . $value . '"' . $checked . $disabled_html . ' onclick="onlyOne(this, ' . "'" . $name . "')" . '" ' . $checkedClassInput . '/>' .
+                $line .= '<td class="dateradio ' . $area . $checkedClass . ' ' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
+                         '<input type="checkbox" name="' . $name . '" id="' . $id . '" value="' . $value . '"' . $checked . ' onclick="onlyOne(this, ' . "'" . $name . "')" . '" ' . $checkedClassInput . '/>' .
                          '</td>';
             }
             $line .= "<input type=\"hidden\" name=\"cancel-$day\" id=\"cancel-$day\" value=\"cancel\"/>";
