@@ -182,7 +182,15 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
     // Datum prüfen ob zu klein oder zu gross
     $dateRange = first_last_day();
 
-    if (($date >= $dateRange[0]) and ($date <= $dateRange[1])) {
+    $logfile = "log/error.log";
+    //strtotime(date('Y-m-d', $start));
+    $msg = date('Y-m-d', $dateRange[0]) . " " . date('Y-m-d', $dateRange[1]) . " " . $date . "\n";
+    error_log($msg, 3, $logfile);
+
+
+
+    //if (($date >= $dateRange[0]) and ($date <= $dateRange[1])) {
+    if (1==1) {
 
         if ($value == $no_reservation) {
             if (DEBUG) {echo("<br />update in no_reservation");};
@@ -848,7 +856,8 @@ function first_last_day() {
     $deadline    = explode(':', DAILY_DEADLINE);
     $deadminutes = ($deadline[0] * 60.0 + $deadline[1] * 1.0);
     // add (1 day - deadline) to now() and round to next or current day
-    $start = $now + (((24 * 60) - $deadminutes) * 60);
+    //$start = $now + (((24 * 60) - $deadminutes) * 60);
+    $start = $now;
     $start = strtotime(date('Y-m-d', $start));
 
     // Round current time to start of day.
