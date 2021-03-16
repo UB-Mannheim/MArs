@@ -209,9 +209,24 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
 
         $timestamp = time();
         $uhrzeit = date("H:i:s", $timestamp);
-        $date, $oldvalue
-        $msg = "<!-- debug: Uhrzeit " . $uhrzeit . " uid: '" . $uid . "' value: '" . $value . "' group: '" . $group . "' is_member: '" . $is_member . "' date: '" . $date . "' oldvalue: '" . $oldvalue . "' -->\n";
+        $msg = "";
         $logfile = "log/error.log";
+ 
+        $vtype = gettype($value);       
+        if ($value == '') {
+            $msg = "--------------------------------------------\n";            
+            error_log($msg, 3, $logfile);
+            $_temp = $_POST;
+            $_temp['password'] = '';
+            $msg = json_encode($_temp) . "\n";
+            error_log($msg, 3, $logfile);
+        } else {
+              $_temp = $_POST;
+              $_temp['password'] = '';
+              $msg = json_encode($_temp) . "\n";
+              error_log($msg, 3, $logfile);
+        }
+        $msg = "<!-- debug: Uhrzeit " . $uhrzeit . " uid: '" . $uid . "' value: '" . $value . "' group: '" . $group . "' is_member: '" . $is_member . "' date: '" . $date . "' oldvalue: '" . $oldvalue . "' type: " . $vtype . "' -->\n";
         error_log($msg, 3, $logfile);
 
         $today = date('Y-m-d', time());
@@ -328,7 +343,9 @@ function show_database($uid, $lastuid, $is_member)
         $text = 'no';
         $used = '';
         // am gleichen Tag kein Reservieren mehr möglich
-        if (DEBUG) {echo("<br />time: " . $time . " start: " . $start );}
+        if (DEBUG) {
+            echo("<br />time: " . $time . " start: " . $start );
+        }
         if ($time < $start) {
             //$disabled = true;
             $is_today = true;
@@ -539,7 +556,6 @@ function show_database($uid, $lastuid, $is_member)
             $line .= "<input type=\"hidden\" name=\"cancel-$day\" id=\"cancel-$day\" value=\"cancel\"/>";
             // für stornierte Buchung am aktuellen Tag Ende
 
-
         } elseif ($requested == 'left' || $used == '2') {
             // für benutzte beendete Buchung am aktuellen Tag
             // Status 2
@@ -547,13 +563,7 @@ function show_database($uid, $lastuid, $is_member)
                 $id = "$area-$day";
                 $checked = ($text == $area) ? ' checked' : '';
                 $checkedClass = '';
-                //if ($disabled) {
-                // keine weitere Buchung wenn vorher schon gebucht
                 $disabled_html = ' disabled';
-                //} else {
-                //    $disabled_html = '';
-                //}
-
                 if (($commentType != 3) and ($commentType != 2)) {
                     $checkedClass = ($text == $area) ? ' checked ' : ' ';
                 } else {
@@ -583,7 +593,6 @@ function show_database($uid, $lastuid, $is_member)
 
 
         } elseif ($is_today && $used != '' && $requested != 'no') {
-            //if ($used == '0') {
                 /*
                 $area = AREAS[$text];
                 $line = "<input type=\"radio\" name=\"$name\" id=\"$text-$day\" value=\"$text\" checked/>" .
@@ -624,8 +633,6 @@ function show_database($uid, $lastuid, $is_member)
                 // Option um Buchung am aktuellen Tag stornieren zu können Ende
 
         } else {
-
-
             // bisheriges Verhalten
             foreach (AREAS as $area => $values) {
                 $id = "$area-$day";
@@ -638,12 +645,7 @@ function show_database($uid, $lastuid, $is_member)
                 $checkedClassInput = ($text == $area) ? ' class="checked-input ' . __LINE__ . '" ' : ' ';
 
                 $cTitle = $values['name'];
-                #if ($is_today) {
-                #    $cTitle = __('Keine Aenderung mehr moeglich');
-                #    $disabled_html = ' disabled';
-                #} else {
-                    $disabled_html = '';
-                #}
+                $disabled_html = '';
 
                 $line .= '<td class="dateradio ' . $area . $checkedClass . $disabled_html . ' ' . $languageClass . '" title="' . $cTitle . ': ' . date('d.m.', $time) . '">' .
                          '<input type="checkbox" name="' . $name . '" id="' . $id . '" value="' . $area . '"' . $checked . $disabled_html . ' onclick="onlyOne(this, ' . "'" . $name . "')" . '" ' . $checkedClassInput . '/>' .
