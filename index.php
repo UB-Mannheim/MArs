@@ -207,7 +207,13 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
         $group = $is_member ? "member" : "extern";
         $limit = AREAS[$value]['limit'][$group];
 
-        echo("<!-- debug: uid: " . $uid . " value: " . $value . " group: " . $group . " is_member: " . $is_member . -->");
+        $timestamp = time();
+        $uhrzeit = date("H:i:s", $timestamp);
+        $date, $oldvalue
+        $msg = "<!-- debug: Uhrzeit " . $uhrzeit . " uid: '" . $uid . "' value: '" . $value . "' group: '" . $group . "' is_member: '" . $is_member . "' date: '" . $date . "' oldvalue: '" . $oldvalue . "' -->\n";
+        $logfile = "log/error.log";
+        error_log($msg, 3, $logfile);
+
         $today = date('Y-m-d', time());
         if ($url_tstamp) {
             $today = date('Y-m-d', $url_tstamp);
