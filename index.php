@@ -202,7 +202,8 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
             // used booking, user already left library
             #$result = $db->query("UPDATE $table SET used='2' WHERE name='$uid' AND date='$date'");
             #$success = $result ? $success_text : $failure_text;
-            $comment = DEBUG ? "verlassen: $oldvalue, $success" : $success;
+            //$comment = DEBUG ? "verlassen: $oldvalue, $success" : $success;
+            $comment = "";
             $commentType = 6;
         } else {
             if (DEBUG) {echo("<br />" . __LINE__);};
@@ -293,8 +294,6 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
         $_temp['password'] = '';
         $msg = json_encode($_temp) . "\n";
         error_log($msg, 3, $logfile);
-
-        $uid, $is_member, $date, $oldvalue, $value
 
         $msg = "Datum ungueltig: Uhrzeit " . $uhrzeit . " uid: '" . $uid . "' is_member: '" . $is_member . "' date: '" . $date . "' oldvalue: '" . $oldvalue . "' value: '" . $value . "'\n";
         error_log($msg, 3, $logfile);
