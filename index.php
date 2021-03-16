@@ -206,6 +206,8 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
         $count = $result ? $result->fetch_row()[0] : 0;
         $group = $is_member ? "member" : "extern";
         $limit = AREAS[$value]['limit'][$group];
+
+        echo("<!-- debug: uid: " . $uid . " value: " . $value . " group: " . $group . " is_member: " . $is_member . -->");
         $today = date('Y-m-d', time());
         if ($url_tstamp) {
             $today = date('Y-m-d', $url_tstamp);
