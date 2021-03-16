@@ -314,7 +314,7 @@ function show_database($uid, $lastuid, $is_member)
     $i = 0;
 
     for ($time = $first; $time < $last; $time = strtotime("+1 day", $time)) {
-        $is_today = $false;
+        $is_today = false;
         $CommentClass= '';
         $day = date('Y-m-d', $time);
         $text = 'no';
@@ -1004,7 +1004,7 @@ if ($uid == '' || $task == '') {
 <p>
 <ul>
 <li>
-<?php //<a href="./?task=dump" target="_blank">Alle Buchungen ausgeben</a>  
+<?php //<a href="./?task=dump" target="_blank">Alle Buchungen ausgeben</a>
 ?>
 <div class="powermail_fieldwrap powermail_fieldwrap_type_submit powermail_fieldwrap_abschicken nolabel">
             <label for="save" class="powermail_label leer"></label>
@@ -1017,7 +1017,7 @@ if ($uid == '' || $task == '') {
 </form>
 </div>
 </li>
-<li><?php //<a href="./?task=day-report" target="_blank">Buchungsübersicht</a> 
+<li><?php //<a href="./?task=day-report" target="_blank">Buchungsübersicht</a>
 ?>
 <div class="powermail_fieldwrap powermail_fieldwrap_type_submit powermail_fieldwrap_abschicken nolabel">
             <label for="save" class="powermail_label leer"></label>
