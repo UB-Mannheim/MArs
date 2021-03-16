@@ -857,7 +857,7 @@ function first_last_day() {
     // Last day which may be booked (time rounded to start of day).
     $last = $now + 24 * 60 * 60 * MAX_DAYS;
 
-    return(arry($start,$last));
+    return(array($start,$last));
 }
 
 
