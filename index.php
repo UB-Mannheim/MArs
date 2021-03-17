@@ -179,8 +179,8 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
     $success_text = '<span class="success">' . __('Aktion erfolgreich') . '</span>';
     $failure_text = '<span class="failure">' . __('Aktion nicht erfolgreich') . '</span>';
 
-    // Datum prüfen ob zu klein oder zu gross
-    $dateRange = first_last_day();
+        // Datum prüfen ob zu klein oder zu gross
+        $dateRange = first_last_day();
 
     $logfile = "log/error.log";
     //strtotime(date('Y-m-d', $start));
@@ -481,6 +481,23 @@ function show_database($uid, $lastuid, $is_member)
                $requested = get_parameter("left-$day", '');
             }
         };
+        // =========================================================================
+        // ToDo:
+        // wenn $requested leer ist dann müsste eigentlich ein Fehler vorliegen
+        // weil die Daten nicht im Formular enthalten waren die erwartet wurden.
+        // Damit sollte ev. das Formular neu aufgerufen werden.
+        // oder es wird, wenn es der letzte Tag ist ein no-Wert simuliert
+        // =========================================================================
+        if ($requested == '') {
+            $logfile = "log/error.log";
+
+            $msg = __LINE__ . "=== requested == '' ======================================================================\n";
+            error_log($msg, 3, $logfile);
+            $_temp = $_POST;
+            $_temp['password'] = '';
+            $msg = json_encode($_temp) . "\n";
+            error_log($msg, 3, $logfile);
+        }
 
         $comment = '';
         $commentType = 0;
@@ -1021,6 +1038,8 @@ if ($master && $task == 'dump') {
     }
     print("<p>" . __('Sie sind angemeldet als') . " $usertext</p>");
     print("<h3>" . __('Meine Sitzplatzbuchungen') . "</h3>");
+
+
 
     // Show all bookings.
     show_database($uid, $lastuid, $user['is_member']);
