@@ -487,6 +487,7 @@ function show_database($uid, $lastuid, $is_member)
         // weil die Daten nicht im Formular enthalten waren die erwartet wurden.
         // Damit sollte ev. das Formular neu aufgerufen werden.
         // oder es wird, wenn es der letzte Tag ist ein no-Wert simuliert
+        // besser es wird für diesen Tag nicht in update_database verzweigt
         // =========================================================================
         if ($requested == '') {
             $logfile = "log/error.log";
