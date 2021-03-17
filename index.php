@@ -490,13 +490,15 @@ function show_database($uid, $lastuid, $is_member)
         // =========================================================================
         if ($requested == '') {
             $logfile = "log/error.log";
-
-            $msg = __LINE__ . "=== requested == '' ======================================================================\n";
-            error_log($msg, 3, $logfile);
-            $_temp = $_POST;
-            $_temp['password'] = '';
-            $msg = json_encode($_temp) . "\n";
-            error_log($msg, 3, $logfile);
+            $xLogin = get_parameter('login', '');
+            if ($xLogin !== 'Anmelden') {
+                $msg = __LINE__ . "=== requested == '' ======================================================================\n";
+                error_log($msg, 3, $logfile);
+                $_temp = $_POST;
+                $_temp['password'] = '';
+                $msg = json_encode($_temp) . "\n";
+                error_log($msg, 3, $logfile);
+            }
         }
 
         $comment = '';
