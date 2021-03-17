@@ -491,8 +491,7 @@ function show_database($uid, $lastuid, $is_member)
         // =========================================================================
         if ($requested == '') {
             $logfile = "log/error.log";
-            $xLogin = get_parameter('login', '');
-            if ($xLogin !== 'Anmelden') {
+            if (isset($_POST) and !array_key_exists('login', $_POST)) {
                 $msg = __LINE__ . "=== requested == '' ======================================================================\n";
                 error_log($msg, 3, $logfile);
                 $_temp = $_POST;
@@ -1109,8 +1108,6 @@ if ($uid == '' || $task == '') {
 </form>
 <h3>Admin-Funktionen</h3>
 <p>
-<ul>
-<li>
 <?php //<a href="./?task=dump" target="_blank">Alle Buchungen ausgeben</a>
 ?>
 <div class="powermail_fieldwrap powermail_fieldwrap_type_submit powermail_fieldwrap_abschicken nolabel">
@@ -1123,8 +1120,8 @@ if ($uid == '' || $task == '') {
     <input id="task" name="task" type="hidden" value="dump"/>
 </form>
 </div>
-</li>
-<li><?php //<a href="./?task=day-report" target="_blank">Buchungsübersicht</a>
+
+<?php //<a href="./?task=day-report" target="_blank">Buchungsübersicht</a>
 ?>
 <div class="powermail_fieldwrap powermail_fieldwrap_type_submit powermail_fieldwrap_abschicken nolabel">
             <label for="save" class="powermail_label leer"></label>
@@ -1136,7 +1133,7 @@ if ($uid == '' || $task == '') {
     <input id="task" name="task" type="hidden" value="day-report"/>
 </form>
 </div>
-</li>
+
 <?php
 /*
 foreach (AREAS as $key => $values) {
@@ -1144,7 +1141,7 @@ foreach (AREAS as $key => $values) {
 }
 */
 ?>
-</ul>
+
 </p>
         <?php
     } else {
