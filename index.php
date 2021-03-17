@@ -184,9 +184,16 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
 
     $logfile = "log/error.log";
     //strtotime(date('Y-m-d', $start));
-    $msg = date('Y-m-d', $dateRange[0]) . " " . date('Y-m-d', $dateRange[1]) . " " . $date . "\n";
+    $xDate = new DateTime($date);
+    $msg = date('Y-m-d', $dateRange[0]) . " " . date('Y-m-d', $dateRange[1]) . " " . $date . " " . $xDate->getTimestamp() . "\n";
     error_log($msg, 3, $logfile);
 
+    if (($xDate->getTimestamp() >= $dateRange[0]) and ($xDate->getTimestamp() <= $dateRange[1])) {
+        $msg = "Datum im Bereich " . $date . "\n";
+    } else {
+        $msg = "Datum ausserhalb des Bereiches " . $date . "\n";
+    };
+    error_log($msg, 3, $logfile);
 
 
     //if (($date >= $dateRange[0]) and ($date <= $dateRange[1])) {
