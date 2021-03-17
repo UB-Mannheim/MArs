@@ -506,9 +506,11 @@ function show_database($uid, $lastuid, $is_member)
             // TODO: get new DB values here or do it in some other way, where displaying and updating the db are independent from each other...
             if (DEBUG) {echo("<br />update_database(" . $uid . ", " . $is_member . ", " . $day . ", " . $text . ", " . $requested . ")<br/>");};
 
-            $msg = "update_database(" . $uid . ", " . $is_member . ", " . $day . ", " . $text . ", " . $requested . ")\n";
-            $logfile = "log/error.log";
-            error_log($msg, 3, $logfile);
+            if (DEBUG) {
+                $msg = "update_database(" . $uid . ", " . $is_member . ", " . $day . ", " . $text . ", " . $requested . ")\n";
+                $logfile = "log/error.log";
+                error_log($msg, 3, $logfile);
+            };
 
             $aComment = update_database($uid, $is_member, $day, $text, $requested);
             $comment = $aComment[0];
