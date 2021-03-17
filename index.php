@@ -1029,7 +1029,7 @@ if ($master && $task == 'dump') {
             $usertext .= "<br/>$key: $value";
         }
     }
-    print("<p>" . __('Sie sind angemeldet als') . " $usertext</p>");
+    print("<p>" . __('Sie sind angemeldet als') . " $usertext (". $user['id'] . ")</p>");
     print("<h3>" . __('Meine Sitzplatzbuchungen') . "</h3>");
 
 
