@@ -179,122 +179,126 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
     $success_text = '<span class="success">' . __('Aktion erfolgreich') . '</span>';
     $failure_text = '<span class="failure">' . __('Aktion nicht erfolgreich') . '</span>';
 
-        // Datum prüfen ob zu klein oder zu gross
-        $dateRange = first_last_day();
-
     $logfile = "log/error.log";
-    //strtotime(date('Y-m-d', $start));
+
+    // Get Range of Date
+    $dateRange = first_last_day();
+
+    // check Date in Range?
     $xDate = new DateTime($date);
-    $msg = date('Y-m-d', $dateRange[0]) . " " . date('Y-m-d', $dateRange[1]) . " " . $date . " " . $xDate->getTimestamp() . "\n";
-    error_log($msg, 3, $logfile);
-
     if (($xDate->getTimestamp() >= $dateRange[0]) and ($xDate->getTimestamp() <= $dateRange[1])) {
-        $msg = "Datum im Bereich " . $date . "\n";
-    } else {
-        $msg = "Datum ausserhalb des Bereiches " . $date . "\n";
-    };
-    error_log($msg, 3, $logfile);
+        // Date in Range
 
-
-    if ($value == $no_reservation) {
-        if (DEBUG) {echo("<br />update in no_reservation");};
-        // Delete booking.
-        $result = $db->query("DELETE FROM $table WHERE name='$uid' AND date='$date'");
-        $success = $result ? $success_text : $failure_text;
-        $comment = DEBUG ? __('geloescht') . ": $oldvalue, $success" : $success;
-        $commentType = 1;
-    } elseif ($value == "cancel") {
-        if (DEBUG) {echo("<br />update in cancel");};
-        // Delete booking.
-        $result = $db->query("UPDATE $table SET used='3' WHERE name='$uid' AND date='$date'");
-        $success = $result ? $success_text : $failure_text;
-        $comment = DEBUG ? __('storniert') . ": $oldvalue, $success" : $success;
-        $commentType = 5;
-    } elseif ($value == "left") {
-        // used booking, user already left library
-        #$result = $db->query("UPDATE $table SET used='2' WHERE name='$uid' AND date='$date'");
-        #$success = $result ? $success_text : $failure_text;
-        //$comment = DEBUG ? "verlassen: $oldvalue, $success" : $success;
-        $comment = "";
-        $commentType = 6;
-    } elseif ($value == "") {
-        // unset value
-        $comment = "";
-        $commentType = 99;
-    } else {
-        if (DEBUG) {echo("<br />" . __LINE__);};
-        // Limit bookings.
-        $member = $is_member ? 1 : 0;
-        $result = $db->query("SELECT COUNT(*) FROM $table WHERE date='$date' AND text='$value' and used IN ('0','1') AND member=$member");
-        $count = $result ? $result->fetch_row()[0] : 0;
-        $group = $is_member ? "member" : "extern";
-        $limit = AREAS[$value]['limit'][$group];
-
-        $timestamp = time();
-        $uhrzeit = date("H:i:s", $timestamp);
-        $msg = "";
-        $logfile = "log/error.log";
-
-        $vtype = gettype($value);
-        if ($value == '') {
-            $msg = "--------------------------------------------\n";
-            error_log($msg, 3, $logfile);
-            $_temp = $_POST;
-            $_temp['password'] = '';
-            $msg = json_encode($_temp) . "\n";
-            error_log($msg, 3, $logfile);
+        if ($value == $no_reservation) {
+            if (DEBUG) {echo("<br />update in no_reservation");};
+            // Delete booking.
+            $result = $db->query("DELETE FROM $table WHERE name='$uid' AND date='$date'");
+            $success = $result ? $success_text : $failure_text;
+            $comment = DEBUG ? __('geloescht') . ": $oldvalue, $success" : $success;
+            $commentType = 1;
+        } elseif ($value == "cancel") {
+            if (DEBUG) {echo("<br />update in cancel");};
+            // Delete booking.
+            $result = $db->query("UPDATE $table SET used='3' WHERE name='$uid' AND date='$date'");
+            $success = $result ? $success_text : $failure_text;
+            $comment = DEBUG ? __('storniert') . ": $oldvalue, $success" : $success;
+            $commentType = 5;
+        } elseif ($value == "left") {
+            // used booking, user already left library
+            #$result = $db->query("UPDATE $table SET used='2' WHERE name='$uid' AND date='$date'");
+            #$success = $result ? $success_text : $failure_text;
+            //$comment = DEBUG ? "verlassen: $oldvalue, $success" : $success;
+            $comment = "";
+            $commentType = 6;
+        } elseif ($value == "") {
+            // unset value
+            $comment = "";
+            $commentType = 99;
         } else {
-              $_temp = $_POST;
-              $_temp['password'] = '';
-              $msg = json_encode($_temp) . "\n";
-              error_log($msg, 3, $logfile);
-        }
-        $msg = "<!-- debug: Uhrzeit " . $uhrzeit . " uid: '" . $uid . "' value: '" . $value . "' group: '" . $group . "' is_member: '" . $is_member . "' date: '" . $date . "' oldvalue: '" . $oldvalue . "' type: '" . $vtype . "' -->\n";
-        error_log($msg, 3, $logfile);
+            if (DEBUG) {echo("<br />" . __LINE__);};
+            // Limit bookings.
+            $member = $is_member ? 1 : 0;
+            $result = $db->query("SELECT COUNT(*) FROM $table WHERE date='$date' AND text='$value' and used IN ('0','1') AND member=$member");
+            $count = $result ? $result->fetch_row()[0] : 0;
+            $group = $is_member ? "member" : "extern";
+            $limit = AREAS[$value]['limit'][$group];
 
-        $today = date('Y-m-d', time());
-        if ($url_tstamp) {
-            $today = date('Y-m-d', $url_tstamp);
-        }
-        $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>'$today' and used IN ('0','1') AND name='$uid'");
-        $personal_bookings = $result ? $result->fetch_row()[0] : 999;
-        if ($count >= $limit) {
-            if (DEBUG) {echo("<br />" . __LINE__ );};
-            $comment = '<span class="failure">' . __('Bibliotheksbereich ausgebucht') . '</span>';
-            $commentType = 2;
-        } elseif ($oldvalue == $no_reservation) {
-            if (DEBUG) {echo("<br />" . __LINE__ );};
-            // New bookings.
-            if ($personal_bookings >= PERSONAL_LIMIT[$group]) {
-                $comment = '<span class="failure">' . __('Persoenliches Buchungslimit erreicht') . '</span>';
-                $commentType = 3;
+            $timestamp = time();
+            $uhrzeit = date("H:i:s", $timestamp);
+            $msg = "";
+            $logfile = "log/error.log";
+
+            $vtype = gettype($value);
+            if ($value == '') {
+                $msg = "--------------------------------------------\n";
+                error_log($msg, 3, $logfile);
+                $_temp = $_POST;
+                $_temp['password'] = '';
+                $msg = json_encode($_temp) . "\n";
+                error_log($msg, 3, $logfile);
             } else {
-                if (DEBUG) {echo("<br />" . __LINE__ );};
-                $result = $db->query("INSERT INTO $table (name, member, text, date) VALUES ('$uid',$member,'$value','$date')");
-                $success = $result ? $success_text : $failure_text;
-                $comment = DEBUG ? __('reserviert') . ": $value, $success" : $success;
-                $commentType = 4;
+                if (DEBUG) {
+                    $_temp = $_POST;
+                    $_temp['password'] = '';
+                    $msg = json_encode($_temp) . "\n";
+                    error_log($msg, 3, $logfile);
+                };
             }
-        } else {
-            if (DEBUG) {echo("<br />" . __LINE__ );};
-            // Modified booking.
-            if (DEBUG) {echo("<br />" . __LINE__ );};
-            if ($personal_bookings > PERSONAL_LIMIT[$group]) {
+            if (DEBUG) {
+                $msg = "<!-- debug: Uhrzeit " . $uhrzeit . " uid: '" . $uid . "' value: '" . $value . "' group: '" . $group . "' is_member: '" . $is_member . "' date: '" . $date . "' oldvalue: '" . $oldvalue . "' type: '" . $vtype . "' -->\n";
+                error_log($msg, 3, $logfile);
+            };
+
+            $today = date('Y-m-d', time());
+            if ($url_tstamp) {
+                $today = date('Y-m-d', $url_tstamp);
+            }
+            $result = $db->query("SELECT COUNT(*) FROM $table WHERE date>'$today' and used IN ('0','1') AND name='$uid'");
+            $personal_bookings = $result ? $result->fetch_row()[0] : 999;
+            if ($count >= $limit) {
                 if (DEBUG) {echo("<br />" . __LINE__ );};
-                $comment = '<span class="failure">' . __('Persoenliches Buchungslimit erreicht') . '</span>';
-                $commentType = 3;
+                $comment = '<span class="failure">' . __('Bibliotheksbereich ausgebucht') . '</span>';
+                $commentType = 2;
+            } elseif ($oldvalue == $no_reservation) {
+                if (DEBUG) {echo("<br />" . __LINE__ );};
+                // New bookings.
+                if ($personal_bookings >= PERSONAL_LIMIT[$group]) {
+                    $comment = '<span class="failure">' . __('Persoenliches Buchungslimit erreicht') . '</span>';
+                    $commentType = 3;
+                } else {
+                    if (DEBUG) {echo("<br />" . __LINE__ );};
+                    $result = $db->query("INSERT INTO $table (name, member, text, date) VALUES ('$uid',$member,'$value','$date')");
+                    $success = $result ? $success_text : $failure_text;
+                    $comment = DEBUG ? __('reserviert') . ": $value, $success" : $success;
+                    $commentType = 4;
+                }
             } else {
                 if (DEBUG) {echo("<br />" . __LINE__ );};
-                if (DEBUG) {echo("<br />update $table set text='$value', used='0' where name='$uid' and date='$date'");};
-                $result = $db->query("UPDATE $table set text='$value', used='0' WHERE name='$uid' AND date='$date'");
-                $success = $result ? $success_text : $failure_text;
-                $comment = DEBUG ? __('aktualisiert') . ": $oldvalue -> $value, $success" : $success;
-                $commentType = 0;
-                if (DEBUG) {echo($success);};
+                // Modified booking.
+                if (DEBUG) {echo("<br />" . __LINE__ );};
+                if ($personal_bookings > PERSONAL_LIMIT[$group]) {
+                    if (DEBUG) {echo("<br />" . __LINE__ );};
+                    $comment = '<span class="failure">' . __('Persoenliches Buchungslimit erreicht') . '</span>';
+                    $commentType = 3;
+                } else {
+                    if (DEBUG) {echo("<br />" . __LINE__ );};
+                    if (DEBUG) {echo("<br />update $table set text='$value', used='0' where name='$uid' and date='$date'");};
+                    $result = $db->query("UPDATE $table set text='$value', used='0' WHERE name='$uid' AND date='$date'");
+                    $success = $result ? $success_text : $failure_text;
+                    $comment = DEBUG ? __('aktualisiert') . ": $oldvalue -> $value, $success" : $success;
+                    $commentType = 0;
+                    if (DEBUG) {echo($success);};
+                };
             };
         };
+        $db->close();
+    } else {
+        $msg = "Datum ausserhalb des Bereiches " . $date . "\n";
+        error_log($msg, 3, $logfile);
+
+        $comment = "";
+        $commentType = 98;
     };
-    $db->close();
 
     return array($comment,$commentType);
 }
@@ -464,27 +468,29 @@ function show_database($uid, $lastuid, $is_member)
                $requested = get_parameter("left-$day", '');
             }
         };
-        // =========================================================================
-        // ToDo:
-        // wenn $requested leer ist dann müsste eigentlich ein Fehler vorliegen
-        // weil die Daten nicht im Formular enthalten waren die erwartet wurden.
-        // Damit sollte ev. das Formular neu aufgerufen werden.
-        // oder es wird, wenn es der letzte Tag ist ein no-Wert simuliert
-        // besser es wird für diesen Tag nicht in update_database verzweigt
-        // =========================================================================
-        if ($requested == '') {
-            $logfile = "log/error.log";
-            if (isset($_POST) and !array_key_exists('login', $_POST)) {
-                $msg = __LINE__ . "=== requested == '' ======================================================================\n";
-                error_log($msg, 3, $logfile);
-                $_temp = $_POST;
-                $_temp['password'] = '';
-                $msg = json_encode($_temp) . "\n";
-                error_log($msg, 3, $logfile);
+        if (DEBUG) {
+            // =========================================================================
+            // ToDo:
+            // wenn $requested leer ist dann müsste eigentlich ein Fehler vorliegen
+            // weil die Daten nicht im Formular enthalten waren die erwartet wurden.
+            // Damit sollte ev. das Formular neu aufgerufen werden.
+            // oder es wird, wenn es der letzte Tag ist ein no-Wert simuliert
+            // besser es wird für diesen Tag nicht in update_database verzweigt
+            // =========================================================================
+            if ($requested == '') {
+                $logfile = "log/error.log";
+                if (isset($_POST) and !array_key_exists('login', $_POST)) {
+                    $msg = __LINE__ . "=== requested == '' ======================================================================\n";
+                    error_log($msg, 3, $logfile);
+                    $_temp = $_POST;
+                    $_temp['password'] = '';
+                    $msg = json_encode($_temp) . "\n";
+                    error_log($msg, 3, $logfile);
 
-                //$lCallUpdate = false;
+                    //$lCallUpdate = false;
+                }
             }
-        }
+        };
 
         $comment = '';
         $commentType = 0;
