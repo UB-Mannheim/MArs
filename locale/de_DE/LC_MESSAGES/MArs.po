@@ -118,11 +118,8 @@ msgid "Die Anmeldedaten sind ungueltig. Bitte pruefen Sie Uni-ID und Passwort"
 msgstr "Die Anmeldedaten sind ungültig. Bitte prüfen Sie Uni-ID und Passwort"
 
 #: ../index.php:1045
-msgid ""
-"Informieren Sie mich bitte per E-Mail ueber meine aktuellen "
-"Sitzplatzbuchungen"
-msgstr ""
-"Informieren Sie mich bitte per E-Mail über meine aktuellen Sitzplatzbuchungen"
+msgid "Informieren Sie mich bitte per E-Mail ueber meine aktuellen Sitzplatzbuchungen"
+msgstr "Informieren Sie mich bitte per E-Mail über meine aktuellen Sitzplatzbuchungen"
 
 #: ../index.php:1050
 msgid "Eingaben absenden"
@@ -146,12 +143,8 @@ msgid "UB Mannheim - Keine Sitzplatzbuchungen"
 msgstr "UB Mannheim - Keine Sitzplatzbuchungen"
 
 #: ../local/mail.php:18
-msgid ""
-"fuer Ihre Uni-ID sind keine Sitzplatzbuchungen in den Bibliotheksbereichen "
-"der UB Mannheim angelegt"
-msgstr ""
-"für Ihre Uni-ID sind keine Sitzplatzbuchungen in den Bibliotheksbereichen "
-"der UB Mannheim angelegt"
+msgid "fuer Ihre Uni-ID sind keine Sitzplatzbuchungen in den Bibliotheksbereichen der UB Mannheim angelegt"
+msgstr "für Ihre Uni-ID sind keine Sitzplatzbuchungen in den Bibliotheksbereichen der UB Mannheim angelegt"
 
 #: ../local/mail.php:20
 msgid "UB Mannheim - Sitzplatzbuchungen"
@@ -171,12 +164,8 @@ msgid "Bibliotheksbereich"
 msgstr "Bibliotheksbereich"
 
 #: ../local/mail.php:22
-msgid ""
-"Informieren Sie sich vor Ihrem Besuch bitte ueber die Hygieneregeln in den "
-"Bibliotheksbereichen"
-msgstr ""
-"Informieren Sie sich vor Ihrem Besuch bitte über die Hygieneregeln in den "
-"Bibliotheksbereichen"
+msgid "Informieren Sie sich vor Ihrem Besuch bitte ueber die Hygieneregeln in den Bibliotheksbereichen"
+msgstr "Informieren Sie sich vor Ihrem Besuch bitte über die Hygieneregeln in den Bibliotheksbereichen"
 
 #: ../local/mail.php:32
 msgid "Verwalten Sie Ihre Sitzplatzbuchungen hier"
@@ -201,6 +190,9 @@ msgstr "Sehr geehrte Frau"
 #: ../local/mail.php:47
 msgid "Sehr geehrte/r"
 msgstr "Sehr geehrte/r"
+
+msgid "Diese Email gilt nicht als Nachweis Ihrer Buchung für den Einlass in die Bibliothek, da Sie Ihre Buchungen fortlaufend anpassen können."
+msgstr "Diese Email gilt nicht als Nachweis Ihrer Buchung für den Einlass in die Bibliothek, da Sie Ihre Buchungen fortlaufend anpassen können."
 
 #~ msgid "Keine Reservierungen fuer den laufenden Tag moeglich"
 #~ msgstr "Keine Reservierungen für den laufenden Tag möglich"

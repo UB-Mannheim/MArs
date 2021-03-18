@@ -118,9 +118,7 @@ msgid "Die Anmeldedaten sind ungueltig. Bitte pruefen Sie Uni-ID und Passwort"
 msgstr "The login details are invalid. Please check your Uni-ID and password"
 
 #: ../index.php:1045
-msgid ""
-"Informieren Sie mich bitte per E-Mail ueber meine aktuellen "
-"Sitzplatzbuchungen"
+msgid "Informieren Sie mich bitte per E-Mail ueber meine aktuellen Sitzplatzbuchungen"
 msgstr "Please inform me by e-mail about my current bookings"
 
 #: ../index.php:1050
@@ -145,12 +143,8 @@ msgid "UB Mannheim - Keine Sitzplatzbuchungen"
 msgstr "UL Mannheim - No seat reservations"
 
 #: ../local/mail.php:18
-msgid ""
-"fuer Ihre Uni-ID sind keine Sitzplatzbuchungen in den Bibliotheksbereichen "
-"der UB Mannheim angelegt"
-msgstr ""
-"there are no seat bookings for your Uni-ID in the library areas of the UL "
-"Mannheim"
+msgid "fuer Ihre Uni-ID sind keine Sitzplatzbuchungen in den Bibliotheksbereichen der UB Mannheim angelegt"
+msgstr "there are no seat bookings for your Uni-ID in the library areas of the UL Mannheim"
 
 #: ../local/mail.php:20
 msgid "UB Mannheim - Sitzplatzbuchungen"
@@ -170,11 +164,8 @@ msgid "Bibliotheksbereich"
 msgstr "Library area"
 
 #: ../local/mail.php:22
-msgid ""
-"Informieren Sie sich vor Ihrem Besuch bitte ueber die Hygieneregeln in den "
-"Bibliotheksbereichen"
-msgstr ""
-"Please inform yourself about the hygiene regulations before your visit"
+msgid "Informieren Sie sich vor Ihrem Besuch bitte ueber die Hygieneregeln in den Bibliotheksbereichen"
+msgstr "Please inform yourself about the hygiene regulations before your visit"
 
 #: ../local/mail.php:32
 msgid "Verwalten Sie Ihre Sitzplatzbuchungen hier"
@@ -199,6 +190,9 @@ msgstr "Dear Mrs"
 #: ../local/mail.php:47
 msgid "Sehr geehrte/r"
 msgstr "Dear"
+
+msgid "Diese Email gilt nicht als Nachweis Ihrer Buchung für den Einlass in die Bibliothek, da Sie Ihre Buchungen fortlaufend anpassen können."
+msgstr "This message does not serve as a proof of your booking at the library entrance since you can continuously alter your bookings."
 
 #~ msgid "Keine Reservierungen fuer den laufenden Tag moeglich"
 #~ msgstr "No reservations possible for the current day"
