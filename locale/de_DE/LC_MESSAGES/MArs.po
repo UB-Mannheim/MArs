@@ -191,7 +191,7 @@ msgstr "Sehr geehrte Frau"
 msgid "Sehr geehrte/r"
 msgstr "Sehr geehrte/r"
 
-msgid "Diese Email gilt nicht als Nachweis Ihrer Buchung für den Einlass in die Bibliothek, da Sie Ihre Buchungen fortlaufend anpassen können."
+msgid "Diese Email gilt nicht als Nachweis Ihrer Buchung fuer den Einlass in die Bibliothek, da Sie Ihre Buchungen fortlaufend anpassen koennen."
 msgstr "Diese Email gilt nicht als Nachweis Ihrer Buchung für den Einlass in die Bibliothek, da Sie Ihre Buchungen fortlaufend anpassen können."
 
 #~ msgid "Keine Reservierungen fuer den laufenden Tag moeglich"
