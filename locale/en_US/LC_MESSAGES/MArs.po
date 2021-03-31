@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-16 20:34+0100\n"
+"POT-Creation-Date: 2021-03-31 14:08+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Bernd Fallert <bernd.fallert@bib.uni-mannheim.de>\n"
 "Language-Team: \n"
@@ -20,112 +20,110 @@ msgstr "Action successful"
 msgid "Aktion nicht erfolgreich"
 msgstr "Action unsuccessful"
 
-#: ../index.php:192
+#: ../index.php:197
 msgid "geloescht"
 msgstr "deleted"
 
-#: ../index.php:199
+#: ../index.php:204
 msgid "storniert"
 msgstr "canceled"
 
-#: ../index.php:246
+#: ../index.php:260
 msgid "Bibliotheksbereich ausgebucht"
 msgstr "Library area fully booked"
 
-#: ../index.php:252 ../index.php:267
+#: ../index.php:266 ../index.php:281
 msgid "Persoenliches Buchungslimit erreicht"
 msgstr "Personal booking limit reached"
 
-#: ../index.php:258
+#: ../index.php:272
 msgid "reserviert"
 msgstr "reserved"
 
-#: ../index.php:274
+#: ../index.php:288
 msgid "aktualisiert"
 msgstr "updated"
 
-#: ../index.php:282
-msgid "Datum ausserhalb Gueltigkeitsbereiches"
-msgstr "Date outside the validity range"
-
-#: ../index.php:420 ../index.php:441
+#: ../index.php:421 ../index.php:442
 msgid "geschlossen"
 msgstr "closed"
 
-#: ../index.php:476
+#: ../index.php:500
 msgid "aenderbar"
 msgstr "changeable"
 
-#: ../index.php:478 ../index.php:480
+#: ../index.php:502 ../index.php:504
 msgid "unveraendert"
 msgstr "unchanged"
 
-#: ../index.php:527 ../index.php:608
+#: ../index.php:553 ../index.php:634
 msgid "Keine weiteren Reservierungen fuer den laufenden Tag moeglich"
 msgstr "No further reservations possible for the current day"
 
-#: ../index.php:535
+#: ../index.php:561
 msgid "Buchung wahrgenommen"
 msgstr "booking used"
 
-#: ../index.php:656
+#: ../index.php:682
 msgid "Buchung stornieren"
 msgstr "cancel booking"
 
-#: ../index.php:735
+#: ../index.php:761
 #, php-format
 msgid "Noch %s von %s Buchungen moeglich"
 msgstr "Still %s of %s bookings possible"
 
-#: ../index.php:737
+#: ../index.php:763
 msgid "Keine Buchungen mehr moeglich"
 msgstr "No more bookings possible"
 
-#: ../index.php:895
+#: ../index.php:922
 msgid "UB Sitzplatzbuchung"
 msgstr "UL Seat Booking"
 
-#: ../index.php:913
+#: ../index.php:940
 msgid "Benutzerdaten"
 msgstr "Personal data"
 
-#: ../index.php:923 ../index.php:937
+#: ../index.php:950 ../index.php:964
 msgid "Pflichtfeld"
 msgstr "Mandatory field"
 
-#: ../index.php:933
+#: ../index.php:960
 msgid "Passwort"
 msgstr "Password"
 
-#: ../index.php:956 ../index.php:957
+#: ../index.php:983 ../index.php:984
 msgid "Abmelden"
 msgstr "Logout"
 
-#: ../index.php:1007
+#: ../index.php:1034
 msgid "Sie sind angemeldet als"
 msgstr "You are logged in as"
 
-#: ../index.php:1008
+#: ../index.php:1035
 msgid "Meine Sitzplatzbuchungen"
 msgstr "My seat bookings"
 
-#: ../index.php:1018
+#: ../index.php:1047
 msgid "Bitte ergaenzen Sie Ihre Anmeldedaten um Ihr Passwort"
 msgstr "Please add your password to your login data"
 
-#: ../index.php:1020
+#: ../index.php:1049
 msgid "Die Anmeldedaten sind ungueltig. Bitte pruefen Sie Uni-ID und Passwort"
 msgstr "The login details are invalid. Please check your Uni-ID and password"
 
-#: ../index.php:1045
-msgid "Informieren Sie mich bitte per E-Mail ueber meine aktuellen Sitzplatzbuchungen"
+#: ../index.php:1074
+msgid ""
+"Informieren Sie mich bitte per E-Mail ueber meine aktuellen "
+"Sitzplatzbuchungen"
 msgstr "Please inform me by e-mail about my current bookings"
 
-#: ../index.php:1050
+#: ../index.php:1079
 msgid "Eingaben absenden"
 msgstr "Submit entries"
 
-#: ../index.php:1061
+#: ../index.php:1090
 msgid "Anmelden"
 msgstr "Login"
 
@@ -143,8 +141,12 @@ msgid "UB Mannheim - Keine Sitzplatzbuchungen"
 msgstr "UL Mannheim - No seat reservations"
 
 #: ../local/mail.php:18
-msgid "fuer Ihre Uni-ID sind keine Sitzplatzbuchungen in den Bibliotheksbereichen der UB Mannheim angelegt"
-msgstr "there are no seat bookings for your Uni-ID in the library areas of the UL Mannheim"
+msgid ""
+"fuer Ihre Uni-ID sind keine Sitzplatzbuchungen in den Bibliotheksbereichen "
+"der UB Mannheim angelegt"
+msgstr ""
+"there are no seat bookings for your Uni-ID in the library areas of the UL "
+"Mannheim"
 
 #: ../local/mail.php:20
 msgid "UB Mannheim - Sitzplatzbuchungen"
@@ -164,35 +166,51 @@ msgid "Bibliotheksbereich"
 msgstr "Library area"
 
 #: ../local/mail.php:22
-msgid "Informieren Sie sich vor Ihrem Besuch bitte ueber die Hygieneregeln in den Bibliotheksbereichen"
+msgid ""
+"Informieren Sie sich vor Ihrem Besuch bitte ueber die Hygieneregeln in den "
+"Bibliotheksbereichen"
 msgstr "Please inform yourself about the hygiene regulations before your visit"
 
 #: ../local/mail.php:32
 msgid "Verwalten Sie Ihre Sitzplatzbuchungen hier"
 msgstr "Manage your seat bookings here"
 
-#: ../local/mail.php:38
+#: ../local/mail.php:39
+msgid "Stornieren Sie Sitzplatzbuchungen"
+msgstr ""
+"Please cancel your seat reservation if you are unable to attend. This is the "
+"only way we can ensure that as many people as possible can use the subject "
+"libraries"
+
+#: ../local/mail.php:41
 msgid "Mit freundlichen Gruessen"
 msgstr "Sincerely your"
 
-#: ../local/mail.php:38
+#: ../local/mail.php:41
 msgid "Ihre Universitaetsbibliothek"
 msgstr "your university library"
 
-#: ../local/mail.php:43
+#: ../local/mail.php:46
 msgid "Sehr geehrter Herr"
 msgstr "Dear sir"
 
-#: ../local/mail.php:45
+#: ../local/mail.php:48
 msgid "Sehr geehrte Frau"
 msgstr "Dear Mrs"
 
-#: ../local/mail.php:47
+#: ../local/mail.php:50
 msgid "Sehr geehrte/r"
 msgstr "Dear"
 
-msgid "Diese Email gilt nicht als Nachweis Ihrer Buchung fuer den Einlass in die Bibliothek, da Sie Ihre Buchungen fortlaufend anpassen koennen."
-msgstr "This message does not serve as a proof of your booking at the library entrance since you can continuously alter your bookings."
+#~ msgid "Datum ausserhalb Gueltigkeitsbereiches"
+#~ msgstr "Date outside the validity range"
+
+#~ msgid ""
+#~ "Diese Email gilt nicht als Nachweis Ihrer Buchung fuer den Einlass in die "
+#~ "Bibliothek, da Sie Ihre Buchungen fortlaufend anpassen koennen."
+#~ msgstr ""
+#~ "This message does not serve as a proof of your booking at the library "
+#~ "entrance since you can continuously alter your bookings."
 
 #~ msgid "Keine Reservierungen fuer den laufenden Tag moeglich"
 #~ msgstr "No reservations possible for the current day"

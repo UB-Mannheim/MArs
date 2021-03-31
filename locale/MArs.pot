@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-03-16 20:34+0100\n"
+"POT-Creation-Date: 2021-03-31 14:08+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -25,114 +25,110 @@ msgstr ""
 msgid "Aktion nicht erfolgreich"
 msgstr ""
 
-#: ../index.php:192
+#: ../index.php:197
 msgid "geloescht"
 msgstr ""
 
-#: ../index.php:199
+#: ../index.php:204
 msgid "storniert"
 msgstr ""
 
-#: ../index.php:246
+#: ../index.php:260
 msgid "Bibliotheksbereich ausgebucht"
 msgstr ""
 
-#: ../index.php:252 ../index.php:267
+#: ../index.php:266 ../index.php:281
 msgid "Persoenliches Buchungslimit erreicht"
 msgstr ""
 
-#: ../index.php:258
+#: ../index.php:272
 msgid "reserviert"
 msgstr ""
 
-#: ../index.php:274
+#: ../index.php:288
 msgid "aktualisiert"
 msgstr ""
 
-#: ../index.php:282
-msgid "Datum ausserhalb Gueltigkeitsbereiches"
-msgstr ""
-
-#: ../index.php:420 ../index.php:441
+#: ../index.php:421 ../index.php:442
 msgid "geschlossen"
 msgstr ""
 
-#: ../index.php:476
+#: ../index.php:500
 msgid "aenderbar"
 msgstr ""
 
-#: ../index.php:478 ../index.php:480
+#: ../index.php:502 ../index.php:504
 msgid "unveraendert"
 msgstr ""
 
-#: ../index.php:527 ../index.php:608
+#: ../index.php:553 ../index.php:634
 msgid "Keine weiteren Reservierungen fuer den laufenden Tag moeglich"
 msgstr ""
 
-#: ../index.php:535
+#: ../index.php:561
 msgid "Buchung wahrgenommen"
 msgstr ""
 
-#: ../index.php:656
+#: ../index.php:682
 msgid "Buchung stornieren"
 msgstr ""
 
-#: ../index.php:735
+#: ../index.php:761
 #, php-format
 msgid "Noch %s von %s Buchungen moeglich"
 msgstr ""
 
-#: ../index.php:737
+#: ../index.php:763
 msgid "Keine Buchungen mehr moeglich"
 msgstr ""
 
-#: ../index.php:895
+#: ../index.php:922
 msgid "UB Sitzplatzbuchung"
 msgstr ""
 
-#: ../index.php:913
+#: ../index.php:940
 msgid "Benutzerdaten"
 msgstr ""
 
-#: ../index.php:923 ../index.php:937
+#: ../index.php:950 ../index.php:964
 msgid "Pflichtfeld"
 msgstr ""
 
-#: ../index.php:933
+#: ../index.php:960
 msgid "Passwort"
 msgstr ""
 
-#: ../index.php:956 ../index.php:957
+#: ../index.php:983 ../index.php:984
 msgid "Abmelden"
 msgstr ""
 
-#: ../index.php:1007
+#: ../index.php:1034
 msgid "Sie sind angemeldet als"
 msgstr ""
 
-#: ../index.php:1008
+#: ../index.php:1035
 msgid "Meine Sitzplatzbuchungen"
 msgstr ""
 
-#: ../index.php:1018
+#: ../index.php:1047
 msgid "Bitte ergaenzen Sie Ihre Anmeldedaten um Ihr Passwort"
 msgstr ""
 
-#: ../index.php:1020
+#: ../index.php:1049
 msgid "Die Anmeldedaten sind ungueltig. Bitte pruefen Sie Uni-ID und Passwort"
 msgstr ""
 
-#: ../index.php:1045
+#: ../index.php:1074
 msgid ""
 "Informieren Sie mich bitte per E-Mail ueber meine aktuellen "
 "Sitzplatzbuchungen"
 msgstr ""
 
-#: ../index.php:1050
+#: ../index.php:1079
 msgid "Eingaben absenden"
 msgstr ""
 
-#: ../index.php:1061
+#: ../index.php:1090
 msgid "Anmelden"
 msgstr ""
 
@@ -182,22 +178,26 @@ msgstr ""
 msgid "Verwalten Sie Ihre Sitzplatzbuchungen hier"
 msgstr ""
 
-#: ../local/mail.php:38
+#: ../local/mail.php:39
+msgid "Stornieren Sie Sitzplatzbuchungen"
+msgstr ""
+
+#: ../local/mail.php:41
 msgid "Mit freundlichen Gruessen"
 msgstr ""
 
-#: ../local/mail.php:38
+#: ../local/mail.php:41
 msgid "Ihre Universitaetsbibliothek"
 msgstr ""
 
-#: ../local/mail.php:43
+#: ../local/mail.php:46
 msgid "Sehr geehrter Herr"
 msgstr ""
 
-#: ../local/mail.php:45
+#: ../local/mail.php:48
 msgid "Sehr geehrte Frau"
 msgstr ""
 
-#: ../local/mail.php:47
+#: ../local/mail.php:50
 msgid "Sehr geehrte/r"
 msgstr ""
