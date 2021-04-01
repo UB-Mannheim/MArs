@@ -168,7 +168,7 @@ function preset_database()
 }
 
 // Add, modify or delete bookings in the database.
-function update_database($uid, $is_member, $date, $oldvalue, $value)
+function update_database($uid, $is_member, $date, $oldvalue, $value, $used)
 {
     global $url_tstamp;
     $db = get_database();
@@ -184,25 +184,36 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
     // Get Range of Date
     $dateRange = first_last_day();
 
+    $now = time();
+
     // check Date in Range?
     $xDate = new DateTime($date);
     if (($xDate->getTimestamp() >= $dateRange[0]) and ($xDate->getTimestamp() <= $dateRange[1])) {
         // Date in Range
-
         if ($value == $no_reservation) {
             if (DEBUG) {echo("<br />update in no_reservation");};
             // Delete booking.
-            $result = $db->query("DELETE FROM $table WHERE name='$uid' AND date='$date'");
-            $success = $result ? $success_text : $failure_text;
-            $comment = DEBUG ? __('geloescht') . ": $oldvalue, $success" : $success;
-            $commentType = 1;
+            if ($xDate->getTimestamp() > $now) {
+                $result = $db->query("DELETE FROM $table WHERE name='$uid' AND date='$date'");
+                $success = $result ? $success_text : $failure_text;
+                $comment = DEBUG ? __('geloescht') . ": $oldvalue, $success" : $success;
+                $commentType = 1;
+            } else {
+                $success = $failure_text;
+                $comment = DEBUG ? "only bookings in the future can be deleted" : $success;
+            }
         } elseif ($value == "cancel") {
             if (DEBUG) {echo("<br />update in cancel");};
-            // Delete booking.
-            $result = $db->query("UPDATE $table SET used='3' WHERE name='$uid' AND date='$date'");
-            $success = $result ? $success_text : $failure_text;
-            $comment = DEBUG ? __('storniert') . ": $oldvalue, $success" : $success;
-            $commentType = 5;
+            // Cancel booking.
+            if ($used == 0 && $date == date('Y-m-d', $now)) {
+                $result = $db->query("UPDATE $table SET used='3' WHERE name='$uid' AND date='$date'");
+                $success = $result ? $success_text : $failure_text;
+                $comment = DEBUG ? __('storniert') . ": $oldvalue, $success" : $success;
+                $commentType = 5;
+            } else {
+                $success = $failure_text;
+                $comment = DEBUG ? "only unused reservations for the current day can be cancelled" : $success;
+            }
         } elseif ($value == "left") {
             // used booking, user already left library
             #$result = $db->query("UPDATE $table SET used='2' WHERE name='$uid' AND date='$date'");
@@ -272,7 +283,7 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
                     $comment = DEBUG ? __('reserviert') . ": $value, $success" : $success;
                     $commentType = 4;
                 }
-            } else {
+            } elseif ($used == 0 || $used == 3) {
                 if (DEBUG) {echo("<br />" . __LINE__ );};
                 // Modified booking.
                 if (DEBUG) {echo("<br />" . __LINE__ );};
@@ -289,6 +300,9 @@ function update_database($uid, $is_member, $date, $oldvalue, $value)
                     $commentType = 0;
                     if (DEBUG) {echo($success);};
                 };
+            } else {
+                $success = $failure_text;
+                $comment = DEBUG ? 'Only unused or cancelled bookings may be modified' : $success;
             };
         };
         $db->close();
@@ -504,15 +518,15 @@ function show_database($uid, $lastuid, $is_member)
             $comment = DEBUG ? __('unveraendert') : '';
         } else {
             // TODO: get new DB values here or do it in some other way, where displaying and updating the db are independent from each other...
-            if (DEBUG) {echo("<br />update_database(" . $uid . ", " . $is_member . ", " . $day . ", " . $text . ", " . $requested . ")<br/>");};
+            if (DEBUG) {echo("<br />update_database(" . $uid . ", " . $is_member . ", " . $day . ", " . $text . ", " . $requested . ", " . $used . ")<br/>");};
 
             if (DEBUG) {
-                $msg = "update_database(" . $uid . ", " . $is_member . ", " . $day . ", " . $text . ", " . $requested . ")\n";
+                $msg = "update_database(" . $uid . ", " . $is_member . ", " . $day . ", " . $text . ", " . $requested . ", " . $used . ")\n";
                 $logfile = "log/error.log";
                 error_log($msg, 3, $logfile);
             };
 
-            $aComment = update_database($uid, $is_member, $day, $text, $requested);
+            $aComment = update_database($uid, $is_member, $day, $text, $requested, $used);
             $comment = $aComment[0];
             $commentType = $aComment[1];
             $text = $requested == 'cancel' ? $text : $requested;
